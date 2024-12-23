@@ -3765,6 +3765,30 @@ figure.highlight pre .javascript .function {
   color: var(--font-color) !important;
   text-shadow: none !important;
 }
+
+/* vvv Hide menu nav text */
+#nav .menus_items {
+  display: inline;
+}
+
+#nav .menus_items .menus_item {
+  position: relative;
+  display: inline-block;
+  padding: 0 0 0 14px; /* Internal spacing */
+  margin-right: 20px; /* Add space between items */
+}
+
+#nav .menus_items .menus_item a span {
+  display: none !important; /* Hide the text */
+}
+
+#nav .menus_items .menus_item a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Keep icons centered */
+}
+/* ^^^ Hide menu nav text */
 #nav.hide-menu #toggle-menu {
   display: inline-block !important;
 }
