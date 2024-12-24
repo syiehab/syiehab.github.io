@@ -3766,6 +3766,9 @@ figure.highlight pre .javascript .function {
   text-shadow: none !important;
 }
 
+
+
+
 /* vvv Hide menu nav text */
 #nav .menus_items {
   display: inline;
@@ -6353,4 +6356,8 @@ blockquote.pullquote.right {
   z-index: 1000;
   display: none;
   background: rgba(0,0,0,0.6);
+}
+
+.MathJax {
+  color:#F47466;
 }
