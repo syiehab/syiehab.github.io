@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Software Security Revision</title>
+<style>
+:root{
+  --bg:#f6f7fb;--panel:#ffffff;--text:#1f2937;--muted:#64748b;--border:#e5e7eb;
+  --accent:#2563eb;--accent-soft:#dbeafe;--good:#15803d;--good-soft:#dcfce7;
+  --bad:#b91c1c;--bad-soft:#fee2e2;--warn:#a16207;--warn-soft:#fef3c7;--shadow:0 6px 20px rgba(15,23,42,.07)
+}
+[data-theme="dark"]{
+  --bg:#0f172a;--panel:#111827;--text:#e5e7eb;--muted:#94a3b8;--border:#273449;
+  --accent:#60a5fa;--accent-soft:#172554;--good:#4ade80;--good-soft:#052e16;
+  --bad:#f87171;--bad-soft:#450a0a;--warn:#facc15;--warn-soft:#422006;--shadow:none
+}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+button,input{font:inherit}.app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;overflow:auto;background:var(--panel);border-right:1px solid var(--border);padding:20px}
+.brand{font-size:1.12rem;font-weight:800;margin-bottom:4px}.sub{font-size:.86rem;color:var(--muted);margin-bottom:18px}
+.nav button{width:100%;text-align:left;border:0;background:transparent;color:var(--text);padding:10px 12px;border-radius:10px;cursor:pointer;margin:2px 0}
+.nav button:hover,.nav button.active{background:var(--accent-soft);color:var(--accent)}
+.nav .section{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:16px 10px 6px;font-weight:700}
+.main{padding:28px;max-width:1250px;width:100%;margin:0 auto}.topbar{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:22px}
+.top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid var(--border);background:var(--panel);color:var(--text);padding:9px 12px;border-radius:10px;cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:white}.btn.danger{color:var(--bad)}.btn:disabled{opacity:.5;cursor:not-allowed}
+.search{width:min(430px,55vw);padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--panel);color:var(--text)}
+.page{display:none}.page.active{display:block}.hero,.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow)}
+.hero{padding:26px;margin-bottom:20px}.hero h1{margin:0 0 8px}.hero p{margin:0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}.card{padding:18px}.card h3,.card h4{margin-top:0}
+.stat{font-size:1.7rem;font-weight:800}.muted{color:var(--muted)}.pill{display:inline-flex;padding:3px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:.78rem;font-weight:700}
+.callout{border-left:4px solid var(--accent);background:var(--accent-soft);padding:12px 14px;border-radius:10px;margin:12px 0}.callout.warn{border-color:var(--warn);background:var(--warn-soft)}
+.note-section{margin:18px 0 26px}.note-section h2{margin-bottom:8px}.note-section h3{margin-top:18px}.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;background:var(--panel)}th,td{padding:10px 12px;border:1px solid var(--border);vertical-align:top;text-align:left}th{background:var(--accent-soft)}
+.flow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0}.flow .step{background:var(--panel);border:1px solid var(--border);padding:8px 10px;border-radius:10px}.flow .arrow{color:var(--muted);font-weight:700}
+.quiz-shell{max-width:900px}.quiz-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.progress{height:9px;background:var(--border);border-radius:999px;overflow:hidden;margin:10px 0 18px}.progress>div{height:100%;background:var(--accent);width:0}
+.option{display:block;width:100%;text-align:left;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--panel);color:var(--text);margin:8px 0;cursor:pointer}
+.option.correct{border-color:var(--good);background:var(--good-soft)}.option.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.feedback{padding:14px;border-radius:12px;margin-top:14px;background:var(--accent-soft)}.feedback.good{background:var(--good-soft)}.feedback.bad{background:var(--bad-soft)}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.kpi{display:flex;gap:16px;flex-wrap:wrap;margin:10px 0;color:var(--muted)}
+.result-block{margin:18px 0}.priority-high{color:var(--bad);font-weight:800}.priority-medium{color:var(--warn);font-weight:800}
+.mistake{margin:12px 0;padding:14px;border:1px solid var(--border);border-radius:12px;background:var(--panel)}
+.hidden{display:none!important}.menu-btn{display:none}
+mark{background:#fde68a;color:#111827;padding:0 2px}
+@media(max-width:850px){
+  .app{grid-template-columns:1fr}.sidebar{position:fixed;z-index:50;left:-290px;width:280px;transition:left .2s}.sidebar.open{left:0}
+  .main{padding:18px}.menu-btn{display:inline-block}.search{width:100%}.topbar{align-items:stretch;flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand">Software Security Revision</div>
+  <div class="sub">CCSB5133 • Sem 1 (2026/2027)</div>
+  <div class="nav">
+    <div class="section">Overview</div>
+    <button data-page="home">Dashboard</button>
+    <button data-page="progress">Progress</button>
+    <button data-page="mistakes">Review Mistakes</button>
+    <div class="section">Chapter 1</div>
+    <button data-page="ch1-notes">Study Notes</button>
+    <button data-page="ch1-quick">Quick Revision</button>
+    <button data-page="ch1-quiz">Chapter Quiz</button>
+    <div class="section">Chapter 2</div>
+    <button data-page="ch2-notes">Study Notes</button>
+    <button data-page="ch2-quick">Quick Revision</button>
+    <button data-page="ch2-quiz">Chapter Quiz</button>
+    <div class="section">Mixed Practice</div>
+    <button data-page="all-quiz">All Chapters Quiz</button>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="top-actions">
+      <button class="btn menu-btn" id="menuBtn">☰ Menu</button>
+      <input class="search" id="searchInput" placeholder="Search notes across both chapters…">
+    </div>
+    <div class="top-actions">
+      <button class="btn" id="themeBtn">Toggle theme</button>
+      <button class="btn danger" id="resetBtn">Reset progress</button>
+    </div>
+  </div>
+
+  <section id="home" class="page active">
+    <div class="hero">
+      <h1>Exam Revision Dashboard</h1>
+      <p>Interactive notes and quizzes based on the two uploaded Software Security lecture decks.</p>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>Chapter 1</h3><p>Overview of Software Security</p><p class="muted">CIA, terminology, RMF, touchpoints, SDLC, secure code, threat modelling.</p><button class="btn primary" onclick="showPage('ch1-notes')">Open notes</button></div>
+      <div class="card"><h3>Chapter 2</h3><p>Secure SDLC</p><p class="muted">OWASP SAMM, SSDLC mapping, ISO/IEC 27034, OWASP Top 10, CWE, methodologies.</p><button class="btn primary" onclick="showPage('ch2-notes')">Open notes</button></div>
+      <div class="card"><h3>Total answered</h3><div class="stat" id="homeAnswered">0</div><p class="muted">Across all quiz sessions</p></div>
+      <div class="card"><h3>Overall accuracy</h3><div class="stat" id="homeAccuracy">0%</div><p class="muted">Saved in this browser</p></div>
+    </div>
+  </section>
+
+  <section id="ch1-notes" class="page notes-page"></section>
+  <section id="ch1-quick" class="page notes-page"></section>
+  <section id="ch2-notes" class="page notes-page"></section>
+  <section id="ch2-quick" class="page notes-page"></section>
+
+  <section id="ch1-quiz" class="page"><div class="quiz-shell"><div class="hero"><h1>Chapter 1 Quiz</h1><p>Overview of Software Security</p></div><div id="quiz-ch1"></div></div></section>
+  <section id="ch2-quiz" class="page"><div class="quiz-shell"><div class="hero"><h1>Chapter 2 Quiz</h1><p>Secure SDLC</p></div><div id="quiz-ch2"></div></div></section>
+  <section id="all-quiz" class="page"><div class="quiz-shell"><div class="hero"><h1>All Chapters Quiz</h1><p>Mixed questions from both uploaded chapters.</p></div><div id="quiz-all"></div></div></section>
+
+  <section id="mistakes" class="page">
+    <div class="hero"><h1>Review Mistakes</h1><p>Incorrectly answered questions are stored locally in your browser.</p></div>
+    <button class="btn primary" id="mistakeQuizBtn">Quiz My Mistakes</button>
+    <div id="mistakeList"></div>
+  </section>
+
+  <section id="progress" class="page">
+    <div class="hero"><h1>Progress</h1><p>Performance by chapter and topic.</p></div>
+    <div id="progressContent"></div>
+  </section>
+</main>
+</div>
+
+<script>
+const chapterNotes = {
+  1: {
+    title:"Chapter 1 — Overview of Software Security",
+    subtitle:"Software Security (CCSB5133)",
+    sections:[
+      {title:"What & Why is Software Security?",core:"Software security is the idea of engineering software so that it continues to function correctly under malicious attack. The lecture emphasizes addressing security from the early stages of the software development life cycle.",points:[
+        "Security is treated as risk management.",
+        "Common reasons for insecure software include lack of education in secure methods, lack of thought in design, lack of testing, and poor development environments."
+      ],exam:"Know the lecture definition and the idea that security should be addressed early, not added only at the end."},
+      {title:"CIA Triad",core:"The CIA triad describes three basic security objectives.",table:[
+        ["Confidentiality","Protect information from unauthorized disclosure."],
+        ["Integrity","Ensure messages or settings are not altered without authorization."],
+        ["Availability","Ensure information or services are available as intended when required without delay."]
+      ],exam:"Be able to match a scenario to Confidentiality, Integrity, or Availability."},
+      {title:"Software Security Terminology",core:"The lecture distinguishes defects, bugs, flaws, failures, risks, and vulnerabilities.",table:[
+        ["Defect","A problem that deviates from requirements or specifications."],
+        ["Bug","Implementation-level or coding error causing incorrect behaviour."],
+        ["Flaw","Weakness or imperfection in design, architecture, or logic."],
+        ["Failure","Inability of software to perform its required function."],
+        ["Risk","Probability that a flaw or bug will impact the purpose of the software; lecture shorthand: probability × impact."],
+        ["Vulnerability","A weakness or error that an attacker can exploit; may be design-level or implementation-level."]
+      ],exam:"Design-level vulnerabilities are highlighted as the hardest defects to handle."},
+      {title:"Three Pillars of Software Security",core:"The lecture organizes software security around Risk Management, Touchpoints, and Knowledge.",points:[
+        "Risk Management: identify, rank, track, understand, and handle risks.",
+        "Touchpoints: concrete security activities integrated into development.",
+        "Knowledge: gather, encapsulate, and share security principles, rules, vulnerabilities, exploits, attack patterns, and historical risks."
+      ],exam:"Memorize the three pillars and what each one contributes."},
+      {title:"Risk Management Framework (RMF)",core:"RMF provides a consistent and continuous expertise-driven approach to software security risk management.",flow:["Understand business context","Identify business & technical risks","Synthesize, prioritize & rank risks","Define mitigation strategy","Carry out fixes & validate"],points:[
+        "Business context: extract goals, critical assets, operations, priorities, artifacts, and scope.",
+        "Identify risks: identify threats and vulnerabilities, analyze likelihood, map technical risks to business goals, use questionnaires/interviews.",
+        "Prioritize: use likelihood, impact, and risk trends to decide resource allocation.",
+        "Mitigation strategy: consider cost, implementation time, likelihood of success, competence, and impact; identify validation techniques.",
+        "Fix and validate: implement mitigation, rectify artifacts, measure completeness, and validate that unacceptable risk is removed."
+      ],exam:"Risk identification only once is incorrect; assessment must be repeated throughout the project."},
+      {title:"Touchpoint 1 — Abuse Cases",core:"Abuse cases describe what software cannot or will not do and help anticipate abnormal behaviour.",points:[
+        "Do not assume 'no one would do these things'.",
+        "Anti-requirements provide insight into how attackers approach system assumptions.",
+        "Attack models use known attacks and relevant attack patterns to build abuse cases.",
+        "Include anyone who can gain access to the system."
+      ],exam:"Abuse cases are attacker-oriented and may be applied throughout the lifecycle."},
+      {title:"Touchpoint 2 — Security Requirements",core:"Security requirements cover both functional security and emergent characteristics.",points:[
+        "Definition: clearly define what the security requirements are.",
+        "Assumption: consider assumptions about expected system behaviour.",
+        "Satisfaction: requirements must satisfy security goals and the system must satisfy those requirements."
+      ],exam:"Remember the three criteria: Definition, Assumption, Satisfaction."},
+      {title:"Touchpoint 3 — Architectural Risk Analysis",core:"Architectural risk analysis aims to detect design flaws, which the lecture states account for about 50% of security problems.",points:[
+        "Design flaws require higher-level understanding and cannot be found simply by staring at code.",
+        "Tracks risk over time and links system-level concerns to probability and impact.",
+        "Critical aspects: Attack Resistance Analysis, Ambiguity Analysis, Weakness Analysis.",
+        "Attack Resistance Analysis: known flaws/checklists + attack patterns + architecture risk identification + demonstrate attack viability.",
+        "Ambiguity Analysis: creative discovery of new risks; requires at least two analysts and experience.",
+        "Weakness Analysis: examines dependencies, middleware, outside software assumptions, and what happens when assumptions fail."
+      ],exam:"Know the distinction among Attack Resistance, Ambiguity, and Weakness Analysis."},
+      {title:"Touchpoint 4 — Risk-Based Security Testing",core:"Testing is grounded in the system's architectural reality and the attacker's mindset, focusing on code areas where an attack is likely to succeed.",table:[
+        ["Risk-Based Security Testing","Inside-out; starts before software is complete and prior to system integration; risk analysts identify and rank risks."],
+        ["Penetration Testing","Outside-in; evaluates the system in its final state by simulating an attack."]
+      ],points:[
+        "Functional security testing derives from Security Requirements.",
+        "Adversarial security testing is motivated by attacker behaviour and derives from Abuse Cases and Architectural Risk Analysis."
+      ],exam:"Inside-out vs outside-in and timing are frequent comparison points."},
+      {title:"Touchpoint 5 — Code Review",core:"Code review is source code analysis focused on finding and fixing bugs.",points:[
+        "Static analysis tools can find security bugs.",
+        "Static analysis tools suffer from false positives and false negatives.",
+        "Useful tools should be security-focused, extensible, support existing processes, and make sense to multiple stakeholders."
+      ],exam:"Remember false positives and false negatives."},
+      {title:"Touchpoint 6 — Software Penetration Testing",core:"A method of evaluating software security by simulating an attack in an outside-in manner.",points:[
+        "Testing the system in its final state.",
+        "Described as the most applied of the seven touchpoints.",
+        "May use static and dynamic penetration testing tools."
+      ],exam:"Contrast with risk-based security testing."},
+      {title:"Touchpoint 7 — Security Operations",core:"Software security operations can integrate with network security operations.",points:[
+        "Defensive work includes understanding software behaviour that leads to successful attack.",
+        "Knowledge from attacks should be cycled back into software development."
+      ],exam:"Feedback from operations should improve development."},
+      {title:"Pillar III — Knowledge",core:"Security knowledge must be gathered, encapsulated, and shared.",points:[
+        "Knowledge catalogs may contain principles, guidelines, rules, vulnerabilities, exploits, attack patterns, and historical risks.",
+        "Knowledge is mapped to software artifacts and best practices."
+      ],exam:"Know what can appear in a software security knowledge catalog."},
+      {title:"Software Development Lifecycle (SDLC)",core:"The lecture uses six SDLC stages.",flow:["Planning","Design","Implementation","Testing","Deployment","Maintenance"],table:[
+        ["Planning","Identify project goals, requirements, and feasibility."],
+        ["Design","Create architecture and design specifications."],
+        ["Implementation","Write and compile code."],
+        ["Testing","Validate against requirements and identify defects."],
+        ["Deployment","Release software to users."],
+        ["Maintenance","Ongoing support and updates after deployment."]
+      ],exam:"Order and stage-purpose matching are exam-friendly."},
+      {title:"Quality Code vs Secure Code",core:"Quality and security overlap but are not equivalent.",table:[
+        ["Quality Code","Functionality, performance, usability, maintainability; meets user requirements efficiently."],
+        ["Secure Code","Protection against threats, vulnerabilities, and attacks; preserves confidentiality, integrity, and availability."]
+      ],points:[
+        "High quality ≠ secure: a bug-free app may still be hacked.",
+        "Secure ≠ high quality: a secure app may still crash or lag.",
+        "Best practice: balance quality and security."
+      ],exam:"Do not treat quality and security as synonyms."},
+      {title:"Threat Modelling",core:"A systematic and structured technique used to identify an application's security objectives, threats, and vulnerabilities so design and engineering decisions can be prioritized.",flow:["Identify Security Objectives","Application Overview","Decompose Application","Identify Threats","Identify Vulnerabilities","Rank Threats"],points:[
+        "Threat modelling is iterative/continuous.",
+        "Security objectives may use CI4AM: Confidentiality, Integrity, Availability, Authentication, Authorization, Auditing, Management.",
+        "Application overview considers deployment location, users/actors, data elements, rights, technologies, security mechanisms, and architecture/use cases.",
+        "Decomposition identifies entry points, exit points, data flows, and trust boundaries.",
+        "Threat identification approaches include Attack Trees and attacker thinking methods such as STRIDE/DREAD/OCTAVE.",
+        "Typical threats listed: SQL Injection, XSS, Replay, MITM, Eavesdropping.",
+        "Typical vulnerabilities listed: Weak Encryption, Clear Text Credentials, Unhandled Exception, Dynamic SQL, Long Session Timeouts.",
+        "Threat ranking can use Probability × Impact or DREAD Average Ranking.",
+        "Risk responses shown: Accepted, Mitigated, Transferred, Ignored (avoid this)."
+      ],exam:"Know CI4AM, decomposition elements, identification approaches, and threat-ranking methods."}
+    ]
+  },
+  2: {
+    title:"Chapter 2 — Secure Software Development Lifecycle (SSDLC)",
+    subtitle:"Software Security (CCSB5133)",
+    sections:[
+      {title:"OWASP SAMM",core:"OWASP SAMM is an open-source framework for software security maturity. It helps organizations evaluate current practices, build an improvement roadmap, and measure progress over time.",table:[
+        ["Governance","Strategy & Metrics; Policy & Compliance"],
+        ["Design","Threat Assessment; Security Requirements"],
+        ["Implementation","Secure Build; Secure Deployment"],
+        ["Verification","Security Testing; Security Review"],
+        ["Operations","Incident Management; Environment Management"]
+      ],points:[
+        "Maturity Level 1: ad-hoc/basic activities.",
+        "Maturity Level 2: defined, repeatable, organization-wide.",
+        "Maturity Level 3: optimized, measured, continuous improvement.",
+        "Example improvement plan: AppSec steering committee, threat modelling workshops, developer training, SAST/DAST, penetration tests, CI/CD checks, incident response playbooks, monitoring dashboards."
+      ],exam:"Memorize the five business functions, their two practices, and the three maturity levels."},
+      {title:"Application Security Risk",core:"A risk path may involve threat agents, attack vectors, and security weaknesses. Overall risk combines likelihood with technical and business impact.",table:[
+        ["Technical impact","Examples: reduced privacy, stolen sensitive data, disabled computers."],
+        ["Business impact","Examples: delayed sales/income, increased expenses."]
+      ],exam:"Be able to distinguish technical impact from business impact."},
+      {title:"Integrating Security into Each SDLC Phase",core:"Security activities are mapped throughout the lifecycle rather than left until the end.",table:[
+        ["Planning & Requirements","Risk assessment, abuse cases, security requirements."],
+        ["Design","Threat modelling, secure design principles such as least privilege and defense in depth."],
+        ["Implementation","Secure coding practices and security-focused code reviews."],
+        ["Testing","Static/dynamic analysis, penetration testing, vulnerability scanning, risk-based security testing, automated tools."],
+        ["Deployment","Secure configuration management and strict access controls."],
+        ["Maintenance","Regular updates/dependency updates and an incident response plan."]
+      ],exam:"Know which security activities belong to which phase."},
+      {title:"ISO/IEC 27034",core:"Part of the ISO 27000 family, focused on application security throughout the software lifecycle. It provides guidelines, principles, and frameworks for secure applications.",points:[
+        "Why it matters: applications are major attack targets; common risks include SQL Injection, XSS, Broken Authentication; secure apps protect data, business, and users; it supports compliance.",
+        "27034-1: overview and concepts.",
+        "27034-2: Organization Normative Framework (ONF) — policies, standards, procedures.",
+        "27034-3: Application Security Management Process (ASMP) — managing app security.",
+        "27034-4: Application Security Validation (ASV) — validating security requirements.",
+        "27034-5: Protocol Bindings.",
+        "27034-6: Case Studies.",
+        "27034-7: Assurance Prediction Framework (APF)."
+      ],exam:"The lecture notes indicate some parts as planned/under development; preserve that framing for revision."},
+      {title:"ISO/IEC 27034 Core Concepts",core:"The framework defines reusable structures for application security.",table:[
+        ["ASC","Application Security Control — a specific security function, e.g. input validation, HTTPS, encryption."],
+        ["ASCL","Application Security Control Library — reusable catalog of ASCs."],
+        ["ASLC","Application Security Life Cycle — secure design, development, testing, deployment, maintenance."],
+        ["ASMP","Application Security Management Process — governance ensuring continuous application security."],
+        ["ONF","Organizational Normative Framework — reusable policies, standards, guidelines, and resources."]
+      ],points:[
+        "ISO/IEC 27034 provides a framework and concepts such as ASC, ASCL, ONF, ANF, and ASMP.",
+        "It does not provide a ready-made list of security controls.",
+        "Other standards/resources can provide controls: ISO/IEC 27001, OWASP ASVS, PCI DSS, NIST SP 800-53, CWE."
+      ],exam:"Framework vs control catalog is an important distinction."},
+      {title:"OWASP Top 10 Application Security Risks",core:"The lecture presents the OWASP Top 10 as a list of critical web application security risks used to understand the threat landscape and prioritize security efforts.",table:[
+        ["1","Broken Access Control","Users can act outside intended permissions."],
+        ["2","Cryptography Failures","Weak, missing, or misused encryption exposes sensitive data."],
+        ["3","Injection","Malicious input causes unintended commands/code to execute."],
+        ["4","Insecure Design","Architectural/design flaws create security weaknesses."],
+        ["5","Security Misconfiguration","Poor settings such as defaults, open storage, unnecessary features."],
+        ["6","Vulnerable & Outdated Components","Known-vulnerable old libraries/frameworks/software."],
+        ["7","Identification & Authentication Failures","Weak login, password reset, MFA, or session handling."],
+        ["8","Software & Data Integrity Failures","Code/data are not properly verified, including supply-chain risks."],
+        ["9","Security Logging & Monitoring Failures","Missing/weak/ignored logs hinder detection and response."],
+        ["10","Server-Side Request Forgery (SSRF)","Server fetches a user-supplied remote resource without proper validation, enabling crafted internal/protected requests."]
+      ],exam:"Know the names, numbers, and characteristic examples."},
+      {title:"CWE — Common Weakness Enumeration",core:"CWE is a catalog of common software coding mistakes/weaknesses maintained by MITRE. Each weakness has a unique ID.",table:[
+        ["CWE-20","Improper Input Validation"],
+        ["CWE-74","Injection"],
+        ["CWE-120","Buffer Overflow"],
+        ["CWE-119","Memory Bound Error"],
+        ["CWE-384","Session Fixation"],
+        ["CWE-287","Improper Authentication"],
+        ["CWE-316","Cleartext Storage in Memory"],
+        ["CWE-117","Improper Logging"],
+        ["CWE-223","Missing Security Info"],
+        ["CWE-209","Information Exposure in Error Message"],
+        ["CWE-200","Information Exposure"]
+      ],points:[
+        "Developers use CWE to know coding errors to avoid.",
+        "Testers/security teams use it to check for known flaws.",
+        "Organizations can use it for coding standards and security maturity measurement."
+      ],exam:"Memorize the CWE IDs shown in the lecture and their labels."},
+      {title:"OWASP Top 10 vs CWE",core:"OWASP Top 10 and CWE operate at different abstraction levels.",table:[
+        ["Focus","OWASP: risks from attacker's view","CWE: weaknesses from developer's view"],
+        ["Level","OWASP: high-level categories","CWE: low-level detailed issues"],
+        ["Purpose","OWASP: awareness of critical web risks","CWE: catalog of root causes of flaws"],
+        ["Relationship","One OWASP category can map to many CWE entries","A CWE may belong to one or more OWASP categories"]
+      ],exam:"High-level risk category vs detailed weakness is the central distinction."},
+      {title:"Software Development Methodologies",core:"The lecture compares traditional, iterative, agile, and security-specific approaches.",table:[
+        ["Waterfall","Linear; security added late/reactive; flaws often found during testing."],
+        ["V-Model","Testing at every stage; maps security testing; limited flexibility."],
+        ["Spiral","Risk-driven and iterative; security considered early through threat/risk analysis."],
+        ["RUP","Iterative and architecture-centric; security in requirements and design."],
+        ["Agile","Fast and adaptable, but security may be ignored."],
+        ["Secure Agile / DevSecOps","Security in every sprint; threat modelling; automated CI/CD testing."],
+        ["Microsoft SDL","Security in all phases: threat modelling, secure coding, testing, incident response."],
+        ["OWASP SAMM","Framework for assessing and improving security practices."]
+      ],exam:"Be able to identify a methodology from its defining characteristics."}
+    ]
+  }
+};
+
+const quickFacts = {
+  1:[
+    ["CIA","Confidentiality = prevent unauthorized disclosure; Integrity = prevent unauthorized alteration; Availability = available when required."],
+    ["Risk formula","Risk = probability × impact."],
+    ["3 pillars","Risk Management • Touchpoints • Knowledge."],
+    ["RMF order","Business context → Identify risks → Prioritize/rank → Mitigation strategy → Fix & validate."],
+    ["7 touchpoints","Abuse Cases • Security Requirements • Architectural Risk Analysis • Risk-Based Security Testing • Code Review • Software Penetration Testing • Security Operations."],
+    ["Architectural analysis","Attack Resistance • Ambiguity • Weakness."],
+    ["Testing distinction","Risk-based security testing = inside-out, early; Pen testing = outside-in, final system."],
+    ["SDLC order","Planning → Design → Implementation → Testing → Deployment → Maintenance."],
+    ["Threat modelling","Iterative: objectives → overview → decompose → threats → vulnerabilities → rank."],
+    ["CI4AM","Confidentiality, Integrity, Availability, Authentication, Authorization, Auditing, Management."],
+    ["Rank threats","Probability × Impact or DREAD Average Ranking."],
+    ["Quality vs security","High quality ≠ secure; Secure ≠ high quality."]
+  ],
+  2:[
+    ["SAMM functions","Governance • Design • Implementation • Verification • Operations."],
+    ["SAMM levels","1 = ad-hoc/basic • 2 = defined/repeatable/org-wide • 3 = optimized/measured/continuous improvement."],
+    ["SDLC security map","Planning: risk/abuse/requirements; Design: threat modelling; Implementation: secure coding/review; Testing: security testing; Deployment: config/access control; Maintenance: updates/incident response."],
+    ["ISO 27034","Application security framework across lifecycle; not a ready-made control list."],
+    ["Core concepts","ASC • ASCL • ASLC • ASMP • ONF."],
+    ["OWASP Top 10","Broken Access Control; Cryptography Failures; Injection; Insecure Design; Security Misconfiguration; Vulnerable & Outdated Components; Identification & Authentication Failures; Software & Data Integrity Failures; Security Logging & Monitoring Failures; SSRF."],
+    ["CWE","Detailed software weakness catalog maintained by MITRE."],
+    ["OWASP vs CWE","OWASP = high-level risk categories; CWE = detailed weakness/root-cause catalog."],
+    ["Methodologies","Waterfall, V-Model, Spiral, RUP, Agile, Secure Agile/DevSecOps, Microsoft SDL, OWASP SAMM."]
+  ]
+};
+
+const Q = (id,chapter,topic,difficulty,q,opts,answer,explanation)=>({id,chapter,topic,difficulty,q,opts,answer,explanation});
+const questions = [
+Q("c1q1",1,"Software Security","Easy","Which lecture definition best describes software security?",["Engineering software so it continues to function correctly under malicious attack","Removing every software defect before release","Encrypting all information stored by a program","Running penetration tests after deployment"],0,"The lecture defines software security as engineering software so that it continues to function correctly under malicious attack."),
+Q("c1q2",1,"CIA Triad","Easy","Which CIA objective focuses on preventing unauthorized disclosure?",["Integrity","Availability","Confidentiality","Authentication"],2,"Confidentiality protects information from unauthorized disclosure."),
+Q("c1q3",1,"CIA Triad","Easy","A service must remain usable when required without delay. Which CIA objective is this?",["Availability","Integrity","Confidentiality","Authorization"],0,"Availability is about information or services being accessible as intended when required."),
+Q("c1q4",1,"Terminology","Easy","Which term refers to an implementation-level or coding error that causes incorrect behaviour?",["Flaw","Bug","Risk","Failure"],1,"A bug is an implementation-level or coding error."),
+Q("c1q5",1,"Terminology","Medium","An app stores passwords in plain text because of its architecture. According to the lecture, this is primarily a:",["Failure","Bug","Design flaw","Risk metric"],2,"The lecture uses plain-text password storage as an example of a design flaw."),
+Q("c1q6",1,"Terminology","Medium","What does a vulnerability mean in the lecture?",["Any deviation from a requirement","A weakness or error an attacker can exploit","Only a coding mistake","A measured business impact"],1,"A vulnerability is a weakness or error that an attacker can exploit and may exist at design or implementation level."),
+Q("c1q7",1,"Risk Management","Easy","Which expression matches the lecture shorthand for risk?",["Threat + control","Probability × impact","Asset ÷ vulnerability","Likelihood − cost"],1,"The lecture states risk as probability × impact."),
+Q("c1q8",1,"Pillars","Easy","Which of the following is NOT one of the three pillars of software security in the lecture?",["Risk Management","Touchpoints","Knowledge","Encryption"],3,"The three pillars are Risk Management, Touchpoints, and Knowledge."),
+Q("c1q9",1,"RMF","Medium","What is the first RMF activity presented?",["Define the mitigation strategy","Understand the business context","Carry out fixes","Rank technical controls"],1,"The RMF starts by understanding the business context."),
+Q("c1q10",1,"RMF","Medium","Which activity comes immediately after identifying business and technical risks?",["Synthesize, prioritize, and rank the risks","Carry out fixes","Define security operations","Create penetration tests"],0,"After identifying risks, the lecture says to synthesize, prioritize, and rank them."),
+Q("c1q11",1,"RMF","Hard","Which statement about RMF is consistent with the lecture?",["Risk identification is sufficient once per project","Risk assessment should be repeated throughout the project","RMF applies only after deployment","RMF is independent of business goals"],1,"The lecture explicitly says identifying risks only once is incorrect; assessment must be continuous and repeated."),
+Q("c1q12",1,"Abuse Cases","Medium","What is the main purpose of an anti-requirement in abuse-case generation?",["Describe the ideal user experience","Show how attackers may approach system assumptions","Measure source-code complexity","Replace functional requirements"],1,"Anti-requirements provide insight into how attackers will approach the system's assumptions."),
+Q("c1q13",1,"Security Requirements","Medium","Which set lists the three criteria for security requirements from the lecture?",["Definition, Assumption, Satisfaction","Planning, Design, Testing","Threat, Vulnerability, Impact","Confidentiality, Authentication, Logging"],0,"The lecture lists Definition, Assumption, and Satisfaction."),
+Q("c1q14",1,"Architectural Risk Analysis","Medium","Which type of architectural analysis is aimed at creative discovery of new risks?",["Attack Resistance Analysis","Weakness Analysis","Ambiguity Analysis","Code Review"],2,"Ambiguity Analysis is described as the creative activity required to discover new risks."),
+Q("c1q15",1,"Architectural Risk Analysis","Medium","Weakness Analysis is mainly concerned with:",["The impact of software dependencies and external assumptions","Only user-interface defects","Ranking business goals","Dynamic penetration testing"],0,"Weakness Analysis examines dependencies, middleware, assumptions about outside software, and what happens when those assumptions fail."),
+Q("c1q16",1,"Architectural Risk Analysis","Hard","Which sequence best matches Attack Resistance Analysis?",["Identify known flaws/checklists → map attack patterns → identify architectural risks → demonstrate attack viability","Rank business goals → write code → scan binaries → deploy","Gather logs → patch servers → create use cases → encrypt traffic","Define test cases → ignore architecture → run only dynamic tests → accept risk"],0,"The lecture gives this checklist-oriented sequence for Attack Resistance Analysis."),
+Q("c1q17",1,"Security Testing","Medium","Risk-based security testing is characterized as:",["Outside-in and after final release","Inside-out and before software is complete","Only functional testing","Independent of architecture"],1,"The lecture distinguishes risk-based testing as inside-out and started before completion/system integration."),
+Q("c1q18",1,"Security Testing","Medium","Adversarial security testing is primarily derived from:",["Security requirements only","Abuse Cases and Architectural Risk Analysis","Maintenance logs only","Code style guidelines"],1,"The lecture says adversarial testing is motivated by attacker understanding and comes from Abuse Cases and Risk Architecture Analysis."),
+Q("c1q19",1,"Code Review","Easy","Which tool limitation is specifically mentioned for static analysis?",["It cannot analyze code","It may produce false positives and false negatives","It only works after deployment","It cannot be used by developers"],1,"Static analysis tools are noted as suffering from false negatives and false positives."),
+Q("c1q20",1,"Penetration Testing","Easy","Software penetration testing is described as:",["An inside-out analysis of design documents","An outside-in simulation of attack on the final system","A replacement for all code review","A business risk questionnaire"],1,"The lecture defines software penetration testing as an outside-in attack simulation on the final system."),
+Q("c1q21",1,"Security Operations","Medium","What should happen to knowledge gained from understanding successful attacks?",["It should remain only with operations","It should be cycled back into software development","It should replace all requirements","It should be discarded after patching"],1,"The lecture says attack knowledge should be cycled back into development."),
+Q("c1q22",1,"Knowledge","Medium","Which item belongs in a software security knowledge catalog?",["Historical risks","Payroll schedules","UI themes","Only project budgets"],0,"The lecture lists principles, guidelines, rules, vulnerabilities, exploits, attack patterns, and historical risks."),
+Q("c1q23",1,"SDLC","Easy","Which SDLC phase comes directly after Design?",["Planning","Implementation","Maintenance","Deployment"],1,"The lecture sequence is Planning → Design → Implementation → Testing → Deployment → Maintenance."),
+Q("c1q24",1,"SDLC","Medium","Which phase is primarily described as validating software against requirements and identifying defects?",["Testing","Deployment","Planning","Maintenance"],0,"Testing validates software against requirements and identifies defects."),
+Q("c1q25",1,"Quality vs Security","Medium","Which statement is taught in the lecture?",["High quality software is automatically secure","Secure software is automatically high quality","Quality and security are different and should both be balanced","Security matters only if code has bugs"],2,"The lecture explicitly says high quality ≠ secure and secure ≠ high quality."),
+Q("c1q26",1,"Threat Modelling","Easy","Threat modelling is best described as:",["A structured process to identify security objectives, threats, and vulnerabilities","A method for choosing a programming language","A database normalization technique","A post-incident accounting activity"],0,"This matches the lecture definition of threat modelling."),
+Q("c1q27",1,"Threat Modelling","Medium","Which of the following is part of CI4AM as shown in the lecture?",["Auditing","Compression","Versioning","Caching"],0,"CI4AM includes Confidentiality, Integrity, Availability, Authentication, Authorization, Auditing, and Management."),
+Q("c1q28",1,"Threat Modelling","Medium","Which item is an example of a trust boundary in application decomposition?",["Webserver → Database","Button → Label","Variable → Constant","Loop → Function"],0,"The lecture gives Webserver → Database as an example of a trust boundary."),
+Q("c1q29",1,"Threat Modelling","Medium","Which item is listed as an entry point and principal attack target?",["Ports","Business goals","Risk metrics","Test summaries"],0,"Entry points include ports, pages, components, APIs, and stored procedures."),
+Q("c1q30",1,"Threat Modelling","Hard","Which pair represents the two threat-ranking methods presented?",["Probability × Impact and DREAD Average","STRIDE and CIA","OWASP and CWE","SAST and DAST"],0,"The lecture lists Probability × Impact Ranking and DREAD Average Ranking."),
+Q("c1q31",1,"Threat Modelling","Medium","Which response to risk is shown in the lecture with an explicit note to avoid it?",["Accepted","Mitigated","Transferred","Ignored"],3,"The slide lists Accepted, Mitigated, Transferred, and Ignored, with 'Avoid this' beside Ignored."),
+Q("c1q32",1,"Threat Modelling","Hard","Which ordering matches the lecture threat-modelling flow?",["Objectives → Overview → Decompose → Threats → Vulnerabilities → Rank","Overview → Rank → Objectives → Threats → Deploy → Audit","Threats → Objectives → Code → Test → Rank → Design","Decompose → Deploy → Objectives → Vulnerabilities → Threats → Rank"],0,"The lecture presents security objectives, application overview, decomposition, threat identification, vulnerability identification, then ranking."),
+
+Q("c2q1",2,"OWASP SAMM","Easy","What is OWASP SAMM primarily used for?",["Assessing and improving software security maturity","Encrypting source code","Replacing SDLC with a security-only process","Managing only network firewalls"],0,"SAMM is an open-source framework for evaluating current security practices, planning improvements, and measuring progress."),
+Q("c2q2",2,"OWASP SAMM","Easy","How many business functions are shown in the SAMM structure?",["3","4","5","10"],2,"The lecture presents 5 business functions."),
+Q("c2q3",2,"OWASP SAMM","Medium","Which pair belongs to the Design function in SAMM?",["Threat Assessment and Security Requirements","Strategy & Metrics and Policy & Compliance","Secure Build and Secure Deployment","Incident Management and Environment Management"],0,"Design contains Threat Assessment and Security Requirements."),
+Q("c2q4",2,"OWASP SAMM","Medium","Which pair belongs to Verification?",["Security Testing and Security Review","Threat Assessment and Security Requirements","Secure Build and Secure Deployment","Incident Management and Environment Management"],0,"Verification contains Security Testing and Security Review."),
+Q("c2q5",2,"OWASP SAMM","Easy","SAMM maturity Level 1 is described as:",["Optimized and measured","Defined and organization-wide","Ad-hoc/basic activities","Fully automated security"],2,"Level 1 is ad-hoc/basic."),
+Q("c2q6",2,"OWASP SAMM","Medium","Which description matches SAMM Level 2?",["Defined, repeatable, organization-wide","Ad-hoc and basic","Optimized and continuously improving","Only compliance-focused"],0,"Level 2 is defined, repeatable, and organization-wide."),
+Q("c2q7",2,"OWASP SAMM","Medium","Which description matches SAMM Level 3?",["No formal activities","Defined but not measured","Optimized, measured, continuous improvement","Reactive only"],2,"Level 3 is optimized, measured, and continuously improving."),
+Q("c2q8",2,"Application Security Risk","Medium","Which is a business impact example from the lecture?",["Stolen sensitive data","Disabled computers","Delayed sales or income","Reduced privacy"],2,"Delayed sales/income and increased expenses are business impacts; the others are technical impacts."),
+Q("c2q9",2,"SSDLC Mapping","Easy","Which activity is placed in Planning & Requirements?",["Risk assessment","Secure deployment","Incident response monitoring only","Dependency patching only"],0,"Planning & Requirements includes risk assessment, abuse cases, and security requirements."),
+Q("c2q10",2,"SSDLC Mapping","Medium","Threat modelling and secure design principles are emphasized in which phase?",["Design","Testing","Maintenance","Deployment"],0,"The Design phase uses threat modelling and secure design principles such as least privilege and defense in depth."),
+Q("c2q11",2,"SSDLC Mapping","Medium","Secure coding practices and code reviews belong mainly to:",["Implementation","Planning","Deployment","Maintenance"],0,"The lecture maps secure coding and security-focused code reviews to Implementation."),
+Q("c2q12",2,"SSDLC Mapping","Medium","Which phase includes static/dynamic analysis, penetration testing, and vulnerability scanning?",["Testing","Planning","Design","Maintenance"],0,"These security testing methods are placed in the Testing phase."),
+Q("c2q13",2,"SSDLC Mapping","Medium","Configuration management and strict access controls are emphasized before release in:",["Deployment","Design","Planning","Maintenance"],0,"Deployment includes secure configuration management and access controls."),
+Q("c2q14",2,"SSDLC Mapping","Easy","Regular updates and an incident response plan are mapped to:",["Maintenance","Implementation","Design","Planning"],0,"Maintenance includes regular updates/dependency updates and an incident response plan."),
+Q("c2q15",2,"ISO/IEC 27034","Easy","ISO/IEC 27034 is primarily focused on:",["Application security during the software lifecycle","Physical building security","Only cryptographic algorithms","Only network routing"],0,"The lecture describes ISO/IEC 27034 as application security across the software lifecycle."),
+Q("c2q16",2,"ISO/IEC 27034","Medium","Which part is described as the Application Security Management Process (ASMP)?",["27034-1","27034-3","27034-5","27034-7"],1,"The lecture labels ISO/IEC 27034-3:2018 as ASMP."),
+Q("c2q17",2,"ISO/IEC 27034","Medium","Which concept is a reusable catalog of Application Security Controls?",["ASC","ASCL","ASMP","ONF"],1,"ASCL is the Application Security Control Library, a reusable catalog of ASCs."),
+Q("c2q18",2,"ISO/IEC 27034","Medium","Which concept represents a specific security function such as input validation or HTTPS?",["ASC","ASCL","ASLC","ONF"],0,"ASC means Application Security Control."),
+Q("c2q19",2,"ISO/IEC 27034","Hard","Which statement best reflects the lecture's distinction about ISO/IEC 27034?",["It provides a ready-made complete list of security controls","It provides the framework, while other standards/resources may provide controls","It replaces OWASP Top 10","It applies only to payment-card systems"],1,"The lecture states ISO/IEC 27034 provides the framework and does not provide a ready-made list of security controls."),
+Q("c2q20",2,"OWASP Top 10","Easy","Which OWASP Top 10 item concerns users acting outside their intended permissions?",["Broken Access Control","Injection","Security Misconfiguration","SSRF"],0,"Broken Access Control covers unauthorized actions or access beyond intended permissions."),
+Q("c2q21",2,"OWASP Top 10","Medium","Weak, missing, or misused encryption is categorized as:",["Cryptography Failures","Insecure Design","Software & Data Integrity Failures","Security Logging & Monitoring Failures"],0,"The lecture calls this Cryptography Failures."),
+Q("c2q22",2,"OWASP Top 10","Medium","A user-supplied input tricks the application into running unintended SQL or commands. Which category is this?",["Injection","Broken Access Control","Security Misconfiguration","SSRF"],0,"The lecture describes Injection as malicious input causing unintended commands or code to execute."),
+Q("c2q23",2,"OWASP Top 10","Medium","No threat modelling and insecure workflows are examples of:",["Insecure Design","Cryptography Failures","Vulnerable Components","Logging Failures"],0,"The lecture describes architectural/design weaknesses such as no threat modelling as Insecure Design."),
+Q("c2q24",2,"OWASP Top 10","Medium","Default passwords and unnecessary features left enabled are examples of:",["Security Misconfiguration","Injection","Broken Access Control","Software Integrity Failure"],0,"These are examples of Security Misconfiguration."),
+Q("c2q25",2,"OWASP Top 10","Medium","Which category covers old libraries or frameworks with known exploitable bugs?",["Vulnerable & Outdated Components","Insecure Design","Cryptography Failures","Identification Failures"],0,"This is Vulnerable & Outdated Components."),
+Q("c2q26",2,"OWASP Top 10","Medium","Broken password resets, lack of MFA, and session problems are examples of:",["Identification & Authentication Failures","Broken Access Control","Security Misconfiguration","Logging Failures"],0,"The lecture groups these under Identification & Authentication Failures."),
+Q("c2q27",2,"OWASP Top 10","Hard","A system installs updates from an untrusted source without verification. Which category fits best?",["Software & Data Integrity Failures","Injection","SSRF","Broken Access Control"],0,"The lecture includes untrusted updates and supply-chain attacks under Software & Data Integrity Failures."),
+Q("c2q28",2,"OWASP Top 10","Medium","Missing or ignored logs that prevent breach detection correspond to:",["Security Logging & Monitoring Failures","Cryptography Failures","Insecure Design","Injection"],0,"The category is Security Logging & Monitoring Failures."),
+Q("c2q29",2,"OWASP Top 10","Hard","A web app fetches a user-supplied URL without validating the destination, allowing access to internal services. This is:",["SSRF","Injection","Broken Access Control","Security Misconfiguration"],0,"The lecture defines SSRF around server-side fetching of user-supplied remote resources without proper validation."),
+Q("c2q30",2,"CWE","Easy","What is CWE?",["A catalog of common software weaknesses","A network encryption protocol","A maturity level scale","A penetration testing tool"],0,"CWE is a catalog of common software coding mistakes/weaknesses maintained by MITRE."),
+Q("c2q31",2,"CWE","Medium","Which CWE ID is associated with Improper Input Validation in the lecture?",["CWE-20","CWE-74","CWE-287","CWE-209"],0,"The lecture lists CWE-20 as Improper Input Validation."),
+Q("c2q32",2,"CWE","Medium","Which CWE ID is associated with Session Fixation?",["CWE-384","CWE-120","CWE-117","CWE-200"],0,"The lecture lists CWE-384 as Session Fixation."),
+Q("c2q33",2,"CWE","Hard","Which CWE ID is listed for Information Exposure in Error Message?",["CWE-209","CWE-223","CWE-316","CWE-74"],0,"The lecture lists CWE-209 as Information Exposure in Error Message."),
+Q("c2q34",2,"OWASP vs CWE","Medium","Which comparison is correct according to the lecture?",["OWASP Top 10 is high-level risk categories; CWE is detailed weakness/root-cause entries","OWASP is lower-level than CWE","CWE contains only business impacts","OWASP and CWE are identical lists"],0,"The lecture contrasts OWASP's high-level risk categories with CWE's low-level detailed weaknesses."),
+Q("c2q35",2,"Methodologies","Medium","Which methodology is linear and described as adding security late/reactively?",["Waterfall","Spiral","RUP","DevSecOps"],0,"Waterfall is presented as linear, with security added late and flaws found during testing."),
+Q("c2q36",2,"Methodologies","Medium","Which methodology is risk-driven, iterative, and considers security early?",["Spiral","Waterfall","Agile only","V-Model only"],0,"The Spiral model is described as risk-driven, iterative, and considering security early through threat/risk analysis."),
+Q("c2q37",2,"Methodologies","Medium","Which approach puts security into every sprint and automated testing into CI/CD?",["Secure Agile / DevSecOps","Waterfall","V-Model","RUP"],0,"Secure Agile / DevSecOps integrates security into every sprint with threat modelling and automated CI/CD testing."),
+Q("c2q38",2,"Methodologies","Hard","Which statement about Microsoft SDL matches the lecture?",["Security is integrated through all phases including threat modelling, secure coding, testing, and incident response","It is only a maturity assessment framework","It avoids threat modelling","It applies only after deployment"],0,"The lecture describes Microsoft SDL as a security-specific methodology integrating these activities across phases.")
+];
+
+const storageKey="ssRevisionProgressV1";
+const defaultProgress={attempts:0,total:0,correct:0,topics:{},chapters:{},mistakes:{}};
+let progress=JSON.parse(localStorage.getItem(storageKey)||"null")||structuredClone(defaultProgress);
+let quizStates={};
+
+function save(){localStorage.setItem(storageKey,JSON.stringify(progress));renderDashboard();renderMistakes();renderProgress();}
+function statObj(obj,key){if(!obj[key])obj[key]={answered:0,correct:0};return obj[key]}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function renderTable(rows){return `<div class="table-wrap"><table><tbody>${rows.map(r=>`<tr>${r.map((c,i)=>i===0?`<th>${escapeHtml(c)}</th>`:`<td>${escapeHtml(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`}
+function renderNotes(ch){
+  const c=chapterNotes[ch];
+  return `<div class="hero"><h1>${c.title}</h1><p>${c.subtitle}</p></div>`+
+    c.sections.map(s=>`<div class="note-section card searchable"><h2>${escapeHtml(s.title)}</h2><h3>Core Idea</h3><p>${escapeHtml(s.core)}</p>
+    ${s.points?`<h3>Key Points</h3><ul>${s.points.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>`:""}
+    ${s.table?`<h3>Comparison / Reference</h3>${renderTable(s.table)}`:""}
+    ${s.flow?`<h3>Process / Sequence</h3><div class="flow">${s.flow.map((x,i)=>`<span class="step">${escapeHtml(x)}</span>${i<s.flow.length-1?'<span class="arrow">→</span>':''}`).join("")}</div>`:""}
+    <div class="callout"><strong>Exam Focus:</strong> ${escapeHtml(s.exam)}</div></div>`).join("");
+}
+function renderQuick(ch){
+  const title=chapterNotes[ch].title;
+  return `<div class="hero"><h1>${title} — Quick Revision</h1><p>Compact pre-exam review.</p></div>
+  <div class="card searchable"><h2>Things You Must Remember</h2>${renderTable(quickFacts[ch])}</div>
+  <div class="callout warn"><strong>Revision tip:</strong> Use this page for fast recall, then test yourself with the chapter quiz.</div>`;
+}
+document.getElementById("ch1-notes").innerHTML=renderNotes(1);
+document.getElementById("ch2-notes").innerHTML=renderNotes(2);
+document.getElementById("ch1-quick").innerHTML=renderQuick(1);
+document.getElementById("ch2-quick").innerHTML=renderQuick(2);
+
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+  document.getElementById("sidebar").classList.remove("open");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+window.showPage=showPage;
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+document.getElementById("menuBtn").onclick=()=>document.getElementById("sidebar").classList.toggle("open");
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function getPool(kind){
+  if(kind==="ch1")return questions.filter(q=>q.chapter===1);
+  if(kind==="ch2")return questions.filter(q=>q.chapter===2);
+  if(kind==="mistakes")return Object.keys(progress.mistakes).map(id=>questions.find(q=>q.id===id)).filter(Boolean);
+  return questions;
+}
+function setupQuiz(containerId,kind){
+  const el=document.getElementById(containerId);
+  el.innerHTML=`<div class="card">
+    <h3>Choose quiz length</h3>
+    <div class="controls">
+      ${[10,20,30].map(n=>`<button class="btn" onclick="startQuiz('${containerId}','${kind}',${n})">${n} Questions</button>`).join("")}
+      <button class="btn primary" onclick="startQuiz('${containerId}','${kind}','all')">All Questions</button>
+    </div>
+    <p class="muted">Questions and answer positions are randomized each time.</p>
+  </div>`;
+}
+window.startQuiz=function(containerId,kind,length){
+  let pool=getPool(kind);
+  if(kind==="mistakes" && !pool.length){alert("No stored mistakes yet.");return}
+  const topicWeakness={};
+  Object.entries(progress.topics).forEach(([k,v])=>topicWeakness[k]=v.answered?1-(v.correct/v.answered):0);
+  pool=shuffle(pool).sort((a,b)=>(topicWeakness[b.topic]||0)-(topicWeakness[a.topic]||0)+((Math.random()-.5)*.25));
+  const n=length==="all"?pool.length:Math.min(Number(length),pool.length);
+  const chosen=pool.slice(0,n).map(q=>{
+    const order=shuffle(q.opts.map((text,i)=>({text,orig:i})));
+    return {...q,displayOpts:order,displayAnswer:order.findIndex(o=>o.orig===q.answer)};
+  });
+  quizStates[containerId]={kind,qs:chosen,index:0,score:0,answers:{},complete:false};
+  progress.attempts++; save(); renderQuiz(containerId);
+}
+function renderQuiz(containerId){
+  const st=quizStates[containerId], el=document.getElementById(containerId); if(!st)return;
+  if(st.index>=st.qs.length){renderResults(containerId);return}
+  const q=st.qs[st.index], ans=st.answers[q.id];
+  const answered=!!ans;
+  el.innerHTML=`<div class="card">
+    <div class="kpi"><span>Question ${st.index+1} of ${st.qs.length}</span><span>Score ${st.score}</span><span>Accuracy ${st.index?Math.round(st.score/st.index*100):0}%</span></div>
+    <div class="progress"><div style="width:${((st.index)/st.qs.length)*100}%"></div></div>
+    <div class="quiz-meta"><span class="pill">Chapter ${q.chapter}</span><span class="pill">${escapeHtml(q.topic)}</span><span class="pill">${q.difficulty}</span></div>
+    <h2>${escapeHtml(q.q)}</h2>
+    ${q.displayOpts.map((o,i)=>{
+      let cls="option";
+      if(answered && i===q.displayAnswer)cls+=" correct";
+      if(answered && i===ans.selected && !ans.correct)cls+=" wrong";
+      return `<button class="${cls}" ${answered?"disabled":""} onclick="answerQuestion('${containerId}',${i})"><strong>${String.fromCharCode(65+i)}.</strong> ${escapeHtml(o.text)}</button>`;
+    }).join("")}
+    ${answered?`<div class="feedback ${ans.correct?"good":"bad"}"><strong>${ans.correct?"Correct":"Incorrect"}.</strong> ${escapeHtml(q.explanation)}
+    ${!ans.correct?`<br><strong>Your answer:</strong> ${escapeHtml(q.displayOpts[ans.selected].text)}<br><strong>Correct answer:</strong> ${escapeHtml(q.displayOpts[q.displayAnswer].text)}`:""}</div>`:""}
+    <div class="controls">
+      <button class="btn" onclick="prevQuestion('${containerId}')" ${st.index===0?"disabled":""}>Previous</button>
+      <button class="btn primary" onclick="nextQuestion('${containerId}')" ${answered?"":"disabled"}>Next Question</button>
+      <button class="btn" onclick="restartQuiz('${containerId}')">Restart Quiz</button>
+    </div>
+  </div>`;
+}
+window.answerQuestion=function(containerId,selected){
+  const st=quizStates[containerId],q=st.qs[st.index]; if(st.answers[q.id])return;
+  const correct=selected===q.displayAnswer;
+  st.answers[q.id]={selected,correct};
+  if(correct)st.score++;
+  progress.total++; if(correct)progress.correct++;
+  const tk=statObj(progress.topics,q.topic); tk.answered++; if(correct)tk.correct++;
+  const ck=statObj(progress.chapters,"Chapter "+q.chapter); ck.answered++; if(correct)ck.correct++;
+  if(!correct){
+    progress.mistakes[q.id]={lastWrong:Date.now(),count:(progress.mistakes[q.id]?.count||0)+1};
+  }
+  save(); renderQuiz(containerId);
+}
+window.nextQuestion=function(containerId){const st=quizStates[containerId],q=st.qs[st.index];if(!st.answers[q.id])return;st.index++;renderQuiz(containerId)}
+window.prevQuestion=function(containerId){const st=quizStates[containerId];if(st.index>0){st.index--;renderQuiz(containerId)}}
+window.restartQuiz=function(containerId){const st=quizStates[containerId];startQuiz(containerId,st.kind,st.qs.length)}
+function renderResults(containerId){
+  const st=quizStates[containerId]; st.complete=true;
+  const wrong=st.qs.filter(q=>st.answers[q.id]&&!st.answers[q.id].correct);
+  const localTopic={};st.qs.forEach(q=>{const x=statObj(localTopic,q.topic);x.answered++;if(st.answers[q.id]?.correct)x.correct++});
+  const topicRows=Object.entries(localTopic).map(([k,v])=>[k,Math.round(v.correct/v.answered*100)+"%"]);
+  const sorted=Object.entries(localTopic).map(([k,v])=>({k,p:v.correct/v.answered})).sort((a,b)=>a.p-b.p);
+  const high=sorted.filter(x=>x.p<.6), med=sorted.filter(x=>x.p>=.6&&x.p<.8), strong=sorted.filter(x=>x.p>=.8);
+  document.getElementById(containerId).innerHTML=`<div class="card">
+    <h2>Quiz Results</h2><div class="stat">${st.score} / ${st.qs.length}</div><p>Accuracy: ${Math.round(st.score/st.qs.length*100)}%</p>
+    <div class="result-block"><h3>Performance by Topic</h3>${renderTable(topicRows.length?topicRows:[["No data","—"]])}</div>
+    <div class="result-block"><h3>Strong Topics</h3><p>${strong.length?strong.map(x=>escapeHtml(x.k)).join(", "):"None yet."}</p></div>
+    <div class="result-block"><h3>Topics Needing Revision</h3><p>${[...high,...med].length?[...high,...med].map(x=>escapeHtml(x.k)).join(", "):"None from this quiz."}</p></div>
+    <div class="result-block"><h3>Recommended Revision Priority</h3>
+      <p><span class="priority-high">HIGH PRIORITY</span><br>${high.length?high.map((x,i)=>`${i+1}. ${escapeHtml(x.k)}`).join("<br>"):"None"}</p>
+      <p><span class="priority-medium">MEDIUM PRIORITY</span><br>${med.length?med.map((x,i)=>`${i+1}. ${escapeHtml(x.k)}`).join("<br>"):"None"}</p>
+    </div>
+    <div class="result-block"><h3>Questions Answered Incorrectly</h3>${wrong.length?wrong.map(q=>`<div class="mistake">${escapeHtml(q.q)}</div>`).join(""):"None — great job."}</div>
+    <div class="controls"><button class="btn" onclick="showPage('mistakes')">Review Mistakes</button><button class="btn primary" onclick="restartQuiz('${containerId}')">Retry Quiz</button><button class="btn" onclick="showPage('${st.kind==='ch2'?'ch2-notes':'ch1-notes'}')">Return to Notes</button></div>
+  </div>`;
+}
+setupQuiz("quiz-ch1","ch1");setupQuiz("quiz-ch2","ch2");setupQuiz("quiz-all","all");
+
+function renderMistakes(){
+  const el=document.getElementById("mistakeList");
+  const ids=Object.keys(progress.mistakes);
+  document.getElementById("mistakeQuizBtn").disabled=!ids.length;
+  el.innerHTML=ids.length?ids.map(id=>{
+    const q=questions.find(x=>x.id===id); if(!q)return "";
+    return `<div class="mistake"><div class="quiz-meta"><span class="pill">Chapter ${q.chapter}</span><span class="pill">${escapeHtml(q.topic)}</span></div><strong>${escapeHtml(q.q)}</strong><p><strong>Correct answer:</strong> ${escapeHtml(q.opts[q.answer])}</p><p>${escapeHtml(q.explanation)}</p><p class="muted">Wrong attempts recorded: ${progress.mistakes[id].count}</p></div>`;
+  }).join(""):`<div class="card" style="margin-top:16px"><p>No mistakes stored yet.</p></div>`;
+}
+document.getElementById("mistakeQuizBtn").onclick=()=>{showPage("mistakes");const holder=document.createElement("div");holder.id="quiz-mistakes";holder.className="quiz-shell";document.getElementById("mistakeList").prepend(holder);setupQuiz("quiz-mistakes","mistakes");startQuiz("quiz-mistakes","mistakes","all")};
+
+function renderProgress(){
+  const el=document.getElementById("progressContent");
+  const chapRows=Object.entries(progress.chapters).map(([k,v])=>[k,`${v.correct}/${v.answered} (${Math.round(v.correct/v.answered*100)}%)`]);
+  const topicRows=Object.entries(progress.topics).map(([k,v])=>[k,`${v.correct}/${v.answered} (${Math.round(v.correct/v.answered*100)}%)`]).sort((a,b)=>parseInt(a[1].match(/\((\d+)/)?.[1]||0)-parseInt(b[1].match(/\((\d+)/)?.[1]||0));
+  const weak=Object.entries(progress.topics).filter(([k,v])=>v.answered>=2&&v.correct/v.answered<.6).map(([k])=>k);
+  const strong=Object.entries(progress.topics).filter(([k,v])=>v.answered>=2&&v.correct/v.answered>=.8).map(([k])=>k);
+  el.innerHTML=`<div class="grid">
+    <div class="card"><h3>Quiz attempts</h3><div class="stat">${progress.attempts}</div></div>
+    <div class="card"><h3>Total questions</h3><div class="stat">${progress.total}</div></div>
+    <div class="card"><h3>Correct</h3><div class="stat">${progress.correct}</div></div>
+    <div class="card"><h3>Overall accuracy</h3><div class="stat">${progress.total?Math.round(progress.correct/progress.total*100):0}%</div></div>
+  </div>
+  <div class="card" style="margin-top:16px"><h2>Performance by Chapter</h2>${chapRows.length?renderTable(chapRows):"<p>No data yet.</p>"}</div>
+  <div class="card" style="margin-top:16px"><h2>Performance by Topic</h2>${topicRows.length?renderTable(topicRows):"<p>No data yet.</p>"}</div>
+  <div class="grid" style="margin-top:16px"><div class="card"><h3>Strong Topics</h3><p>${strong.length?strong.map(escapeHtml).join(", "):"Answer more questions to identify strengths."}</p></div><div class="card"><h3>Topics to Review</h3><p>${weak.length?weak.map(escapeHtml).join(", "):"No repeated weak topic detected yet."}</p></div></div>`;
+}
+function renderDashboard(){
+  document.getElementById("homeAnswered").textContent=progress.total;
+  document.getElementById("homeAccuracy").textContent=(progress.total?Math.round(progress.correct/progress.total*100):0)+"%";
+}
+renderDashboard();renderMistakes();renderProgress();
+
+const savedTheme=localStorage.getItem("ssRevisionTheme")||"light";document.documentElement.dataset.theme=savedTheme;
+document.getElementById("themeBtn").onclick=()=>{const t=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=t;localStorage.setItem("ssRevisionTheme",t)};
+document.getElementById("resetBtn").onclick=()=>{if(confirm("Reset all quiz progress and mistake history?")){progress=structuredClone(defaultProgress);localStorage.removeItem(storageKey);save()}};
+
+document.getElementById("searchInput").addEventListener("input",e=>{
+  const term=e.target.value.trim().toLowerCase();
+  document.querySelectorAll(".searchable").forEach(el=>{
+    el.querySelectorAll("mark").forEach(m=>m.replaceWith(document.createTextNode(m.textContent)));
+    el.normalize();
+  });
+  if(!term)return;
+  showPage("ch1-notes");
+  const candidates=[...document.querySelectorAll("#ch1-notes .searchable,#ch2-notes .searchable,#ch1-quick .searchable,#ch2-quick .searchable")];
+  let first=null;
+  candidates.forEach(el=>{
+    if(el.textContent.toLowerCase().includes(term)){
+      if(!first)first=el;
+      highlightText(el,term);
+    }
+  });
+  if(first){const page=first.closest(".page");showPage(page.id);setTimeout(()=>first.scrollIntoView({behavior:"smooth",block:"center"}),50)}
+});
+function highlightText(root,term){
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>(n.parentElement&&["SCRIPT","STYLE","MARK"].includes(n.parentElement.tagName))?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
+  const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+  nodes.forEach(n=>{const idx=n.nodeValue.toLowerCase().indexOf(term);if(idx>=0){const range=document.createRange();range.setStart(n,idx);range.setEnd(n,idx+term.length);const m=document.createElement("mark");range.surroundContents(m)}});
+}
+</script>
+</body>
+</html>
