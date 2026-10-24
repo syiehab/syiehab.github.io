@@ -1,0 +1,66 @@
+# Overrides recovered from the live HTML; other settings use theme defaults.
+menu:
+  Home: / || fas fa-home
+  Archives: /archives/ || fas fa-archive
+  Tags: /tags/ || fas fa-tags
+  Categories: /categories/ || fas fa-folder-open
+  Notes: /notes/ || fas fa-book-open
+  Finals: /finals/ || fas fa-graduation-cap
+  About: /about/ || fas fa-heart
+social:
+  fab fa-github: https://github.com/syiehab || Github || '#ffffff'
+  fab fa-x-twitter: https://x.com/ukyovis || X || '#ffffff'
+  fab fa-spotify: https://open.spotify.com/user/22oy7kjj3lzgeabmq3ribiw2y?si=72473b17ab7a4c06 || Spotify || '#ffffff'
+favicon: /favicon.ico
+avatar:
+  img: https://i.pinimg.com/736x/f4/04/44/f4044494aeacb1a2a428a597e072bdad.jpg
+  effect: false
+index_img: https://wallpapercave.com/wp/wp8908552.jpg
+default_top_img: https://wallpapercave.com/wp/wp8908552.jpg
+footer_img: true
+subtitle:
+  enable: true
+  effect: true
+  source: false
+  sub:
+    - Welcome to my blog :D
+    - 48bb6e862e54f2a795ffc4e541caed4d
+    - cool text effect hehe
+display_mode: dark
+darkmode:
+  enable: true
+  button: true
+  autoChangeMode: false
+  start: 6
+  end: 18
+aside:
+  enable: true
+  card_author:
+    enable: true
+    description: '2nd Year Cyber Security Student'
+    button:
+      enable: false
+  card_announcement:
+    enable: true
+    content: Noob CTF Player
+footer:
+  owner:
+    enable: true
+    since: 2024
+  copyright: true
+fancybox: true
+post_meta:
+  page:
+    tags: true
+canvas_nest:
+  enable: true
+  color: '0,0,255'
+  opacity: 0.7
+  zIndex: -1
+  count: 99
+  mobile: false
+activate_power_mode:
+  enable: true
+  colorful: true
+  shake: true
+  mobile: false

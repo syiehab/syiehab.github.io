@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CISB3112 Complete Answer Guide</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1c1714;--ink-mid:#3a2f28;--ink-soft:#6b5a50;--ink-faint:#b09e94;
+  --paper:#faf7f3;--paper-warm:#f4ede4;--paper-mid:#ebe1d6;--div:#d9cfc4;
+  --ac:#8c3b10;--acl:#c45e28;--acp:#f5e8de;
+  --bl:#1a3a60;--blp:#e2eaf5;--blm:#3a6ea8;
+  --gr:#1b4a2a;--grp:#e2ede6;
+  --go:#7a5800;--gop:#fef5d8;--gob:#d4a010;
+  --te:#0d4a4a;--tep:#e0f0ef;
+}
+body{font-family:Georgia,'Times New Roman',serif;background:var(--paper);color:var(--ink);line-height:1.8;font-size:15px}
+header{background:var(--ink);padding:2.5rem 2rem 2.2rem;text-align:center;border-bottom:4px solid var(--ac)}
+header .sub{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:.6rem;font-family:Arial,sans-serif}
+header h1{font-size:2rem;font-weight:700;color:#faf7f3}
+header .meta{margin-top:.6rem;font-size:12px;color:var(--ink-faint);font-family:Arial,sans-serif;letter-spacing:.05em}
+.tabs{background:#2a211a;display:flex;overflow-x:auto;border-bottom:3px solid var(--ac);position:sticky;top:0;z-index:99}
+.tab{flex-shrink:0;background:transparent;border:none;color:#9e8c82;padding:.85rem 1.6rem;cursor:pointer;font-family:Arial,sans-serif;font-size:11px;letter-spacing:.07em;text-transform:uppercase;border-bottom:3px solid transparent;margin-bottom:-3px;transition:color .2s}
+.tab:hover{color:#e8ddd6}
+.tab.on{color:#faf7f3;border-bottom-color:var(--acl);font-weight:700}
+.panel{display:none}.panel.on{display:block}
+.wrap{max-width:860px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+.sh{display:flex;align-items:center;gap:.75rem;margin:2.5rem 0 1.2rem;padding-bottom:.6rem;border-bottom:2.5px solid var(--ac)}
+.sb{background:var(--ac);color:#faf7f3;font-size:10px;letter-spacing:.15em;text-transform:uppercase;padding:3px 10px;border-radius:2px;font-family:Arial,sans-serif;white-space:nowrap}
+.st{font-size:1.25rem;color:var(--ink)}
+.qb{margin-bottom:.8rem;border:1px solid var(--div);border-radius:3px;overflow:hidden;background:#fff}
+.qt{width:100%;background:var(--paper-warm);border:none;padding:.85rem 1.2rem;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:Georgia,serif;font-size:13.5px;color:var(--ink-mid);transition:background .15s}
+.qt:hover{background:var(--paper-mid)}
+.qt.on{background:var(--ink);color:#faf7f3}
+.ql{font-weight:700;flex:1;padding-right:.5rem}
+.qm{font-size:10px;letter-spacing:.07em;text-transform:uppercase;opacity:.6;flex-shrink:0;font-family:Arial,sans-serif}
+.ch{font-size:14px;transition:transform .2s;flex-shrink:0;margin-left:.5rem}
+.qt.on .ch{transform:rotate(180deg)}
+.qbody{display:none;padding:1.5rem 1.5rem 1.75rem;border-top:1px solid var(--div)}
+.qbody.on{display:block}
+.part{margin-bottom:1.4rem}.part:last-child{margin-bottom:0}
+.pl{display:inline-block;background:var(--acp);color:var(--ac);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:2px 8px;border-radius:2px;margin-bottom:.55rem;font-weight:700;font-family:Arial,sans-serif}
+.ans{font-size:14.5px;line-height:1.82;color:var(--ink-mid)}
+.ans p{margin-bottom:.7rem}.ans p:last-child{margin-bottom:0}
+strong.t{color:var(--ink);font-weight:700}
+ol.nl{list-style:none;counter-reset:nl;padding:0;margin:.5rem 0 .75rem}
+ol.nl li{counter-increment:nl;position:relative;padding-left:1.9rem;margin-bottom:.75rem;font-size:14.5px;line-height:1.78;color:var(--ink-mid)}
+ol.nl li::before{content:counter(nl)'.';position:absolute;left:0;color:var(--ac);font-weight:700;font-size:13px}
+ul.bl{list-style:none;padding:0;margin:.5rem 0 .75rem}
+ul.bl li{position:relative;padding-left:1.4rem;margin-bottom:.55rem;font-size:14.5px;line-height:1.75;color:var(--ink-mid)}
+ul.bl li::before{content:'▸';position:absolute;left:0;color:var(--acl);font-size:11px;top:4px}
+.defbox{background:var(--blp);border-left:3px solid var(--blm);padding:.75rem 1rem;border-radius:0 3px 3px 0;margin:.6rem 0}
+.defbox .dl{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--bl);font-weight:700;font-family:Arial,sans-serif;margin-bottom:.2rem}
+.defbox p{font-size:14px;color:#1a3a60;margin:0;line-height:1.65}
+.verd{background:var(--gop);border:1px solid var(--gob);border-radius:3px;padding:.65rem 1rem;margin-top:.7rem;font-size:13.5px;color:var(--go);line-height:1.6}
+.verd strong{color:var(--go)}
+.pc{background:var(--grp);border-left:3px solid var(--gr);padding:.7rem 1rem;margin:.55rem 0;border-radius:0 3px 3px 0}
+.pc .pcl{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--gr);font-weight:700;font-family:Arial,sans-serif;margin-bottom:.2rem}
+.pc p{font-size:14px;color:#1b4a2a;margin:0;line-height:1.65}
+.call{background:var(--acp);border:1px solid #e8c0aa;border-radius:3px;padding:.85rem 1.1rem;margin:.8rem 0;font-size:13.5px;color:var(--ac);line-height:1.65}
+.call strong{color:var(--ac)}
+table.ct{width:100%;border-collapse:collapse;font-size:13.5px;margin:.7rem 0}
+table.ct th{background:var(--ink-mid);color:#faf7f3;padding:.5rem .75rem;text-align:left;font-size:11.5px;letter-spacing:.03em;font-family:Arial,sans-serif}
+table.ct td{padding:.5rem .75rem;border-bottom:1px solid var(--div);color:var(--ink-mid);vertical-align:top}
+table.ct tr:nth-child(even) td{background:var(--paper-warm)}
+.chip{display:inline-flex;align-items:center;background:var(--ink);color:#faf7f3;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border-radius:2px;margin-bottom:1.5rem;font-family:Arial,sans-serif}
+</style>
+</head>
+<body>
+<header>
+  <div class="sub">Computing Ethics &amp; Society · CISB3112</div>
+  <h1>Complete Answer Guide — All Three Papers</h1>
+  <div class="meta">Special Semester 2024/2025 &nbsp;·&nbsp; Semester 2 2024/2025 &nbsp;·&nbsp; Semester 1 2025/2026</div>
+</header>
+<div class="tabs">
+  <button class="tab on" onclick="showP('sp',this)">Special Sem 2024/25</button>
+  <button class="tab" onclick="showP('s2',this)">Semester 2 2024/25</button>
+  <button class="tab" onclick="showP('s1',this)">Semester 1 2025/26</button>
+</div>
+
+<!-- ===== SPECIAL SEMESTER 2024/2025 ===== -->
+<div id="p-sp" class="panel on"><div class="wrap">
+<div class="chip">Special Semester 2024 / 2025</div>
+<div class="sh"><span class="sb">Section B</span><span class="st">Subjective Questions — 50 Marks</span></div>
+
+<div class="qb">
+<button class="qt on" onclick="tq(this)"><span class="ql">Q1(a) — Socrates' Views on Obeying Laws in Digital Environments</span><span class="qm">5 marks</span><span class="ch">▾</span></button>
+<div class="qbody on"><div class="ans">
+<p>Socrates, through Plato's <em>Crito</em>, argued that citizens who benefit from the state's laws enter an implicit social contract and are morally obligated to obey those laws — or work to change them through legitimate persuasion rather than defiance. His views remain highly relevant to digital ethics today:</p>
+<ol class="nl">
+<li><strong class="t">Social contract obligation in cyberspace:</strong> Internet users benefit from digital infrastructure, platform services, and legal frameworks that protect them online. This creates a Socratic duty to comply with cybersecurity laws (Computer Crimes Act 1997), data protection regulations (PDPA 2010), and intellectual property law — not merely because enforcement is possible, but because it is ethically owed.</li>
+<li><strong class="t">Legitimate channels over digital vigilantism:</strong> Socrates believed in using persuasion and speech to change bad laws. In digital contexts, this means advocating against censorship or surveillance laws through democratic channels — rather than hacking government infrastructure or conducting cyberattacks as protest.</li>
+<li><strong class="t">Moral duty persists despite anonymity:</strong> The internet provides anonymity unavailable in ancient Athens, yet Socrates' view implies that anonymity does not reduce moral obligation. A person who pirates software, conducts phishing attacks, or spreads malware cannot justify the act because they will not be caught.</li>
+<li><strong class="t">Tension with unjust digital laws:</strong> Socrates acknowledged that deeply unjust laws may warrant principled defiance at great personal cost — relevant to digital rights advocates facing authoritarian censorship — though he counselled extreme restraint.</li>
+<li><strong class="t">Professional accountability for IT practitioners:</strong> Socratic ethics reinforces that professional codes of conduct (ACM Code of Ethics) represent a social contract with the public. Compliance is a moral duty, not merely a legal one.</li>
+</ol>
+<div class="verd"><strong>Conclusion:</strong> Socrates' social contract reasoning applies broadly to digital citizenship — the obligation to obey digital laws, use legitimate dissent, and uphold professional ethics all find grounding in his philosophy.</div>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q1(b) — Subjective Relativism vs Cultural Relativism</span><span class="qm">5 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<div class="defbox"><div class="dl">Subjective Relativism</div><p>Moral judgments are relative to the individual. Each person is their own sole moral authority. What is right or wrong depends entirely on one's personal beliefs and attitudes. There are no objective moral truths — only individual perspectives, all equally valid.</p></div>
+<div class="defbox"><div class="dl">Cultural Relativism</div><p>Moral judgments are relative to the culture or society a person belongs to. An action is right or wrong only within the context of the cultural norms of a particular group. No culture can claim moral superiority over another; ethics is defined by shared social norms, not universal principles.</p></div>
+<p><strong class="t">Key Differences:</strong></p>
+<table class="ct">
+<tr><th>Dimension</th><th>Subjective Relativism</th><th>Cultural Relativism</th></tr>
+<tr><td>Unit of moral authority</td><td>The individual</td><td>The cultural group / society</td></tr>
+<tr><td>Shared moral standards?</td><td>No — every person decides alone</td><td>Yes — shared within a culture only</td></tr>
+<tr><td>Source of moral rules</td><td>Personal beliefs and attitudes</td><td>Cultural norms, traditions, customs</td></tr>
+<tr><td>Can we critique others?</td><td>No — no shared standard exists</td><td>Only within a culture; not across cultures</td></tr>
+<tr><td>Major weakness</td><td>Cannot condemn any individual act; morality collapses to preference</td><td>Cannot condemn atrocities if "culturally normal"</td></tr>
+</table>
+<div class="verd"><strong>IT Example:</strong> A developer who personally decides "using unlicensed code is fine" reflects subjective relativism. A tech culture where "everyone torrents software here so it's acceptable" reflects cultural relativism.</div>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q2(a) — Two Reasons Internet Censorship is Challenging</span><span class="qm">5 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<ol class="nl">
+<li><strong class="t">Borderless and decentralised nature of the internet:</strong> The internet operates across national jurisdictions simultaneously. Content hosted on servers in one country can be accessed freely from anywhere. A government may block certain websites domestically but lacks legal jurisdiction over foreign servers. International cooperation on censorship is politically contentious and legally complex, making comprehensive enforcement nearly impossible without severely restricting legitimate traffic.</li>
+<li><strong class="t">Rapid evolution of technical circumvention tools:</strong> Users can bypass censorship using VPNs, Tor anonymity network, proxy servers, encrypted DNS, and mirror sites. As authorities develop more sophisticated filtering, users and developers adapt with more advanced circumvention tools — an ongoing arms race. Blocking these tools risks collateral damage to legitimate business, academic, and personal communications, creating significant ethical and economic trade-offs.</li>
+</ol>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q2(b) — CAN-SPAM Act 2003 &amp; Misleading Subject Lines</span><span class="qm">5 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<p>The <strong class="t">CAN-SPAM Act of 2003</strong> establishes legally binding rules for commercial email in the United States. The scenario — emails with the subject line "You've Won a Prize!" for promotional purposes — violates the Act as follows:</p>
+<ol class="nl">
+<li><strong class="t">Prohibition on deceptive subject lines (Section 5):</strong> The Act explicitly prohibits subject lines that are misleading about the contents or purpose of the email. "You've Won a Prize!" implies the recipient has won something when it is a promotional advertisement — a direct violation of the requirement that subject lines honestly reflect the message's content.</li>
+<li><strong class="t">Prohibition on false or misleading header information:</strong> All routing information (From, To, Reply-To) must accurately identify the sender. If the company disguises its identity, this is a further violation.</li>
+<li><strong class="t">Mandatory identification as an advertisement:</strong> The email must clearly disclose that it is a commercial advertisement. Framing it as a prize notification without this disclosure violates this requirement.</li>
+<li><strong class="t">Mandatory opt-out mechanism:</strong> Every commercial email must include a clear, conspicuous mechanism for recipients to opt out of future messages, honoured within 10 business days.</li>
+<li><strong class="t">Physical postal address:</strong> A valid physical postal address of the sender must be included in the email.</li>
+</ol>
+<div class="verd"><strong>Penalties:</strong> Each violation can attract fines up to $50,120 per email. The deceptive subject line is a clear violation of Section 5 and exposes the company to significant civil and potential criminal liability.</div>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q3(a) — Copyright Applied to Digital Intellectual Property</span><span class="qm">5 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<p>Copyright is an exclusive, automatic legal right protecting original creative works from unauthorised reproduction, distribution, or modification. In the digital world, it applies across different forms of IP:</p>
+<ol class="nl">
+<li><strong class="t">Software and source code:</strong> Computer programs are treated as literary works and protected automatically upon creation. This prevents competitors from copying, decompiling, or distributing proprietary code. Open-source licences (GPL, MIT) use copyright to enforce licence terms.</li>
+<li><strong class="t">Digital images and photography:</strong> Photographs and digital artwork are automatically protected from the moment of creation. Using an artist's image on a website or commercial product without permission constitutes infringement regardless of whether a copyright notice is displayed.</li>
+<li><strong class="t">Music and audio content:</strong> Both the musical composition (melody, lyrics) and the specific sound recording are separately copyrightable. Unauthorised downloading, streaming, sampling, or sharing of music violates these rights.</li>
+<li><strong class="t">E-books, articles, and digital text:</strong> Written works published digitally retain full copyright. Copying and republishing substantial portions of an e-book or academic article without permission infringes the author's exclusive rights.</li>
+<li><strong class="t">Audiovisual and video content:</strong> Films, online videos, and multimedia works are protected. Uploading movies or TV episodes without authorisation is infringement, enforceable through DMCA takedowns and platform content identification systems like YouTube ContentID.</li>
+</ol>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q3(b) — Solove's Taxonomy of Privacy &amp; Modern Social Media</span><span class="qm">5 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<p>Daniel Solove's Taxonomy (2006) identifies 16 privacy-related activities in four categories: <em>Information Collection</em>, <em>Information Processing</em>, <em>Information Dissemination</em>, and <em>Invasion</em>.</p>
+<p><strong class="t">Where the Taxonomy is useful for social media:</strong></p>
+<ol class="nl">
+<li><strong class="t">Aggregation problem:</strong> Social media platforms combine individually harmless data points — name, employer, location check-ins, likes, friends lists — into detailed sensitive profiles used for targeted advertising and political microtargeting. Solove's taxonomy explicitly identifies aggregation as a distinct privacy harm, giving regulators and critics precise vocabulary to articulate this concern.</li>
+<li><strong class="t">Secondary use:</strong> Data collected for one purpose (social connection) is repurposed for commercial profiling or sale to data brokers. The taxonomy treats secondary use as a harm independent from original collection, helping regulators argue that consent for one use does not imply consent for all uses.</li>
+<li><strong class="t">Surveillance and increased accessibility:</strong> Continuous tracking of user behaviour and making previously limited-audience content globally searchable are both captured within the taxonomy — directly applicable to social media architecture.</li>
+<li><strong class="t">Disclosure and distortion:</strong> Sharing private posts without consent and algorithmic amplification of false or damaging information fall within Solove's information dissemination harms.</li>
+</ol>
+<p><strong class="t">Limitations:</strong></p>
+<ul class="bl">
+<li>Developed before modern AI-driven platforms existed; does not address deepfakes, biometric surveillance, or algorithmic behaviour manipulation.</li>
+<li>Descriptive, not prescriptive — identifies harms but does not specify legal or technical remedies.</li>
+</ul>
+<div class="verd"><strong>Conclusion:</strong> Solove's Taxonomy remains highly useful for categorising social media privacy harms, but requires supplementation to address AI-era and platform-specific challenges.</div>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q4 — Malware Attack: Impact &amp; Prevention Strategies</span><span class="qm">4 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<p><strong class="t">Impact of a malware attack:</strong></p>
+<ul class="bl">
+<li><strong>Data breach and theft:</strong> Malware (spyware, keyloggers, RATs) can exfiltrate sensitive customer data, trade secrets, and financial records — exposing the company to PDPA 2010 penalties and civil liability.</li>
+<li><strong>Operational disruption:</strong> Ransomware encrypts critical systems and halts business operations entirely. Recovery can take days or weeks, causing severe financial loss.</li>
+<li><strong>Data integrity compromise:</strong> Some malware modifies or corrupts data without deletion, undermining the reliability of business records.</li>
+<li><strong>Reputational and financial damage:</strong> A publicised breach erodes customer confidence, triggers regulatory scrutiny, and may result in class-action litigation.</li>
+</ul>
+<p><strong class="t">Prevention strategies:</strong></p>
+<ol class="nl">
+<li><strong class="t">Regular software patching and vulnerability management:</strong> Apply security patches promptly to close known vulnerabilities exploited by malware.</li>
+<li><strong class="t">Employee security awareness training:</strong> Train staff to recognise phishing emails and social engineering — the primary malware delivery vectors.</li>
+<li><strong class="t">Endpoint protection and network defences:</strong> Deploy EDR tools, firewalls, and intrusion detection systems (IDS) to detect and block malicious activity at endpoint and network level.</li>
+<li><strong class="t">Encrypted off-site backups (3-2-1 rule):</strong> Maintain three copies of data on two media types with one off-site or offline, enabling recovery without paying ransom.</li>
+<li><strong class="t">Network segmentation and least privilege access:</strong> Divide the network into isolated zones and restrict user permissions to the minimum necessary for each role.</li>
+</ol>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q5(a) — Two Ethical App Development Practices</span><span class="qm">4 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<ol class="nl">
+<li><strong class="t">Privacy by Design (PbD):</strong> Integrating privacy protections from the earliest stages of development — conducting Privacy Impact Assessments (PIAs), minimising data collected to what is strictly necessary, and building consent management and access controls into the architecture from the start. <em>How it helps:</em> Ensures legal compliance with PDPA 2010 from launch, reduces costly post-release fixes, and builds user trust by treating privacy as a core value rather than an afterthought.</li>
+<li><strong class="t">Structured code review with an ethical risk checklist:</strong> Mandatory peer review of all code before deployment — evaluating not only for bugs but specifically screening for security vulnerabilities, discriminatory algorithmic outcomes, and misuse risks. Using a formal ethics checklist ensures that issues like insecure data storage or overly broad data collection are caught before reaching users. <em>How it helps:</em> Prevents harm to users, avoids regulatory liability, and creates institutional accountability for ethical decision-making within the team.</li>
+</ol>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q5(b) — Whistleblowing on Insecure Banking App: DeGeorge's Rules</span><span class="qm">4 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<div class="call"><strong>Recommendation:</strong> Yes — you should report (whistleblow) the issue if internal channels have been exhausted and the insecure banking app is about to be released.</div>
+<p>Richard De George outlined conditions under which whistleblowing is morally <em>permitted</em> and, in serious cases, morally <em>required</em>. Two directly applicable conditions:</p>
+<ol class="nl">
+<li><strong class="t">The harm to the public is serious and considerable (Condition 1):</strong> A banking application released without full security could expose users' login credentials, account numbers, transaction histories, and personal financial data to theft and fraud. The potential harm is severe and affects a large number of users who trust the app with their financial wellbeing. De George's condition is clearly satisfied: the harm is serious in nature (financial ruin, identity theft) and likely to affect a substantial number of people — justifying, and potentially requiring, disclosure.</li>
+<li><strong class="t">Internal reporting has been attempted and exhausted (Condition 3):</strong> De George requires the employee to first raise the issue internally before going external. If you have already flagged the security deficiencies to the project lead or management and been overruled or ignored, this condition is met. Having genuinely exhausted internal options, external reporting to Malaysia's MCMC or Bank Negara Malaysia becomes not only morally permitted but potentially required to prevent foreseeable harm to users.</li>
+</ol>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q6(a) — Digital Surveillance of Remote Workers: Ethical Concerns Justified</span><span class="qm">4 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<ol class="nl">
+<li><strong class="t">Invasion of the private home environment:</strong> Unlike a managed corporate office, an employee's home is a private space shared with family members. Monitoring tools that capture screenshots, log keystrokes, or activate webcams intrude into this private sphere. What is ethically permissible in an office becomes disproportionately invasive when deployed in someone's home where personal activities inevitably occur.</li>
+<li><strong class="t">Erosion of trust and psychological harm:</strong> Constant surveillance signals institutional distrust. Ethical management respects employees as autonomous professionals. Replacing trust with surveillance undermines morale, generates workplace anxiety, and may cause chronic stress — psychological harms that are real costs borne by workers.</li>
+<li><strong class="t">Proportionality and data minimisation concerns:</strong> Under PDPA 2010 principles, data collected should be limited to what is necessary for the stated purpose. Monitoring every keystroke and browser activity of a remote worker far exceeds what is necessary to confirm work is being completed — violating proportionality and data minimisation principles.</li>
+<li><strong class="t">Transparency obligation:</strong> Even where monitoring is legally permissible, employers are ethically obligated to be fully transparent about what is monitored, how data is used, and how long it is retained. Covert monitoring is unequivocally unethical regardless of legal status.</li>
+</ol>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q6(b) — Two Ethical Actions for Automating Cashier Jobs</span><span class="qm">4 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<ol class="nl">
+<li><strong class="t">Invest in retraining and reskilling programmes:</strong> The company should proactively offer affected cashiers funded training for alternative roles — such as customer experience associates, inventory system supervisors, or technical support staff for automated kiosks. This reflects the ethical duty to minimise harm to workers whose livelihoods are disrupted by decisions made entirely for corporate efficiency. It demonstrates respect for employees as individuals with worth and capacity for growth rather than as disposable resources.</li>
+<li><strong class="t">Provide adequate advance notice and financial transition support:</strong> Workers should receive meaningful advance notice of role changes — not a sudden announcement shortly before implementation — accompanied by fair severance packages, career counselling, and job placement assistance for those unable to transition to new roles. This allows employees time to plan financially and emotionally, mitigating the economic harm of sudden unemployment and reflecting the principle of justice: those who bear the costs of automation deserve fair compensation.</li>
+</ol>
+</div></div></div>
+
+<div class="sh"><span class="sb">Section C</span><span class="st">HealthSecure Case Study — 20 Marks</span></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">C1(a) — Kantian Ethics: HealthSecure's Actions — Three Supporting Points</span><span class="qm">9 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<p>Kant's Categorical Imperative has two key formulations: (1) <em>Universal Law</em> — act only on maxims you could will to be universal laws; and (2) <em>Humanity Formula</em> — always treat persons as ends in themselves, never merely as means.</p>
+<p><strong class="t">Point 1 — Sharing data without consent cannot be universalised (Universal Law):</strong></p>
+<p>HealthSecure's maxim: "A health app may share users' sensitive personal data with third-party advertisers without specific consent." If universalised — if every health application did this — the concept of informed consent would become meaningless. Users would stop trusting health apps with their data altogether, collapsing the ecosystem HealthSecure itself depends upon. The maxim is self-defeating; it cannot be universalised without contradiction. Therefore, sharing data without consent is morally unjustifiable under Kant's First Formulation.</p>
+<p><strong class="t">Point 2 — Storing unencrypted data treats users merely as means (Humanity Formula):</strong></p>
+<p>By failing to encrypt data and implement access controls, HealthSecure treated users' sensitive health information as a low-cost resource to exploit rather than as data belonging to autonomous persons deserving protection. Users were not informed of the security inadequacy and could not consent to the risk. Kant's Humanity Formula is violated — users were treated as data commodities to facilitate HealthSecure's business model, not as rational beings with dignity and rights.</p>
+<p><strong class="t">Point 3 — Removing attribution from copyrighted code involves deliberate deception, which Kant absolutely prohibits:</strong></p>
+<p>The developer took another person's code, removed all attribution, and claimed the feature as original. Kant holds that deception is categorically impermissible under all circumstances. Additionally, applying the Universal Law test: if every developer universally appropriated others' code and claimed it as their own, the entire foundation of open-source collaboration and intellectual attribution would collapse. No rational developer would share work under such conditions. The maxim is self-defeating, and the act involves a direct lie — morally unjustifiable under both formulations.</p>
+<div class="verd"><strong>Conclusion:</strong> None of HealthSecure's actions — unauthorised data sharing, insecure storage, or deceptive code attribution — is morally justifiable under Kantian ethics. All three fail the universalisability test and violate the requirement to respect persons as rational ends in themselves.</div>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">C1(b) — PDPA 2010: Two User Rights Violated</span><span class="qm">5 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<ol class="nl">
+<li><strong class="t">Right to be Informed and Right to Consent (Sections 6 &amp; 7, PDPA 2010):</strong> Under the PDPA, data users must clearly inform data subjects of the purposes for which their data is collected and must obtain explicit consent before processing it for any purpose — particularly any secondary use beyond the original stated purpose. HealthSecure collected sensitive health data under the guise of a free health tracking app but secretly shared it with third-party advertisers and researchers. Users were never informed of this secondary use and never provided specific consent for it. This directly violates their right to be informed and their right to control how their personal data is used.</li>
+<li><strong class="t">Right to Security and Protection from Unauthorised Access (Section 9, PDPA 2010):</strong> The PDPA requires data users to implement reasonable, practical security measures to protect personal data from loss, misuse, modification, unauthorised access, or disclosure. HealthSecure stored highly sensitive health and contact data of over 200,000 users in plaintext (unencrypted) on cloud servers with no access controls — a fundamental and egregious failure of this duty. The resulting data breach is direct evidence of this violation. Every user whose data was exposed had their right to have personal data protected securely violated.</li>
+</ol>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">C1(c) — Creative Commons &amp; Copyright: Was the Code Reuse Ethical or Legal?</span><span class="qm">3 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<p><strong class="t">Legal analysis:</strong> Open-source code on GitHub is governed by specific licence terms (MIT, Apache 2.0, GPL, etc.). All standard open-source licences — and Creative Commons Attribution (CC BY) licences — require that attribution to the original author be retained in all copies or substantially derived works. By removing this attribution, the developer breached the licence terms. A licence breach voids the permission to use the code and converts the use into copyright infringement — making the reuse legally unauthorised and actionable under copyright law.</p>
+<p><strong class="t">Ethical analysis:</strong> Even setting aside legality, deliberately removing attribution and falsely claiming another person's work as original constitutes deliberate deception. It denies the original developer due recognition, violates the trust underpinning open-source collaboration, and constitutes professional misrepresentation — an ethical violation independent of and additional to the legal one.</p>
+<div class="verd"><strong>Conclusion:</strong> The developer's action was neither ethical nor legal. It breached the open-source licence (copyright infringement), involved deliberate deception (removing attribution), and falsely claimed another person's intellectual work as original — failing both legal standards and basic professional ethics.</div>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">C1(d) — Two Measures to Prevent Future Data Breaches</span><span class="qm">3 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<ol class="nl">
+<li><strong class="t">Technical measure — End-to-end encryption and strict access control:</strong> Implement AES-256 encryption for all personal data stored at rest on cloud servers, and TLS encryption for all data in transit. Deploy Role-Based Access Control (RBAC) enforcing the principle of least privilege — ensuring only authorised personnel with a legitimate need can access specific categories of sensitive health data. Conduct regular penetration testing and vulnerability assessments to identify and remediate weaknesses proactively.</li>
+<li><strong class="t">Organisational measure — Data governance framework and PDPA compliance programme:</strong> Establish a comprehensive data governance policy covering data classification, a formal consent management system, and a documented incident response plan. Appoint a Data Protection Officer (DPO) to oversee PDPA 2010 compliance, deliver regular staff training on data handling obligations, and conduct Privacy Impact Assessments (PIAs) before deploying any new features involving personal health data.</li>
+</ol>
+</div></div></div>
+
+</div></div>
+
+<!-- ===== SEMESTER 2 2024/2025 ===== -->
+<div id="p-s2" class="panel"><div class="wrap">
+<div class="chip">Semester 2 — 2024 / 2025</div>
+<div class="sh"><span class="sb">Section B</span><span class="st">Short Answers — 50 Marks</span></div>
+
+<div class="qb">
+<button class="qt on" onclick="tq(this)"><span class="ql">Q1 — How Malaysia Handles Spam &amp; Conditions for Punishment</span><span class="qm">4 marks</span><span class="ch">▾</span></button>
+<div class="qbody on"><div class="ans">
+<p>Malaysia does not have a dedicated anti-spam law but addresses spam-related offences under several existing statutes:</p>
+<ol class="nl">
+<li><strong class="t">Communications and Multimedia Act 1998 (CMA), Section 233:</strong> Prohibits improper use of network facilities to transmit communications that are obscene, false, menacing, or offensive with intent to annoy, abuse, threaten, or harass. Deceptive promotional spam, phishing messages, and harassing bulk emails fall within this provision. <em>Punishment:</em> Fine not exceeding RM50,000, or imprisonment not exceeding one year, or both on conviction.</li>
+<li><strong class="t">Personal Data Protection Act 2010 (PDPA):</strong> Sending marketing emails using personal data collected without consent violates PDPA requirements for lawful processing and explicit consent for marketing. Data users found in violation face fines and criminal charges.</li>
+<li><strong class="t">Computer Crimes Act 1997:</strong> Where spam is used for phishing, identity theft, or unauthorised access to computer systems, this Act may also apply.</li>
+</ol>
+<p><strong class="t">Conditions for punishment:</strong> A sender may be punished when they knowingly transmit unsolicited or deceptive commercial messages using network facilities; when they use personal data collected without appropriate consent; when the message is intentionally misleading, fraudulent, or designed to cause distress or financial harm; or when spam is used to facilitate phishing, malware distribution, or other cybercrimes.</p>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q2(a)(i) — Was Alex's Action Appropriate?</span><span class="qm">3 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<p><strong class="t">No — Alex's action was not appropriate, either legally or ethically.</strong></p>
+<p>The Creative Commons Attribution (CC BY) licence allows users to freely share, copy, adapt, and even commercially use the material — subject to one non-negotiable condition: <em>appropriate credit must be given to the original creator</em>, including their name, a link to the original work, and a link to the licence.</p>
+<p>Alex violated this condition in two compounding ways:</p>
+<ul class="bl">
+<li><strong>Omission of attribution:</strong> He entirely failed to credit the original creator — a direct breach of the CC BY licence terms.</li>
+<li><strong>False claim of authorship:</strong> He actively misrepresented the image as his own original work, going beyond mere omission into deliberate dishonesty.</li>
+</ul>
+<p>These actions constitute a breach of the CC BY licence (potentially actionable as copyright infringement since licence permission is voided by non-compliance), academic dishonesty, and a fundamental ethical violation of intellectual property norms. The permissiveness of the licence does not grant users permission to claim others' work as their own — it only waives payment in exchange for attribution.</p>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q2(a)(ii) — Responsibilities Under CC Attribution Licence</span><span class="qm">3 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<ul class="bl">
+<li><strong class="t">Provide appropriate credit:</strong> Clearly identify the original creator's name (or username if real name unavailable), the title of the work where known, and the URL of the original work.</li>
+<li><strong class="t">Include a licence reference:</strong> Provide a link to the CC BY licence (e.g., creativecommons.org/licenses/by/4.0/) so others know the terms under which the work is used.</li>
+<li><strong class="t">Indicate if modifications were made:</strong> If the image was cropped, edited, or otherwise adapted, this must be clearly stated — for example, "Image adapted from [original source] by [original creator]." Users must not imply endorsement by the original creator.</li>
+<li><strong class="t">Do not claim ownership:</strong> Users must not represent the CC-licensed work as their own original creation or imply they hold copyright over it.</li>
+</ul>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q2(b) — One Consequence of Using IP Without Permission</span><span class="qm">2 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<p><strong class="t">Legal liability and financial penalties:</strong> The intellectual property owner may initiate civil legal proceedings for copyright or patent infringement. Courts can grant injunctions ordering immediate cessation of the infringing use and award damages compensating the IP owner for lost earnings and licensing fees denied. In Malaysia, the Copyright Act 1987 provides for criminal prosecution in serious cases, with fines and potential imprisonment. For businesses, this can result in substantial financial exposure, reputational damage, and forced product removal from distribution platforms — consequences that can threaten the continued operation of a company, particularly a startup.</p>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q3(a) — Software Piracy: Definition and Why It is Unethical</span><span class="qm">4 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<div class="defbox"><div class="dl">Software Piracy</div><p>The unauthorised copying, distribution, installation, sale, or use of software without a valid licence from the developer or publisher. This includes downloading cracked software, using a single licence key on more machines than permitted, sharing licence keys, and creating or distributing counterfeit copies of commercial software.</p></div>
+<p><strong class="t">Why it is considered unethical:</strong></p>
+<ul class="bl">
+<li><strong>Theft of intellectual property:</strong> Software represents enormous investments of skilled labour, creativity, and capital. Copying it without authorisation is analogous to stealing a physical product — the creator is denied compensation they legitimately earned.</li>
+<li><strong>Violation of the developer's exclusive rights:</strong> Copyright law grants developers the exclusive right to determine how their work is distributed, priced, and used. Piracy overrides this autonomy without consent, violating both the legal right and the underlying moral right of creators to control their own work.</li>
+<li><strong>Harm to the development ecosystem:</strong> Lost revenues reduce resources for research and development, security patches, and support — legitimate users ultimately bear this cost through higher prices and reduced software quality.</li>
+<li><strong>Unfair competitive advantage:</strong> Businesses using pirated software gain an illegitimate cost advantage over competitors who pay for licences, distorting fair market competition.</li>
+</ul>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q3(b) — Two Negative Effects of Software Piracy</span><span class="qm">4 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<ol class="nl">
+<li><strong class="t">Financial harm to the software industry and innovation:</strong> Software piracy directly deprives developers and publishers of licence sale revenue. For large companies, this reduces funds for R&amp;D, resulting in slower innovation. For small independent developers, widespread piracy can be existential — directly driving them out of business. These losses are ultimately passed on to consumers through higher prices for legitimate software.</li>
+<li><strong class="t">Serious security and safety risks to users of pirated software:</strong> Pirated software is routinely distributed through unofficial channels where malicious actors inject malware, ransomware, spyware, or backdoors into installation packages. The user who pirated the software may become the primary victim — having files encrypted for ransom, banking credentials stolen, or their device conscripted into a botnet. Pirated software also cannot receive official security patches, leaving known vulnerabilities permanently unpatched.</li>
+</ol>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q4(a) — Personal Information vs Public Information</span><span class="qm">4 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<table class="ct">
+<tr><th></th><th>Personal Information</th><th>Public Information</th></tr>
+<tr><td><strong>Definition</strong></td><td>Data that identifies or can reasonably be used to identify a specific living individual; typically private and shared only in specific trusted contexts with an expectation of limited use.</td><td>Data freely accessible to any member of the general public; not restricted, without a reasonable expectation of confidentiality.</td></tr>
+<tr><td><strong>Legal protection</strong></td><td>Protected under PDPA 2010; requires lawful basis and often explicit consent to collect, process, or share.</td><td>Generally not subject to personal data protection restrictions; can be freely accessed and used.</td></tr>
+<tr><td><strong>Example</strong></td><td>A person's MyKad number, home address, medical diagnosis, salary details, or private mobile phone number.</td><td>A company's registered business address in the Companies Commission of Malaysia (SSM) public registry, or a public figure's name and job title in a published news article.</td></tr>
+</table>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q4(b) — Two PDPA 2010 Rights &amp; How They Protect Personal Data</span><span class="qm">6 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<ol class="nl">
+<li><strong class="t">Right of Access (Section 30, PDPA 2010):</strong> An individual (data subject) has the right to request access to their personal data held by any data user, to be informed of the purposes for which it is being processed, and to identify third parties to whom it has been disclosed. The data user must respond within 21 days. <em>How it protects:</em> This right gives individuals visibility and control over their own data. It enables them to verify what information is held, identify unauthorised collection, check for inaccuracies, and confirm whether data has been shared without their knowledge — creating accountability and deterring covert data collection.</li>
+<li><strong class="t">Right to Correction (Section 34, PDPA 2010):</strong> An individual has the right to request correction of personal data that is inaccurate, incomplete, misleading, or out of date. The data user must make the correction within 21 days and transmit the corrected data to third parties who previously received the incorrect information. <em>How it protects:</em> Inaccurate data can cause significant harm — wrongful credit rejections, incorrect medical treatment, or unfair employment decisions. This right ensures data remains accurate, protecting individuals from decisions based on wrong information and holding organisations responsible for data quality.</li>
+</ol>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q5(a) — What is Whistleblowing?</span><span class="qm">2 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<div class="defbox"><div class="dl">Whistleblowing</div><p>Whistleblowing is the act by which a current or former member of an organisation — typically an employee — discloses information about illegal, immoral, unsafe, or otherwise illegitimate practices occurring within that organisation to a person or body with the authority or ability to take corrective action. Disclosure may be internal (to senior management or a compliance officer) or external (to regulators, law enforcement, or the public). Whistleblowing typically involves personal risk to the disclosing individual, including potential retaliation or job loss, and is generally motivated by concern for the public interest or protection of affected parties.</p></div>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q5(b) — Ethical &amp; Unethical Whistleblowing Situations with Examples</span><span class="qm">6 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<div class="part"><div class="pl">Situation Where Whistleblowing May Be Ethical</div>
+<p class="ans"><strong class="t">When it may be ethical:</strong> When serious harm to the public is imminent or ongoing, internal reporting has been genuinely attempted and failed, credible evidence exists, and the motivation is protecting the public interest rather than personal gain.</p>
+<p class="ans"><strong class="t">Example:</strong> A cybersecurity analyst at a hospital discovers that the patient management system stores all patient medical records — including HIV statuses and psychiatric histories — in plaintext with no encryption or access controls. She reports this to IT management on three occasions over two months with no action taken. She then files a formal report with Malaysia's Department of Personal Data Protection (JPDP) and Ministry of Health. This is morally justified: the harm to patients is serious and imminent, internal channels were genuinely exhausted, evidence is concrete, and her motivation is to protect patients who cannot protect themselves.</p>
+</div>
+<div class="part"><div class="pl">Situation Where Whistleblowing May Be Unethical</div>
+<p class="ans"><strong class="t">When it may be unethical:</strong> When the act is primarily motivated by personal revenge or financial self-interest rather than genuine public concern; when it disproportionately harms innocent third parties; or when the alleged wrongdoing is minor and internal channels were never genuinely attempted.</p>
+<p class="ans"><strong class="t">Example:</strong> A software developer passed over for promotion anonymously leaks the company's proprietary source code and confidential client contracts to a competitor, framing it as "exposing poor security practices." In reality, the code contains no significant vulnerabilities, the dismissal was lawful, and the motivation is personal grievance. The disclosure harms innocent colleagues and client organisations. This is malicious sabotage disguised as whistleblowing and is morally unjustifiable.</p>
+</div>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q6(a) — Two Benefits &amp; Two Challenges of Telework for Employees</span><span class="qm">4 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<p><strong class="t">Benefits:</strong></p>
+<ol class="nl">
+<li><strong class="t">Flexibility and improved work-life balance:</strong> Remote work allows employees to structure their workday around personal responsibilities — childcare, appointments, eldercare — without sacrificing professional productivity. This autonomy reduces stress, improves mental health, and leads to higher job satisfaction and employee retention.</li>
+<li><strong class="t">Elimination of commuting time and costs:</strong> Removing the daily commute saves employees significant time (often one to three hours daily) and money on transportation, fuel, and parking. This time can be reinvested into personal wellbeing or additional productivity.</li>
+</ol>
+<p><strong class="t">Challenges:</strong></p>
+<ol class="nl">
+<li><strong class="t">Social isolation and disconnection:</strong> The absence of daily face-to-face interaction with colleagues can lead to feelings of loneliness, professional disconnection, and reduced access to informal mentorship and collaborative energy — negatively affecting mental health and career development.</li>
+<li><strong class="t">Blurred work-life boundaries and risk of overwork:</strong> Working from home makes it psychologically difficult to "switch off" at the end of the day. Without a physical transition between workspace and living space, many remote workers work longer hours and experience burnout, ironically eroding the work-life balance telework is meant to improve.</li>
+</ol>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q6(b) — Two Ethical Considerations for Employers Managing Remote Workers</span><span class="qm">4 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<ol class="nl">
+<li><strong class="t">Respect for employee privacy and proportionate, transparent monitoring:</strong> Employers must not implement surveillance tools that intrude into the employee's private home in a manner disproportionate to legitimate business needs. Any monitoring policy must be clearly communicated to employees before implementation, stating precisely what is monitored and why. Covert monitoring of any kind is unethical. This reflects PDPA 2010 requirements and basic respect for employee dignity in their private homes.</li>
+<li><strong class="t">Equitable treatment and inclusion of remote workers:</strong> Employers must actively guard against proximity bias — the tendency to favour physically visible in-office employees when making promotion or project assignment decisions. Remote employees must have equal access to career development, training, and performance evaluations as in-office counterparts. Treating remote workers as second-tier employees is unfair and constitutes a form of discrimination.</li>
+</ol>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q6(c) — Two Ethical Responsibilities of Employees Working from Home</span><span class="qm">4 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<ol class="nl">
+<li><strong class="t">Maintain honesty, integrity, and professional accountability:</strong> Employees must honestly fulfil their contracted obligations — accurately reporting hours worked, genuinely completing tasks, and being available during agreed core hours. Reduced supervision does not reduce the moral obligation to deliver on professional commitments. Claiming payment for hours not genuinely worked constitutes dishonesty that violates the trust underlying the employment relationship.</li>
+<li><strong class="t">Protect confidential company and client data actively:</strong> Remote employees must take active steps to maintain information security — using VPNs when accessing company systems, ensuring home Wi-Fi is password-protected, keeping work devices locked when not in use, and ensuring sensitive conversations or screen content cannot be seen or heard by unauthorised persons. A data breach caused by negligent home working practices carries the same legal and ethical weight under PDPA 2010 as one caused by office negligence.</li>
+</ol>
+</div></div></div>
+
+<div class="sh"><span class="sb">Section C</span><span class="st">Case Study — Sofia &amp; Unauthorised Data Transfer (20 Marks)</span></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">C1(a)(i) — Kantian Ethics: First Formulation (Universal Law)</span><span class="qm">5 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<div class="call"><strong>First Formulation:</strong> "Act only according to that maxim whereby you can at the same time will that it should become a universal law."</div>
+<p>The maxim of Sofia's action (if she proceeds): <em>"A software engineer may transfer users' personal health data to a third-party marketing company without specific consent, when instructed to do so by management for commercial purposes."</em></p>
+<p><strong class="t">Test of universalisability:</strong> If this maxim were adopted universally — if every software engineer in every health app company transferred user data to marketing companies whenever commercially instructed — users would recognise that health apps cannot be trusted with their personal data and stop sharing sensitive health information entirely. The health technology ecosystem and the commercial health app market would collapse. This is a logical contradiction: the maxim cannot be universalised without destroying the conditions that make the action possible in the first place.</p>
+<p>Under Kant's First Formulation, the action is morally impermissible. <strong class="t">Sofia should not proceed.</strong></p>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">C1(a)(ii) — Kantian Ethics: Second Formulation (Humanity Formula)</span><span class="qm">5 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<div class="call"><strong>Second Formulation:</strong> "Act so that you treat humanity, whether in your own person or in that of another, always as an end and never as a means only."</div>
+<p>Users of the health application are rational agents who made a deliberate, informed decision to share sensitive personal data — location, medical symptoms, and health history — for one specific purpose: to receive a personalised health service. They explicitly did <em>not</em> consent to their data being used for marketing purposes.</p>
+<p><strong class="t">Analysis:</strong> Transferring users' health data to a marketing company treats those users purely as <em>instruments of commercial gain</em>. Their intimate health information becomes a commodity to be sold and exploited in ways they never agreed to, in order to generate revenue for the company. Users are reduced from rational agents with their own ends and rights to mere data points in a marketing database — a direct violation of the Humanity Formula.</p>
+<p>Users have a fundamental right as rational beings to determine how their most sensitive personal data is used. Overriding this without consent reduces them to means for the company's commercial purposes. <strong class="t">Sofia must refuse.</strong></p>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">C1(b) — ACM Code of Ethics: Two Applicable Principles</span><span class="qm">5 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<div class="pc"><div class="pcl">ACM Principle 1.2 — Avoid Harm</div>
+<p>The ACM Code requires computing professionals to take care to avoid causing unnecessary harm to others. Transferring users' sensitive health data to a marketing company without consent causes real identifiable harm: invasion of privacy, psychological harm from unwanted commercial profiling, potential discriminatory targeting based on disclosed health conditions, and financial harm if data is misused. Sofia participating in this transfer would make her a direct contributor to these harms. The Code obligates her to refuse any instruction that causes unjustified harm to third parties, regardless of whether it comes from her immediate supervisor.</p>
+</div>
+<div class="pc" style="margin-top:.75rem"><div class="pcl">ACM Principle 1.6 — Respect Privacy</div>
+<p>The ACM Code explicitly requires computing professionals to protect the privacy of others and to use personal information only in ways consistent with the terms under which it was collected. The app's users shared their health data under a specific agreement — for the purpose of receiving a personalised health service. Using that data for marketing falls entirely outside the scope of the original consent, directly violating the conditions users reasonably and legitimately relied upon. Sofia has a professional obligation to refuse the data transfer precisely because it violates these privacy terms.</p>
+</div>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">C1(c) — What Should Sofia Do? Professional Responsibility &amp; Consequences</span><span class="qm">5 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<p><strong class="t">Sofia should refuse to transfer the data and take the following structured course of action:</strong></p>
+<ol class="nl">
+<li><strong class="t">Formally decline in writing and document her objection:</strong> Refuse the task in clear written form — an email to her manager stating that the data transfer would violate users' consent terms and likely contravenes PDPA 2010. Written documentation protects her professionally and demonstrates good faith.</li>
+<li><strong class="t">Escalate within the organisation:</strong> Escalate to the company's legal counsel, data protection officer, or senior leadership — presenting a clear, evidence-based argument that the data transfer poses concrete legal risk (PDPA fines, regulatory investigation, reputational damage) in addition to the ethical violation.</li>
+<li><strong class="t">Consider external reporting if internal channels fail:</strong> If management proceeds regardless, consider reporting to Malaysia's Department of Personal Data Protection (JPDP). Under De George's framework, this becomes justified because the harm is serious, internal channels were exhausted, and users cannot protect themselves without external intervention.</li>
+</ol>
+<p><strong class="t">Professional responsibility:</strong> As a software engineer, Sofia is bound by professional ethics — specifically the ACM Code — to protect users of the systems she builds. This duty supersedes instructions from her immediate manager when those instructions would cause harm to users.</p>
+<p><strong class="t">Consequences compared:</strong> If Sofia proceeds: the company risks PDPA enforcement action, significant fines, devastating reputational damage, and civil suits from affected users. If Sofia refuses and escalates appropriately: the company may reconsider a decision that exposes it to far greater long-term damage than the short-term loss of a marketing revenue opportunity.</p>
+</div></div></div>
+
+</div></div>
+
+<!-- ===== SEMESTER 1 2025/2026 ===== -->
+<div id="p-s1" class="panel"><div class="wrap">
+<div class="chip">Semester 1 — 2025 / 2026</div>
+<div class="sh"><span class="sb">Section B</span><span class="st">Short Answers — 50 Marks</span></div>
+
+<div class="qb">
+<button class="qt on" onclick="tq(this)"><span class="ql">Q1 — Ethics vs Etiquette in IT Context</span><span class="qm">6 marks</span><span class="ch">▾</span></button>
+<div class="qbody on"><div class="ans">
+<table class="ct">
+<tr><th></th><th>Ethics</th><th>Etiquette</th></tr>
+<tr><td><strong>Definition</strong></td><td>A systematic framework of moral principles governing what is right or wrong, fair or unfair, harmful or beneficial — applying broadly, often universally, regardless of social context or observation.</td><td>Norms and conventions governing socially appropriate, polite, or professional behaviour within a particular community or context. Violations cause social awkwardness but not necessarily significant harm or moral failing.</td></tr>
+<tr><td><strong>Binding force</strong></td><td>Morally obligatory; violations can cause real harm, legal liability, and professional sanctions.</td><td>Socially expected but not morally obligatory; violations result in social friction or reputational cost, not moral wrongdoing.</td></tr>
+<tr><td><strong>Basis</strong></td><td>Rooted in moral philosophy, professional codes, harm prevention, and respect for rights.</td><td>Rooted in social custom, professional convention, and courtesy norms specific to a context.</td></tr>
+<tr><td><strong>IT Example</strong></td><td><em>Ethical violation:</em> A software developer intentionally inserts a hidden backdoor into a banking application, granting themselves covert access to users' financial accounts. This violates the Computer Crimes Act 1997, PDPA 2010, and fundamental ethical duties — causing real financial and privacy harm to users.</td><td><em>Etiquette violation:</em> A developer sends a lengthy, poorly formatted "Reply-All" email to an entire company mailing list for a matter relevant only to two people. This is inconsiderate and violates professional email etiquette, but does not cause significant ethical harm.</td></tr>
+</table>
+<div class="verd"><strong>Key distinction:</strong> Ethics concerns <em>what is right or wrong and why</em>; etiquette concerns <em>what is socially appropriate in a given context</em>. An action can violate etiquette without being unethical, and an ethical violation can occur without any etiquette breach.</div>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q2 — Subjective Relativism vs Ethical Egoism &amp; Software Piracy</span><span class="qm">6 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<div class="defbox"><div class="dl">Subjective Relativism</div><p>Moral judgments are entirely relative to the individual. Each person is their own sole moral authority; there are no objective moral truths. What is right for one person may not be right for another, and no external standard can validly override a person's sincere personal moral judgment.</p></div>
+<div class="defbox"><div class="dl">Ethical Egoism</div><p>The moral theory that each person ought to act in whatever way best promotes their own self-interest. The morally correct action is always the one that produces maximum personal benefit for the actor. The interests and wellbeing of other people have no independent moral weight in the actor's decision-making.</p></div>
+<p><strong class="t">How each theory might justify software piracy:</strong></p>
+<ul class="bl">
+<li><strong class="t">Subjective relativism:</strong> If an individual sincerely believes that copying software without paying for a licence is acceptable, then that belief makes piracy morally right — for them. No objective external standard can override this personal moral view. The software developer's contrary belief that their rights are being violated is simply that developer's personal opinion, which carries no more validity than the pirate's own view.</li>
+<li><strong class="t">Ethical egoism:</strong> If pirating software costs nothing, the risk of legal prosecution is low, and the software fully meets the individual's needs, then the pirated copy produces maximum personal benefit at minimal cost or risk. Ethical egoism would endorse this action on the grounds that it maximises self-interest. The financial loss inflicted on the software developer is morally irrelevant to the actor under this framework.</li>
+</ul>
+<div class="verd"><strong>Critique:</strong> Both theories fail as comprehensive ethical frameworks because they cannot consistently condemn clearly harmful acts. A world where everyone followed ethical egoism and pirated all software would eliminate financial incentives to develop software — ultimately destroying even the pirate's long-term access to the software they wish to use.</div>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q3(a) — Two Ways Spammers Cause Harm to Society</span><span class="qm">4 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<ol class="nl">
+<li><strong class="t">Financial harm and security damage through fraud, phishing, and malware delivery:</strong> Spam is the primary delivery vector for phishing attacks, advance-fee fraud, malware, and ransomware. Individuals deceived into clicking malicious links or opening infected attachments may suffer identity theft, emptied bank accounts, ransomware-encrypted devices, and significant financial losses. The global economic cost of spam-facilitated cybercrime runs into the hundreds of billions of dollars annually.</li>
+<li><strong class="t">Productivity loss and infrastructure resource consumption:</strong> Spam wastes enormous productive time and technical resources across society. Individuals and organisations collectively spend billions of hours annually filtering and deleting spam. Email servers require substantial computational resources and bandwidth to process spam before delivery — costs borne by internet service providers, organisations, and ultimately consumers. Anti-spam infrastructure itself represents a massive ongoing financial investment redirected from productive purposes.</li>
+</ol>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q3(b) — One Difficulty in Enforcing Anti-Spam Laws</span><span class="qm">3 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<p><strong class="t">Jurisdictional and cross-border enforcement difficulty:</strong> The vast majority of spam originates from foreign countries — frequently jurisdictions with minimal cybercrime legislation, limited law enforcement capacity, or hostile relationships with the spam-receiving country. A spam campaign targeting Malaysian users may originate from servers routing through multiple intermediate countries to obscure origin. Malaysian authorities have no direct legal jurisdiction over foreign operators, and international extradition or Mutual Legal Assistance Treaty (MLAT) processes are slow, expensive, and often ultimately unproductive. By the time any investigation reaches a meaningful stage, spammers have typically relocated infrastructure to a different jurisdiction or rebuilt under a new identity, rendering enforcement practically ineffective.</p>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q4 — Copyright vs Patent: Two Differences with IT Examples</span><span class="qm">6 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<table class="ct">
+<tr><th>Dimension</th><th>Copyright</th><th>Patent</th></tr>
+<tr><td><strong>How protection arises</strong></td><td>Automatic — arises immediately upon creation of an original work. No formal registration required (though registration may be advisable for evidentiary purposes).</td><td>Requires formal application, examination, and grant by an intellectual property office (e.g., MyIPO in Malaysia). The invention must be novel, involve an inventive step (non-obvious), and be industrially applicable.</td></tr>
+<tr><td><strong>What it protects</strong></td><td>Protects the specific <em>expression</em> of an idea — the actual text, code, images, or sounds. Does not protect the underlying idea, concept, or method itself.</td><td>Protects the underlying <em>invention, process, method, or system</em> itself — the functional mechanism — regardless of how it is expressed in any particular implementation.</td></tr>
+<tr><td><strong>Duration</strong></td><td>Life of creator plus 50 years under Malaysia's Copyright Act 1987 (70 years in many other jurisdictions).</td><td>Typically 20 years from the date of filing, after which the invention enters the public domain.</td></tr>
+<tr><td><strong>IT Example</strong></td><td>The source code of a mobile application is copyrighted from the moment it is written. A competitor cannot copy that code without a licence. However, the <em>idea</em> of a to-do list application itself is not protected by copyright.</td><td>A company patents a novel, non-obvious data compression algorithm. This protects the underlying algorithmic method itself. No other company can commercially implement that specific algorithm in any software without a licence, regardless of how differently they code it.</td></tr>
+</table>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q5(a) — What is Whistleblowing?</span><span class="qm">3 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<div class="defbox"><div class="dl">Whistleblowing</div><p>Whistleblowing is the act by which a current or former member of an organisation — typically an employee or contractor — discloses information about illegal, unsafe, unethical, fraudulent, or otherwise illegitimate practices occurring within that organisation to a person or entity with the authority or capacity to take corrective action. Disclosure may be internal (to senior management or an ethics hotline) or external (to government regulators, law enforcement, or the public). It typically involves significant personal risk including potential professional retaliation, termination, or legal action. It is generally considered to be motivated by concern for the public interest or protection of harmed parties, rather than personal gain or vendetta.</p></div>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q5(b) — Morally Required vs Morally Questionable Whistleblowing</span><span class="qm">6 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<div class="part"><div class="pl">Morally Required — Reason &amp; Example</div>
+<p class="ans"><strong class="t">Reason:</strong> When a computing professional has credible evidence of a serious, imminent danger to the public that cannot be resolved through internal channels, and whistleblowing is the only remaining means of preventing that harm, it becomes a moral duty. De George's conditions support this: if the harm is serious, internal reporting is genuinely exhausted, evidence is credible, and external disclosure has a reasonable chance of preventing harm, whistleblowing is morally required.</p>
+<p class="ans"><strong class="t">Example:</strong> A senior IT security engineer at a large Malaysian bank discovers a critical vulnerability in the online banking platform that allows attackers to bypass multi-factor authentication and access any customer account. She reports this to the Head of IT Security, the CISO, and the COO over six weeks. Each time she is told the fix is being "prioritised" but no action is taken and the platform remains live. She then formally reports to Bank Negara Malaysia's cybersecurity unit. This is morally required: the harm to banking customers is serious and imminent, internal channels were genuinely and persistently exhausted, evidence is concrete, and she has strong reason to believe regulatory intervention will force resolution.</p>
+</div>
+<div class="part"><div class="pl">Morally Questionable — Reason &amp; Example</div>
+<p class="ans"><strong class="t">Reason:</strong> Whistleblowing may be morally questionable when primarily motivated by personal grievance or financial self-interest rather than genuine public concern; when the disclosure causes disproportionate harm to innocent third parties; or when internal channels were never genuinely attempted and the alleged wrongdoing is trivial.</p>
+<p class="ans"><strong class="t">Example:</strong> A contracted software developer is dismissed following a legitimate poor performance review. Motivated by personal anger, he publicly posts the company's proprietary source code to an open GitHub repository and sends the link to a technology journalist, framing it as "exposing reckless security practices." In reality, the code contains no significant vulnerabilities and the dismissal was entirely lawful. The disclosure harms innocent colleagues and clients, constitutes a criminal breach of his NDA, and serves no genuine public interest — the motivation is personal revenge. This is malicious sabotage dressed in the language of ethical disclosure.</p>
+</div>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q6(a) — Two Ethical Responsibilities of Employers in Telework</span><span class="qm">4 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<ol class="nl">
+<li><strong class="t">Provide necessary equipment, resources, and support equitably:</strong> Employers have an ethical obligation to ensure remote employees are provided with the tools, licensed software, secure hardware, and reliable connectivity necessary to perform their work effectively and safely. Requiring employees to work remotely while expecting them to fund their own work infrastructure — computers, high-speed internet, ergonomic equipment — shifts costs and burdens onto workers unilaterally, particularly unfair to lower-income employees who may lack home office resources.</li>
+<li><strong class="t">Implement transparent, proportionate, and disclosed monitoring policies:</strong> If the employer chooses to monitor remote work activities — through time-tracking software, activity logging, or productivity tools — this must be fully disclosed to employees in writing before implementation, specifying precisely what data is collected, for what purpose, and how long it is retained. Covert monitoring of any kind is unethical. Monitoring must also be proportionate: recording every keystroke and capturing screenshots every 30 seconds goes far beyond what is necessary to confirm work completion and is inconsistent with PDPA 2010 data minimisation principles.</li>
+</ol>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q6(b) — Two Ethical Responsibilities of Employees Working Remotely</span><span class="qm">4 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<ol class="nl">
+<li><strong class="t">Maintain honesty, professional integrity, and accountability:</strong> Remote employees must fulfil their contracted obligations honestly — accurately logging work hours, genuinely completing assigned tasks, and being available during agreed core hours with the same commitment as they would in an office. The absence of direct supervisory visibility does not reduce the moral obligation to deliver on professional commitments. Systematically misrepresenting productivity while drawing a full salary is dishonest and constitutes a breach of the trust fundamental to the employment relationship.</li>
+<li><strong class="t">Actively protect confidential company and client data:</strong> Employees accessing company systems and sensitive data from home bear a personal ethical and legal responsibility for information security: consistently using VPNs when accessing company systems remotely, working exclusively on secured password-protected home networks, keeping work devices locked when not in active use, and ensuring that sensitive documents or conversations are not visible or audible to unauthorised persons in the home. A data breach resulting from negligent home working practices carries the same legal and ethical weight under PDPA 2010 as one caused by office negligence.</li>
+</ol>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q6(c) — One Challenge of Monitoring Remote Employees Ethically</span><span class="qm">2 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<p><strong class="t">Balancing legitimate business accountability with the right to privacy in a personal home environment:</strong> The fundamental ethical challenge is determining the level of oversight sufficient to ensure genuine work accountability without crossing into surveillance that invades the employee's private home space. Monitoring tools commonly used in corporate offices — screen capture software, activity loggers, keystroke recorders — become ethically problematic when deployed in a worker's home, where personal and family life inevitably occurs alongside professional work during the same hours. Determining what level of monitoring is "proportionate" in a private residential context requires careful ethical judgment, as any policy must be transparent, consented to, and proportionate to the legitimate objective — yet this balance admits of no easy universal answer and risks violating PDPA 2010 data minimisation principles or causing psychological harm through constant surveillance.</p>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">Q7 — Two Hacking Motives &amp; How They Differ Ethically</span><span class="qm">6 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<ol class="nl">
+<li><strong class="t">Financial / Criminal Motive (Black Hat Hacking):</strong><p>A significant proportion of hacking is motivated by direct financial gain: stealing credit card numbers and selling them on darkweb markets, deploying ransomware to extort payment from organisations, conducting banking fraud through credential theft, corporate espionage on behalf of paying competitors, and cryptojacking.</p><p><em>Ethical assessment:</em> This motive is unambiguously unethical. The hacker deliberately causes harm to specific, identifiable victims — real financial loss, violated privacy, and disrupted livelihoods — in order to personally profit at those victims' expense. There is no redeeming public interest dimension; the harm is intentional, victims are innocents, and the action violates legal and moral standards across all ethical frameworks. This is equivalent to digital theft and extortion.</p></li>
+<li><strong class="t">Political / Ideological Motive — Hacktivism:</strong><p>Some hackers act from political or ideological conviction rather than financial interest, targeting government systems or corporations to expose wrongdoing, draw attention to political causes, protest policies, or distribute censored information. Groups like Anonymous have defaced government websites to protest surveillance laws, or leaked documents to expose corporate fraud.</p><p><em>Ethical assessment:</em> This motive is ethically more complex and genuinely contested. The underlying goal — exposing injustice or resisting oppression — may be morally praiseworthy. However, the means (unauthorised access, illegal under the Computer Crimes Act 1997) remain problematic even when the end is arguably legitimate. Hacktivism may cause collateral harm to innocent third parties, undermine the rule of law even where specific laws are unjust, and set precedents for illegal action in pursuit of any cause an actor deems worthy. It sits in a fundamentally different moral category from criminal hacking — it can be analysed as digital civil disobedience — but is ethically contested because illegal means cannot be fully justified by legitimate ends alone.</p></li>
+</ol>
+<div class="verd"><strong>Key ethical distinction:</strong> Criminal hacking causes intentional harm to innocent victims for personal gain — condemned across all ethical frameworks. Hacktivism may be motivated by genuine public interest and a desire to prevent greater injustice, but remains ethically contested because illegal means and collateral harm to innocents cannot be fully justified even by noble ends.</div>
+</div></div></div>
+
+<div class="sh"><span class="sb">Section C</span><span class="st">Case Study — AI Recruitment System (20 Marks)</span></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">C1(a) — Utilitarianism: Is the AI Recruitment System Morally Justified?</span><span class="qm">5 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<div class="call"><strong>Utilitarianism (Bentham / Mill):</strong> An action is morally right if and only if it produces the greatest good (utility, wellbeing) for the greatest number of people affected by it. All parties' interests must be considered impartially.</div>
+<p><strong class="t">Arguments in favour (claimed benefits):</strong></p>
+<ul class="bl">
+<li>The system increases hiring efficiency, processing thousands of applications faster than human reviewers — reducing costs and administrative burden for the company.</li>
+<li>Management claims it reduces subjective human biases in the review process.</li>
+</ul>
+<p><strong class="t">Arguments against (actual harms identified):</strong></p>
+<ul class="bl">
+<li><strong>Discriminatory outcomes affecting a significant group:</strong> Internal audits reveal the AI disproportionately rejects female and minority applicants even when equally qualified. These individuals suffer concrete, serious harm: loss of legitimate employment opportunities, economic disadvantage, psychological harm from discrimination, and reinforcement of systemic inequality. These are not trivial harms — career outcomes affect financial security and social mobility over decades.</li>
+<li><strong>Harm is systemic and self-perpetuating:</strong> The model trained on historically biased data encodes and perpetuates existing social and gender discrimination at scale. Rather than reducing bias, the system amplifies it across every hiring cycle.</li>
+<li><strong>Claimed benefits do not fully materialise:</strong> A system that systematically excludes qualified candidates does not maximise utility — it deprives the company of talent and perpetuates workplace monoculture, undermining long-term organisational health.</li>
+</ul>
+<div class="verd"><strong>Utilitarian conclusion:</strong> The AI recruitment system is <em>not</em> morally justified under utilitarianism. A comprehensive calculation including all affected parties — particularly systematically excluded female and minority applicants — reveals that the harm caused (discrimination, economic exclusion, perpetuation of inequality) substantially outweighs the efficiency gains enjoyed by the company. The greatest good for the greatest number is not achieved when a system encodes discrimination against identifiable groups.</div>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">C1(b) — Kantian Ethics: Company's Moral Responsibility</span><span class="qm">5 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<p><strong class="t">First Formulation — Universal Law:</strong></p>
+<p>The company's maxim: "A company may deploy an AI recruitment system trained on historically biased data, without adequate pre-deployment bias testing, because it increases processing efficiency." Can this be universalised? If all companies universally deployed biased AI hiring systems without adequate bias auditing, meritocratic recruitment would be replaced by algorithmic discrimination institutionalised across entire labour markets. Female and minority workers would be systematically excluded regardless of qualifications, and the principle of equal opportunity would become meaningless. No rational society could will this as a universal law — it is self-evidently contradictory to the principles of fair employment all companies publicly claim to uphold. The action fails the universalisability test.</p>
+<p><strong class="t">Second Formulation — Humanity Formula:</strong></p>
+<p>Every job applicant is a rational human being with goals, dignity, and the right to be evaluated on their actual qualifications and capabilities. By deploying an AI system that rejects female and minority candidates due to the composition of past hiring cohorts rather than individual merit, the company treats these applicants not as ends in themselves but as interchangeable data points to be processed by a machine trained on unjust historical patterns. Their individuality, qualifications, and dignity as rational persons are entirely subordinated to statistical biases embedded in the model. This directly violates the Humanity Formula: the company has a moral responsibility to ensure every applicant is evaluated fairly as an individual, not as a member of a historically underrepresented demographic category.</p>
+<div class="verd"><strong>Kantian conclusion:</strong> The company bears clear moral responsibility for deploying a system that fails the Universal Law test and treats applicants as data commodities rather than as rational persons deserving individual, merit-based evaluation. The company had a duty to audit for bias before deployment and a continuing duty to correct it immediately upon discovery.</div>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">C1(c) — Two ACM Code of Ethics Principles Violated</span><span class="qm">5 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<div class="pc"><div class="pcl">ACM Principle 1.4 — Be Fair and Take Action Not to Discriminate</div>
+<p>The ACM Code requires computing professionals to be fair and to actively take action to prevent discrimination based on characteristics such as gender, race, or ethnicity. The AI recruitment system demonstrably and disproportionately discriminates against female and minority applicants — individuals possessing equivalent qualifications to those shortlisted. The company not only failed to prevent this discrimination through adequate pre-deployment testing; it allowed the system to operate for several months after deployment before internal audits revealed the problem, and presumably continued to use discriminatory results throughout. This is a serious violation: the company's IT and AI development teams had a professional obligation to audit the system for discriminatory outcomes before deployment — and to act immediately upon discovery.</p>
+</div>
+<div class="pc" style="margin-top:.75rem"><div class="pcl">ACM Principle 2.5 — Give Comprehensive and Thorough Evaluations of Computer Systems and Their Impacts, Including Analysis of Possible Risks</div>
+<p>The ACM Code requires computing professionals to conduct thorough evaluations of computer systems before deployment, with particular attention to potential risks to users and affected parties. The company failed to conduct adequate evaluation of the AI model's potential for discriminatory outcomes before deploying it at scale. A responsible evaluation would have included bias auditing of training data, fairness testing across demographic groups, independent review of the model's decision criteria, and assessment of risks to applicants from automated rejection. Bypassing or inadequately performing this evaluation — and deploying a system encoding known historical biases without verification — is a clear violation of the professional obligation to rigorously assess risks before systems affecting real people's lives and careers are released.</p>
+</div>
+</div></div></div>
+
+<div class="qb">
+<button class="qt" onclick="tq(this)"><span class="ql">C1(d) — Recommended Actions to Address Bias &amp; Fairness Issues</span><span class="qm">5 marks</span><span class="ch">▾</span></button>
+<div class="qbody"><div class="ans">
+<p><strong class="t">The company should take the following actions, considering both professional responsibility and fairness to all applicants:</strong></p>
+<ol class="nl">
+<li><strong class="t">Immediate suspension and independent algorithmic audit:</strong> Suspend the AI system from making or influencing final hiring decisions immediately, pending a thorough independent audit conducted by external AI ethics specialists — not the company's own development team. The audit must document all sources of bias in the training data, identify the specific features driving discriminatory outcomes, and quantify the scale of harm to affected demographic groups. All applications rejected during the period of biased operation should be identified, and a process established to fairly review those rejections — potentially re-opening consideration for candidates unfairly excluded.</li>
+<li><strong class="t">Rebuild the model with debiased, representative training data and embedded fairness constraints:</strong> Retrain the machine-learning model using a curated, balanced dataset that does not reflect historical hiring patterns rooted in past discrimination. Work with AI ethics specialists and diversity experts to implement algorithmic fairness constraints — such as demographic parity or equal opportunity metrics — ensuring the system evaluates candidates based solely on job-relevant qualifications. Testing for discriminatory outcomes across all demographic groups must be a mandatory, documented step in any future AI deployment lifecycle.</li>
+<li><strong class="t">Mandate human oversight for all consequential decisions and establish a transparent appeals process:</strong> No job application should be definitively rejected solely by automated means. A mandatory human review stage must be introduced for all AI-screened candidates. The company must establish a transparent appeals process allowing applicants to challenge automated decisions and have their applications reviewed by a trained, impartial human evaluator. This reflects the professional responsibility to ensure that consequential decisions affecting individuals' careers are made by accountable persons, and the basic fairness owed to every applicant as a rational person entitled to individual consideration.</li>
+<li><strong class="t">Establish accountability structures and communicate transparently:</strong> Appoint a dedicated AI Ethics Officer responsible for ongoing monitoring and bias auditing of all AI systems. Publish a transparency report acknowledging the bias issue, describing corrective actions taken, and committing to regular independent audits. Inform affected applicants that their applications were processed by an AI system subsequently found to exhibit bias and provide them with the opportunity to reapply under fair conditions.</li>
+</ol>
+<div class="verd"><strong>Professional responsibility conclusion:</strong> Addressing algorithmic bias is not merely a reputational risk management exercise — it is a fundamental professional and moral obligation. Computing professionals who build systems affecting millions of people's lives bear responsibility for the fairness of those systems. Organisations deploying such systems must create accountability structures capable of identifying and correcting harms before they cause irreversible damage to affected individuals' careers and livelihoods.</div>
+</div></div></div>
+
+</div></div>
+
+<script>
+function showP(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('p-'+id).classList.add('on');
+  btn.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function tq(btn){
+  const body=btn.nextElementSibling;
+  const open=body.classList.contains('on');
+  body.classList.toggle('on',!open);
+  btn.classList.toggle('on',!open);
+}
+</script>
+</body>
+</html>

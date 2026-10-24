@@ -1,0 +1,7 @@
+node_modules/
+hexo-source/public/
+hexo-source/db.json
+hexo-source/.deploy_git/
+hexo-source/.cache/
+hexo-source/.verification/
+*.log

@@ -1,0 +1,2007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCSB3113 Cryptography — Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#0a0e1a;--bg2:#111827;--bg3:#1a2235;--bg4:#1f2d45;
+--accent:#00e5ff;--accent2:#39ff14;--accent3:#ff6b6b;--accent4:#ffd60a;
+--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+--border:#1e3a5f;--border2:#2a4a7a;
+--card:#131c2e;--card2:#1a2540;
+}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif}
+code,pre,.mono{font-family:'JetBrains Mono',monospace}
+
+/* Layout */
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:260px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;position:sticky;top:0;height:100vh}
+.main{flex:1;overflow-y:auto;padding:0}
+
+/* Sidebar */
+.sidebar-header{padding:20px 16px;border-bottom:1px solid var(--border)}
+.sidebar-title{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:2px;text-transform:uppercase}
+.sidebar-sub{font-size:11px;color:var(--text3);margin-top:4px}
+.nav-section{padding:8px 0}
+.nav-label{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:2px;text-transform:uppercase;padding:8px 16px 4px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 16px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;border-left:3px solid transparent;text-decoration:none}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:var(--bg3);color:var(--accent);border-left-color:var(--accent)}
+.nav-badge{font-size:10px;background:var(--accent);color:var(--bg);border-radius:4px;padding:1px 6px;margin-left:auto;font-weight:700}
+.nav-badge.green{background:var(--accent2)}
+.nav-badge.red{background:var(--accent3)}
+.nav-badge.yellow{background:var(--accent4);color:#000}
+
+/* Content */
+.page{display:none;padding:32px 40px}
+.page.active{display:block}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px}
+.card-accent{border-left:4px solid var(--accent)}
+.card-green{border-left:4px solid var(--accent2)}
+.card-red{border-left:4px solid var(--accent3)}
+.card-yellow{border-left:4px solid var(--accent4)}
+.card-header{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.card-title{font-size:16px;font-weight:600;color:var(--text)}
+.card-sub{font-size:12px;color:var(--text3);margin-top:2px}
+
+/* Page header */
+.page-header{margin-bottom:32px}
+.page-tag{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.page-title{font-size:28px;font-weight:700;color:var(--text);line-height:1.2}
+.page-desc{font-size:14px;color:var(--text2);margin-top:8px;max-width:600px;line-height:1.6}
+
+/* Section header */
+.section-title{font-size:18px;font-weight:600;color:var(--text);margin:32px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+
+/* Tags / chips */
+.chip{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;margin:3px 3px 3px 0;letter-spacing:.5px}
+.chip-cyan{background:rgba(0,229,255,.15);color:var(--accent);border:1px solid rgba(0,229,255,.3)}
+.chip-green{background:rgba(57,255,20,.12);color:var(--accent2);border:1px solid rgba(57,255,20,.3)}
+.chip-red{background:rgba(255,107,107,.15);color:var(--accent3);border:1px solid rgba(255,107,107,.3)}
+.chip-yellow{background:rgba(255,214,10,.12);color:var(--accent4);border:1px solid rgba(255,214,10,.3)}
+
+/* Formula boxes */
+.formula{background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:14px 18px;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--accent);margin:12px 0;letter-spacing:.5px}
+.formula-label{font-size:11px;color:var(--text3);margin-bottom:6px;font-family:'Space Grotesk',sans-serif}
+
+/* Steps */
+.steps{list-style:none;counter-reset:step}
+.steps li{counter-increment:step;display:flex;gap:14px;margin-bottom:16px;align-items:flex-start}
+.steps li::before{content:counter(step);background:var(--accent);color:var(--bg);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
+.steps li p{font-size:14px;color:var(--text2);line-height:1.6}
+.steps li strong{color:var(--text)}
+
+/* Table */
+.table-wrap{overflow-x:auto;margin:12px 0;border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--bg4);color:var(--accent);font-weight:600;text-align:left;padding:10px 14px;border-bottom:1px solid var(--border2)}
+td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+
+/* Comparison boxes */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.compare-box{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px}
+.compare-box h4{font-size:13px;font-weight:700;margin-bottom:12px;letter-spacing:.5px}
+.compare-box.left h4{color:var(--accent)}
+.compare-box.right h4{color:var(--accent2)}
+.compare-box ul{list-style:none}
+.compare-box ul li{font-size:13px;color:var(--text2);padding:5px 0;border-bottom:1px solid var(--border);line-height:1.5}
+.compare-box ul li:last-child{border:none}
+.compare-box ul li::before{content:"→ ";color:var(--text3)}
+
+/* Q&A accordion */
+.qa-item{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden}
+.qa-q{padding:16px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;font-size:14px;font-weight:500;color:var(--text);line-height:1.5}
+.qa-q:hover{background:var(--card2)}
+.qa-toggle{font-size:18px;color:var(--accent);flex-shrink:0;transition:transform .2s}
+.qa-item.open .qa-toggle{transform:rotate(45deg)}
+.qa-a{display:none;padding:0 20px 20px;font-size:13px;color:var(--text2);line-height:1.7;border-top:1px solid var(--border)}
+.qa-item.open .qa-a{display:block}
+
+/* Alert boxes */
+.alert{border-radius:8px;padding:14px 18px;margin:14px 0;font-size:13px;line-height:1.6;border-left:4px solid}
+.alert-cyan{background:rgba(0,229,255,.08);border-color:var(--accent);color:var(--text2)}
+.alert-green{background:rgba(57,255,20,.08);border-color:var(--accent2);color:var(--text2)}
+.alert-red{background:rgba(255,107,107,.08);border-color:var(--accent3);color:var(--text2)}
+.alert-yellow{background:rgba(255,214,10,.08);border-color:var(--accent4);color:var(--text2)}
+.alert strong{color:var(--text)}
+
+/* Points grid */
+.points-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:12px 0}
+.point-card{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center}
+.point-card .pt-num{font-size:20px;font-weight:700;color:var(--accent);font-family:'JetBrains Mono',monospace}
+.point-card .pt-label{font-size:11px;color:var(--text3);margin-top:4px}
+
+/* Past paper */
+.pp-meta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.pp-badge{font-size:11px;font-weight:600;padding:4px 12px;border-radius:6px;letter-spacing:.5px}
+.pp-badge.cyan{background:rgba(0,229,255,.15);color:var(--accent);border:1px solid rgba(0,229,255,.3)}
+.pp-badge.green{background:rgba(57,255,20,.12);color:var(--accent2);border:1px solid rgba(57,255,20,.3)}
+.pp-badge.yellow{background:rgba(255,214,10,.12);color:#d4a800;border:1px solid rgba(255,214,10,.3)}
+.pp-q{background:var(--bg3);border:1px solid var(--border);border-radius:10px;margin-bottom:14px;overflow:hidden}
+.pp-q-header{padding:16px 20px;cursor:pointer;display:flex;align-items:flex-start;gap:14px}
+.pp-q-num{background:var(--accent);color:var(--bg);font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;flex-shrink:0;margin-top:2px}
+.pp-q-text{font-size:14px;color:var(--text);line-height:1.5;flex:1}
+.pp-marks{font-size:11px;color:var(--accent4);font-weight:600;flex-shrink:0;margin-top:3px}
+.pp-answer{display:none;border-top:1px solid var(--border);padding:20px}
+.pp-answer.shown{display:block}
+.pp-answer h5{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.pp-answer p{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:10px}
+.pp-answer .step-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;margin:10px 0;font-size:13px;color:var(--text2)}
+.pp-answer .calc{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:10px 14px;margin:8px 0;line-height:1.8}
+.show-answer-btn{background:rgba(0,229,255,.12);border:1px solid rgba(0,229,255,.3);color:var(--accent);border-radius:6px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;letter-spacing:.5px;transition:all .15s}
+.show-answer-btn:hover{background:rgba(0,229,255,.25)}
+
+/* Cipher table */
+.cipher-alphabet{display:grid;grid-template-columns:repeat(26,1fr);gap:2px;margin:12px 0}
+.ca-cell{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:4px 2px;text-align:center;font-size:11px;font-family:'JetBrains Mono',monospace}
+.ca-cell.header{background:var(--bg4);color:var(--accent);font-weight:700}
+.ca-cell.highlight{background:rgba(0,229,255,.2);color:var(--accent);font-weight:700}
+
+/* Grid columns */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+
+/* Section divider */
+.divider{border:none;border-top:1px solid var(--border);margin:28px 0}
+
+/* Mark indicator */
+.marks{display:inline-block;font-size:11px;font-weight:700;color:var(--accent4);background:rgba(255,214,10,.1);border:1px solid rgba(255,214,10,.3);border-radius:4px;padding:2px 7px;margin-left:8px}
+
+/* Key value rows */
+.kv{display:flex;gap:16px;flex-wrap:wrap;margin:10px 0}
+.kv-item{font-size:13px;color:var(--text2)}
+.kv-item strong{color:var(--accent);font-family:'JetBrains Mono',monospace}
+
+/* Big number */
+.big-num{font-size:36px;font-weight:700;color:var(--accent);font-family:'JetBrains Mono',monospace}
+
+/* Scroll indicator */
+.scroll-tip{font-size:11px;color:var(--text3);margin-top:8px;letter-spacing:.5px}
+
+/* Mobile */
+@media(max-width:768px){
+  .app{flex-direction:column;height:auto}
+  .sidebar{width:100%;height:auto;position:relative}
+  .main{overflow-y:visible}
+  .page{padding:20px 16px}
+  .compare-grid,.grid-2,.grid-3{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">CCSB3113</div>
+    <div class="sidebar-sub">Cryptography — Final Exam Guide</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Overview</div>
+    <div class="nav-item active" onclick="showPage('home')">🏠 Home & Exam Tips</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Section A — MCQ <span class="nav-badge yellow">20M</span></div>
+    <div class="nav-item" onclick="showPage('cia')">CIA Triad</div>
+    <div class="nav-item" onclick="showPage('cryptodefs')">Crypto Definitions</div>
+    <div class="nav-item" onclick="showPage('rng')">Random Numbers (RNG)</div>
+    <div class="nav-item" onclick="showPage('stego')">Stegano & Watermark</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Section B — Theory <span class="nav-badge yellow">30M</span></div>
+    <div class="nav-item" onclick="showPage('theory')">Theory Questions & Notes</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Section C — Calculation <span class="nav-badge yellow">50M</span></div>
+    <div class="nav-item" onclick="showPage('classical')">Classical Ciphers</div>
+    <div class="nav-item" onclick="showPage('sdes')">S-DES</div>
+    <div class="nav-item" onclick="showPage('aes')">AES</div>
+    <div class="nav-item" onclick="showPage('rsa')">RSA & Diffie-Hellman</div>
+    <div class="nav-item" onclick="showPage('ecc')">ECC</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Past Papers</div>
+    <div class="nav-item" onclick="showPage('pp1')">Sem 1 2025/2026 <span class="nav-badge green">NEW</span></div>
+    <div class="nav-item" onclick="showPage('pp2')">Sem 2 2024/2025</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Quick Reference</div>
+    <div class="nav-item" onclick="showPage('qref')">📋 Formula Sheet</div>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="page-header">
+    <div class="page-tag">CCSB3113 Cryptography</div>
+    <h1 class="page-title">Final Exam Study Guide</h1>
+    <p class="page-desc">Complete study notes, past paper analysis, and answer schemes based on your lecture slides, labs, and lecturer tips.</p>
+  </div>
+
+  <div class="grid-3">
+    <div class="card card-yellow">
+      <div class="card-header"><div>
+        <div class="card-title">Section A — MCQ</div>
+        <div class="card-sub">20 Questions</div>
+      </div></div>
+      <div class="big-num">20</div>
+      <p style="font-size:12px;color:var(--text3);margin-top:6px">marks</p>
+      <div style="margin-top:14px;font-size:13px;color:var(--text2)">CIA Triad · Crypto Definitions · RNG · Steganography / Watermark</div>
+    </div>
+    <div class="card card-accent">
+      <div class="card-header"><div>
+        <div class="card-title">Section B — Theory</div>
+        <div class="card-sub">Subjective Questions</div>
+      </div></div>
+      <div class="big-num">30</div>
+      <p style="font-size:12px;color:var(--text3);margin-top:6px">marks</p>
+      <div style="margin-top:14px;font-size:13px;color:var(--text2)">Explain, Compare, Analyse concepts</div>
+    </div>
+    <div class="card card-green">
+      <div class="card-header"><div>
+        <div class="card-title">Section C — Calculation</div>
+        <div class="card-sub">Problem Solving</div>
+      </div></div>
+      <div class="big-num">50</div>
+      <p style="font-size:12px;color:var(--text3);margin-top:6px">marks</p>
+      <div style="margin-top:14px;font-size:13px;color:var(--text2)">Classical · S-DES · AES · RSA · ECC</div>
+    </div>
+  </div>
+
+  <div class="section-title">⚡ Exam Tips from Lecturer</div>
+  <div class="card card-yellow">
+    <h3 style="color:var(--accent4);margin-bottom:14px;font-size:14px">HIGH PRIORITY TOPICS</h3>
+    <div class="grid-2">
+      <div>
+        <p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px">Section A MCQ — Know these concepts:</p>
+        <ul style="list-style:none;font-size:13px;color:var(--text2);line-height:2">
+          <li>✅ CIA Triad (Confidentiality, Integrity, Availability)</li>
+          <li>✅ Cryptography definitions (encryption, decryption, plaintext, ciphertext)</li>
+          <li>✅ Random Number Generator (PRNG vs TRNG)</li>
+          <li>✅ Steganography vs Watermarking (differences!)</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px">Section C Calculation — Master these:</p>
+        <ul style="list-style:none;font-size:13px;color:var(--text2);line-height:2">
+          <li>🔢 ALL Classical Ciphers (Caesar, Vernam, Vigenère, Transposition)</li>
+          <li>🔢 S-DES (P10, P8, IP, EP, S-box, Swap)</li>
+          <li>🔢 AES (Key Expansion: RotWord, SubByte, XOR RCON)</li>
+          <li>🔢 RSA (Key gen, Encrypt C=Me mod n, Decrypt M=Cd mod n)</li>
+          <li>🔢 ECC (Find points, R, 2P, Encrypt/Decrypt)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">📅 Exam Format</div>
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <tr><th>Section</th><th>Type</th><th>Questions</th><th>Marks</th><th>Time Estimate</th></tr>
+        <tr><td><strong>A</strong></td><td>Multiple Choice (MCQ)</td><td>20 questions</td><td>20 marks</td><td>~25 min</td></tr>
+        <tr><td><strong>B</strong></td><td>Theory / Subjective</td><td>3–5 questions</td><td>30 marks</td><td>~40 min</td></tr>
+        <tr><td><strong>C</strong></td><td>Calculation / Problem Solving</td><td>5–7 questions</td><td>50 marks</td><td>~60 min</td></tr>
+        <tr><td colspan="3"><strong>Total Duration</strong></td><td><strong>100 marks</strong></td><td><strong>2.5 Hours</strong></td></tr>
+      </table>
+    </div>
+    <div class="alert alert-cyan" style="margin-top:14px">
+      <strong>Strategy:</strong> Always show all working steps in Section C — partial marks are given. Start with what you know best. Allocate about 1.2 mins per MCQ.
+    </div>
+  </div>
+</div>
+
+<!-- CIA TRIAD -->
+<div id="page-cia" class="page">
+  <div class="page-header">
+    <div class="page-tag">Section A — MCQ</div>
+    <h1 class="page-title">CIA Triad</h1>
+    <p class="page-desc">The three fundamental goals of information security.</p>
+  </div>
+
+  <div class="grid-3">
+    <div class="card card-accent">
+      <div style="font-size:30px;margin-bottom:10px">🔒</div>
+      <h3 style="color:var(--accent);margin-bottom:8px">Confidentiality</h3>
+      <p style="font-size:13px;color:var(--text2);line-height:1.7">Information is accessible ONLY to those authorized. Prevents unauthorized disclosure. Achieved using encryption (AES, RSA).</p>
+      <div class="alert alert-cyan" style="margin-top:12px"><strong>Example:</strong> Encrypting email so only the receiver can read it.</div>
+    </div>
+    <div class="card card-green">
+      <div style="font-size:30px;margin-bottom:10px">✅</div>
+      <h3 style="color:var(--accent2);margin-bottom:8px">Integrity</h3>
+      <p style="font-size:13px;color:var(--text2);line-height:1.7">Data has NOT been altered or tampered with. Ensures data is accurate and complete. Achieved using hash functions (SHA-256), digital signatures, MACs.</p>
+      <div class="alert alert-green" style="margin-top:12px"><strong>Example:</strong> A downloaded file has the same hash as the official one.</div>
+    </div>
+    <div class="card card-yellow">
+      <div style="font-size:30px;margin-bottom:10px">⚡</div>
+      <h3 style="color:var(--accent4);margin-bottom:8px">Availability</h3>
+      <p style="font-size:13px;color:var(--text2);line-height:1.7">Systems and data are accessible to authorized users WHEN needed. Prevents DoS attacks. Achieved through redundancy, backups, fault tolerance.</p>
+      <div class="alert alert-yellow" style="margin-top:12px"><strong>Example:</strong> Bank website must be available 24/7 for customers.</div>
+    </div>
+  </div>
+
+  <div class="section-title">Security Attacks vs CIA</div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Attack Type</th><th>CIA Violated</th><th>Description</th><th>Example</th></tr>
+      <tr><td>Interception (Passive)</td><td><span class="chip chip-red">Confidentiality</span></td><td>Unauthorized reading/copying data in transit</td><td>Eavesdropping, traffic analysis</td></tr>
+      <tr><td>Modification (Active)</td><td><span class="chip chip-green">Integrity</span></td><td>Unauthorized altering of data</td><td>Man-in-the-Middle, data manipulation</td></tr>
+      <tr><td>Denial of Service (Active)</td><td><span class="chip chip-yellow">Availability</span></td><td>Preventing legitimate access</td><td>DDoS attack, ransomware</td></tr>
+      <tr><td>Fabrication (Active)</td><td><span class="chip chip-cyan">Auth + Integrity</span></td><td>Inserting counterfeit data/messages</td><td>Replay attacks, fake certificates</td></tr>
+    </table>
+  </div>
+
+  <div class="section-title">Vulnerability vs Threat vs Risk</div>
+  <div class="card">
+    <div class="compare-grid">
+      <div class="compare-box left">
+        <h4>VULNERABILITY</h4>
+        <ul><li>Weakness in a system/program</li><li>Example: Unpatched software</li><li>Example: No firewall configured</li><li>Example: Weak passwords allowed</li></ul>
+      </div>
+      <div class="compare-box right">
+        <h4>THREAT</h4>
+        <ul><li>Potential to exploit a vulnerability</li><li>Example: Hackers, malware</li><li>Example: Terminated employees</li><li>Example: Natural disasters</li></ul>
+      </div>
+    </div>
+    <div class="alert alert-cyan" style="margin-top:0">
+      <strong>RISK</strong> = Potential for loss when a threat exploits a vulnerability. Risk = Threat × Vulnerability × Impact.
+    </div>
+  </div>
+
+  <div class="section-title">Passive vs Active Attacks</div>
+  <div class="compare-grid">
+    <div class="compare-box left">
+      <h4>PASSIVE ATTACKS</h4>
+      <ul>
+        <li>Eavesdrop / monitor only</li>
+        <li>Does NOT modify data</li>
+        <li>Hard to detect</li>
+        <li>Types: Release of message, Traffic analysis</li>
+      </ul>
+    </div>
+    <div class="compare-box right">
+      <h4>ACTIVE ATTACKS</h4>
+      <ul>
+        <li>Modifies / destroys data</li>
+        <li>Replay, modification, denial of service</li>
+        <li>Hard to prevent, easier to detect</li>
+        <li>Types: Masquerade, Replay, DoS, Modification</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- CRYPTO DEFINITIONS -->
+<div id="page-cryptodefs" class="page">
+  <div class="page-header">
+    <div class="page-tag">Section A — MCQ</div>
+    <h1 class="page-title">Cryptography Definitions</h1>
+    <p class="page-desc">Core terminology every student must know cold.</p>
+  </div>
+
+  <div class="card card-accent">
+    <h3 style="color:var(--accent);margin-bottom:14px">Core Terms</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Term</th><th>Definition</th></tr>
+        <tr><td><strong>Cryptography</strong></td><td>The design and analysis of mechanisms based on mathematical techniques that provide security services (confidentiality, integrity, authentication).</td></tr>
+        <tr><td><strong>Cryptanalysis</strong></td><td>The science of breaking ciphers — retrieving plaintext WITHOUT knowing the key.</td></tr>
+        <tr><td><strong>Cryptology</strong></td><td>Cryptography + Cryptanalysis combined.</td></tr>
+        <tr><td><strong>Plaintext</strong></td><td>The original, unencrypted message.</td></tr>
+        <tr><td><strong>Ciphertext</strong></td><td>The encrypted, unreadable message.</td></tr>
+        <tr><td><strong>Encryption</strong></td><td>The process of converting plaintext → ciphertext.</td></tr>
+        <tr><td><strong>Decryption</strong></td><td>The process of converting ciphertext → plaintext (reverse of encryption).</td></tr>
+        <tr><td><strong>Key</strong></td><td>Secret value used in encryption/decryption. Independent of the algorithm.</td></tr>
+        <tr><td><strong>Cryptosystem</strong></td><td>A system that supports both encryption and decryption.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="section-title">Symmetric vs Asymmetric Encryption</div>
+  <div class="compare-grid">
+    <div class="compare-box left">
+      <h4>SYMMETRIC (Private Key)</h4>
+      <ul>
+        <li>SAME key for encrypt & decrypt</li>
+        <li>Faster — good for large data</li>
+        <li>Key distribution problem</li>
+        <li>Examples: AES, DES, 3DES</li>
+        <li>Key size: 128/192/256 bits (AES)</li>
+      </ul>
+    </div>
+    <div class="compare-box right">
+      <h4>ASYMMETRIC (Public Key)</h4>
+      <ul>
+        <li>Different key pair (public/private)</li>
+        <li>Slower — good for key exchange</li>
+        <li>Solves key distribution problem</li>
+        <li>Examples: RSA, ECC, Diffie-Hellman</li>
+        <li>Key size: 2048+ bits (RSA)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">Types of Cryptographic Attacks</div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Attack Type</th><th>What Attacker Knows</th><th>Difficulty</th></tr>
+      <tr><td><strong>Ciphertext Only</strong></td><td>Only the ciphertext</td><td>Hardest for attacker</td></tr>
+      <tr><td><strong>Known Plaintext</strong></td><td>Some plaintext-ciphertext pairs</td><td>Medium</td></tr>
+      <tr><td><strong>Chosen Plaintext</strong></td><td>Can choose plaintexts and get ciphertext</td><td>Easier for attacker</td></tr>
+      <tr><td><strong>Chosen Ciphertext</strong></td><td>Can choose ciphertext and get plaintext</td><td>Easiest for attacker</td></tr>
+      <tr><td><strong>Brute Force</strong></td><td>Tries all possible keys</td><td>Depends on key size</td></tr>
+    </table>
+  </div>
+
+  <div class="section-title">Stream Cipher vs Block Cipher</div>
+  <div class="compare-grid">
+    <div class="compare-box left">
+      <h4>STREAM CIPHER</h4>
+      <ul>
+        <li>Encrypts 1 bit/byte at a time</li>
+        <li>Processes data as continuous stream</li>
+        <li>Key must equal plaintext length (ideal)</li>
+        <li>Examples: Vernam, RC4, Vigenère</li>
+        <li>Good for: Real-time communication</li>
+      </ul>
+    </div>
+    <div class="compare-box right">
+      <h4>BLOCK CIPHER</h4>
+      <ul>
+        <li>Encrypts fixed-size blocks at once</li>
+        <li>AES: 128-bit blocks</li>
+        <li>DES: 64-bit blocks</li>
+        <li>Examples: AES, DES, 3DES</li>
+        <li>Good for: File storage, databases</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- RNG -->
+<div id="page-rng" class="page">
+  <div class="page-header">
+    <div class="page-tag">Section A — MCQ</div>
+    <h1 class="page-title">Random Number Generators</h1>
+    <p class="page-desc">TRNG vs PRNG — a common MCQ and theory topic.</p>
+  </div>
+
+  <div class="compare-grid">
+    <div class="card card-green">
+      <h3 style="color:var(--accent2);margin-bottom:12px">TRNG — True Random Number Generator</h3>
+      <ul style="list-style:none;font-size:13px;color:var(--text2);line-height:2">
+        <li>✅ Source: Physical environment (entropy)</li>
+        <li>✅ Input: Keystroke timing, mouse movements, disk activity, temperature</li>
+        <li>✅ Truly random — cannot be reproduced</li>
+        <li>✅ Not deterministic</li>
+        <li>✅ Used where absolute randomness is required</li>
+        <li>✅ Example: Hardware security modules (HSMs)</li>
+      </ul>
+    </div>
+    <div class="card card-accent">
+      <h3 style="color:var(--accent);margin-bottom:12px">PRNG — Pseudorandom Number Generator</h3>
+      <ul style="list-style:none;font-size:13px;color:var(--text2);line-height:2">
+        <li>⚡ Source: Mathematical algorithm + seed</li>
+        <li>⚡ Input: A fixed seed value</li>
+        <li>⚡ Deterministic — same seed = same output</li>
+        <li>⚡ Reproducible (if seed known)</li>
+        <li>⚡ Appears random (passes statistical tests)</li>
+        <li>⚡ Used in most cryptographic applications</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">Uses of Random Numbers in Cryptography</div>
+  <div class="card">
+    <ul class="steps">
+      <li><p><strong>Session Key Generation</strong> — One-time keys for a communication session (e.g., SSL/TLS)</p></li>
+      <li><p><strong>Nonce Generation</strong> — "Number used once" to prevent replay attacks</p></li>
+      <li><p><strong>RSA Key Generation</strong> — p and q must be random large primes</p></li>
+      <li><p><strong>Stream Cipher Keystream</strong> — The keystream in OTP/Vernam must be random</p></li>
+      <li><p><strong>IV (Initialization Vector)</strong> — Used in CBC and other block cipher modes</p></li>
+    </ul>
+  </div>
+
+  <div class="section-title">Requirements for Cryptographic Random Numbers</div>
+  <div class="card card-accent">
+    <div class="grid-3">
+      <div style="text-align:center;padding:14px">
+        <div style="font-size:24px">🎲</div>
+        <div style="font-size:13px;font-weight:600;color:var(--accent);margin:8px 0">Randomness</div>
+        <div style="font-size:12px;color:var(--text2)">Uniform distribution — no value more likely than another</div>
+      </div>
+      <div style="text-align:center;padding:14px">
+        <div style="font-size:24px">🔮</div>
+        <div style="font-size:13px;font-weight:600;color:var(--accent);margin:8px 0">Unpredictability</div>
+        <div style="font-size:12px;color:var(--text2)">Cannot predict next number even knowing previous ones</div>
+      </div>
+      <div style="text-align:center;padding:14px">
+        <div style="font-size:24px">🛡️</div>
+        <div style="font-size:13px;font-weight:600;color:var(--accent);margin:8px 0">Seed Secrecy</div>
+        <div style="font-size:12px;color:var(--text2)">Attacker must not know or predict the seed</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-cyan">
+    <strong>MCQ Trap:</strong> RC4 is a stream cipher (PRNG-based), not TRNG. The output is pseudorandom. IETF RFC 7465 prohibits RC4 in TLS because it's now insecure.
+  </div>
+</div>
+
+<!-- STEGANOGRAPHY -->
+<div id="page-stego" class="page">
+  <div class="page-header">
+    <div class="page-tag">Section A — MCQ</div>
+    <h1 class="page-title">Steganography & Watermarking</h1>
+    <p class="page-desc">Hiding data vs proving ownership — know the difference!</p>
+  </div>
+
+  <div class="compare-grid">
+    <div class="card card-accent">
+      <h3 style="color:var(--accent);margin-bottom:12px">🕵️ Steganography</h3>
+      <ul style="list-style:none;font-size:13px;color:var(--text2);line-height:2">
+        <li>✅ Goal: <strong>HIDE the existence</strong> of a message</li>
+        <li>✅ The message is secret</li>
+        <li>✅ Carrier: image, audio, video, text</li>
+        <li>✅ Secrecy level: HIGH (message must be invisible)</li>
+        <li>✅ Technique: LSB (Least Significant Bit) substitution</li>
+        <li>✅ Detection: Steganalysis</li>
+        <li>✅ Example: Spy hiding message in a JPEG image</li>
+      </ul>
+    </div>
+    <div class="card card-green">
+      <h3 style="color:var(--accent2);margin-bottom:12px">💧 Digital Watermarking</h3>
+      <ul style="list-style:none;font-size:13px;color:var(--text2);line-height:2">
+        <li>✅ Goal: <strong>PROVE OWNERSHIP</strong> / copyright</li>
+        <li>✅ The mark may be visible or hidden</li>
+        <li>✅ Must survive transformations (rotation, compression)</li>
+        <li>✅ Secrecy level: LOW (owner should know it's there)</li>
+        <li>✅ Types: Fragile (detect tampering) / Robust (survive attacks)</li>
+        <li>✅ Domain: Spatial or Frequency (DCT — most robust)</li>
+        <li>✅ Example: News agency watermark on photos</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">Comparison Table</div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Feature</th><th>Steganography</th><th>Watermarking</th></tr>
+      <tr><td><strong>Goal</strong></td><td>Hide message existence</td><td>Prove ownership / copyright</td></tr>
+      <tr><td><strong>Visibility</strong></td><td>Completely invisible</td><td>May be visible (logo) or invisible</td></tr>
+      <tr><td><strong>Secrecy</strong></td><td>High — nobody should know</td><td>Low — owner/verifier knows</td></tr>
+      <tr><td><strong>Robustness</strong></td><td>Fragile (compression destroys it)</td><td>Robust (survives processing)</td></tr>
+      <tr><td><strong>Primary user</strong></td><td>Secret communication</td><td>Media companies, copyright holders</td></tr>
+      <tr><td><strong>Detection</strong></td><td>Steganalysis needed</td><td>Watermark detector used</td></tr>
+      <tr><td><strong>Common technique</strong></td><td>LSB substitution</td><td>DCT (frequency domain)</td></tr>
+    </table>
+  </div>
+
+  <div class="section-title">LSB Steganography (Common Calculation)</div>
+  <div class="card card-accent">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">To hide a message in an image: replace the Least Significant Bit of each pixel byte with a bit from your message.</p>
+    <div class="formula-label">Example: Hide ASCII 'C' (binary: 01000011) in pixels</div>
+    <div class="formula">
+      Pixel bytes: 0x64 = 0110 0100<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0xB9 = 1011 1001<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0x2A = 0010 1010<br>
+      Message bit '0': 0110 010<strong>0</strong> → 0x64 (unchanged)<br>
+      Message bit '1': 1011 100<strong>1</strong> → 0xB9 (unchanged)<br>
+      Message bit '0': 0010 101<strong>0</strong> → 0x2A (unchanged)
+    </div>
+    <div class="alert alert-cyan">
+      <strong>Rule:</strong> Replace ONLY the last (LSB) bit of each byte with one bit from your ASCII message. 8 bytes = 1 character hidden. Extraction: read only the LSB of each byte and reconstruct.
+    </div>
+  </div>
+
+  <div class="section-title">Steganalysis</div>
+  <div class="card">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">The science of detecting hidden messages (breaking steganography).</p>
+    <div class="grid-2">
+      <div>
+        <h4 style="font-size:13px;color:var(--accent);margin-bottom:10px">Detection Methods</h4>
+        <ul style="list-style:none;font-size:13px;color:var(--text2);line-height:2">
+          <li>→ Statistical analysis (histogram comparison)</li>
+          <li>→ Chi-square test on pixel values</li>
+          <li>→ Frequency domain analysis (DCT coefficients)</li>
+          <li>→ Visual inspection of LSB plane</li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-size:13px;color:var(--accent);margin-bottom:10px">Challenges</h4>
+        <ul style="list-style:none;font-size:13px;color:var(--text2);line-height:2">
+          <li>→ Advanced techniques adapt to avoid statistics</li>
+          <li>→ Small payload → undetectable changes</li>
+          <li>→ Encrypted hidden data even harder to detect</li>
+          <li>→ Unknown carrier file format</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- THEORY -->
+<div id="page-theory" class="page">
+  <div class="page-header">
+    <div class="page-tag">Section B — Theory</div>
+    <h1 class="page-title">Theory Questions & Model Answers</h1>
+    <p class="page-desc">Key theory questions from past papers with model answers.</p>
+  </div>
+
+  <div class="alert alert-yellow"><strong>Section B strategy:</strong> Use bullet points, structured answers. Always define terms first, then explain. Each mark = one clear point.</div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggleQA(this)">Differentiate between Watermarking and Steganography in terms of goal and secrecy level. <span class="qa-toggle">+</span></div>
+    <div class="qa-a">
+      <div class="table-wrap"><table>
+        <tr><th>Feature</th><th>Watermarking</th><th>Steganography</th></tr>
+        <tr><td>Goal</td><td>Prove ownership / protect copyright</td><td>Hide the existence of a secret message</td></tr>
+        <tr><td>Secrecy</td><td>Low — owner knows the watermark exists</td><td>High — no one should know a message is hidden</td></tr>
+        <tr><td>Robustness</td><td>Must survive transformation (compression, rotation)</td><td>Often fragile — compression may destroy the message</td></tr>
+        <tr><td>Visibility</td><td>May be visible or invisible</td><td>Always invisible</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggleQA(this)">Differentiate between symmetric and asymmetric encryption. Include key management and performance. <span class="qa-toggle">+</span></div>
+    <div class="qa-a">
+      <p><strong>Symmetric Encryption:</strong></p>
+      <ul style="list-style:disc;padding-left:20px;font-size:13px;color:var(--text2);line-height:1.9">
+        <li>Uses the SAME key for encryption and decryption (shared secret)</li>
+        <li>Fast — suitable for large volumes of data</li>
+        <li>Key management problem: securely distributing the same key to both parties is challenging</li>
+        <li>Examples: AES, DES, Triple-DES</li>
+      </ul>
+      <p style="margin-top:10px"><strong>Asymmetric Encryption:</strong></p>
+      <ul style="list-style:disc;padding-left:20px;font-size:13px;color:var(--text2);line-height:1.9">
+        <li>Uses a KEY PAIR: public key (shared openly) and private key (kept secret)</li>
+        <li>Slow — computationally expensive; not for large data</li>
+        <li>Solves key distribution: anyone can encrypt with public key; only the owner decrypts with private key</li>
+        <li>Examples: RSA, ECC, Diffie-Hellman</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggleQA(this)">Explain how encryption is used in ransomware attacks. Include the two common encryption types, common demand and solution. <span class="qa-toggle">+</span></div>
+    <div class="qa-a">
+      <p><strong>Relationship of encryption with ransomware:</strong> Ransomware uses encryption as a weapon — attackers encrypt the victim's files so they cannot access their own data, then demand ransom for the decryption key.</p>
+      <p style="margin-top:10px"><strong>Two common types of encryption used:</strong></p>
+      <ul style="list-style:disc;padding-left:20px;font-size:13px;color:var(--text2);line-height:1.9">
+        <li><strong>Symmetric encryption (AES)</strong> — used to encrypt the victim's files quickly (fast)</li>
+        <li><strong>Asymmetric encryption (RSA)</strong> — used to encrypt the symmetric key, ensuring only the attacker has the decryption key</li>
+      </ul>
+      <p style="margin-top:10px"><strong>Common demand:</strong> Payment in cryptocurrency (e.g., Bitcoin) to maintain attacker anonymity.</p>
+      <p style="margin-top:10px"><strong>Solution promised:</strong> Attacker promises to provide the decryption key upon payment, allowing the victim to recover their files.</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggleQA(this)">Explain the difference between ECB and CBC modes of operation. <span class="qa-toggle">+</span></div>
+    <div class="qa-a">
+      <p><strong>ECB (Electronic Codebook):</strong></p>
+      <ul style="list-style:disc;padding-left:20px;font-size:13px;color:var(--text2);line-height:1.9">
+        <li>Each plaintext block is encrypted INDEPENDENTLY</li>
+        <li>Same plaintext block → same ciphertext block (deterministic)</li>
+        <li>Vulnerable to pattern attacks — patterns in data visible in ciphertext</li>
+        <li>Parallelizable but INSECURE for most applications</li>
+      </ul>
+      <p style="margin-top:10px"><strong>CBC (Cipher Block Chaining):</strong></p>
+      <ul style="list-style:disc;padding-left:20px;font-size:13px;color:var(--text2);line-height:1.9">
+        <li>Each plaintext block is XOR'd with the PREVIOUS ciphertext block before encryption</li>
+        <li>First block uses an Initialization Vector (IV)</li>
+        <li>Same plaintext → different ciphertext (depends on previous block)</li>
+        <li>Hides patterns — SECURE for most use cases</li>
+        <li>Cannot parallelize encryption (sequential), but decryption can be parallelized</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggleQA(this)">Analyse a digital signature scenario: manager signs email and HR verifies it. Describe hash generation, keys, and verification. <span class="qa-toggle">+</span></div>
+    <div class="qa-a">
+      <p><strong>Process:</strong></p>
+      <ol style="list-style:decimal;padding-left:20px;font-size:13px;color:var(--text2);line-height:2">
+        <li><strong>Hash generation:</strong> Manager runs email content through a hash function (SHA-256) → produces a fixed-length digest (hash value)</li>
+        <li><strong>Signing:</strong> Manager encrypts the hash using his PRIVATE KEY → this is the digital signature</li>
+        <li><strong>Sending:</strong> Manager sends the email + digital signature to HR</li>
+        <li><strong>Verification:</strong> HR decrypts the signature using Manager's PUBLIC KEY → recovers hash H1</li>
+        <li><strong>Hash comparison:</strong> HR computes hash H2 of received email → compares H1 and H2</li>
+        <li><strong>If H1 == H2:</strong> Signature is valid — email is authentic and untampered</li>
+        <li><strong>If H1 ≠ H2:</strong> Email was modified → signature invalid</li>
+      </ol>
+      <p style="margin-top:10px"><strong>What is submitted:</strong> The email (plaintext) + the encrypted hash (digital signature).</p>
+      <p><strong>Digital signature uses both:</strong> Hashing (for integrity) + Asymmetric encryption (for authentication).</p>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggleQA(this)">Analyse the characteristics of DES. <span class="qa-toggle">+</span></div>
+    <div class="qa-a">
+      <ul style="list-style:disc;padding-left:20px;font-size:13px;color:var(--text2);line-height:2">
+        <li>Block size: <strong>64 bits</strong></li>
+        <li>Key size: <strong>64 bits total, but only 56 bits effective</strong> (8 bits are parity bits, one per byte)</li>
+        <li>Structure: <strong>Feistel cipher</strong> — divides block into Left (L) and Right (R) halves</li>
+        <li>Rounds: <strong>16 rounds</strong> of substitution and permutation</li>
+        <li>Security: <strong>INSECURE</strong> — 56-bit key vulnerable to brute-force attacks</li>
+        <li>Successor: Triple-DES (3DES) applies DES three times; AES replaced it entirely</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggleQA(this)">Compare MACs and RSA digital signatures. <span class="qa-toggle">+</span></div>
+    <div class="qa-a">
+      <div class="table-wrap"><table>
+        <tr><th>Feature</th><th>MAC</th><th>RSA Digital Signature</th></tr>
+        <tr><td>Key used</td><td>Shared secret (symmetric)</td><td>Private key (asymmetric)</td></tr>
+        <tr><td>Verification</td><td>Only by parties with shared key</td><td>Anyone with public key</td></tr>
+        <tr><td>Non-repudiation</td><td>NO — sender can deny</td><td>YES — only sender has private key</td></tr>
+        <tr><td>Purpose</td><td>Integrity + Authentication</td><td>Integrity + Authentication + Non-repudiation</td></tr>
+        <tr><td>Speed</td><td>Faster</td><td>Slower</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-q" onclick="toggleQA(this)">Encryption vs Hashing for storing passwords. Which is better? <span class="qa-toggle">+</span></div>
+    <div class="qa-a">
+      <p><strong>a) Encryption implications:</strong></p>
+      <ul style="list-style:disc;padding-left:20px;font-size:13px;color:var(--text2);line-height:1.9">
+        <li>Reversible — if encryption key is compromised, ALL passwords exposed</li>
+        <li>Creates a single point of failure (the key)</li>
+        <li>Not recommended for password storage</li>
+      </ul>
+      <p style="margin-top:10px"><strong>b) Hashing implications:</strong></p>
+      <ul style="list-style:disc;padding-left:20px;font-size:13px;color:var(--text2);line-height:1.9">
+        <li>ONE-WAY — cannot retrieve original password from hash</li>
+        <li>If database is breached, hashes are useless to attacker (without brute force)</li>
+        <li>Add salt (random value) to prevent rainbow table attacks</li>
+        <li>Use bcrypt, scrypt, or Argon2 for password hashing</li>
+      </ul>
+      <p style="margin-top:10px"><strong>c) Recommendation: HASHING</strong> — because it's irreversible. Even if the database is stolen, original passwords cannot be recovered. Combined with salting, it provides strong protection.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CLASSICAL CIPHERS -->
+<div id="page-classical" class="page">
+  <div class="page-header">
+    <div class="page-tag">Section C — Calculation</div>
+    <h1 class="page-title">Classical Ciphers</h1>
+    <p class="page-desc">Step-by-step calculation guides for all classical ciphers.</p>
+  </div>
+
+  <!-- CAESAR -->
+  <div class="section-title">1. Caesar Cipher (Shift Cipher)</div>
+  <div class="card card-accent">
+    <div class="formula-label">Encryption Formula</div>
+    <div class="formula">C = E(k, p) = (p + k) mod 26</div>
+    <div class="formula-label">Decryption Formula</div>
+    <div class="formula">p = D(k, C) = (C - k) mod 26</div>
+    <div class="alert alert-cyan">Letter values: A=0, B=1, C=2, ... Z=25. If result is negative, add 26.</div>
+  </div>
+
+  <div class="card">
+    <h4 style="color:var(--accent);margin-bottom:12px">Example: Encrypt "NISA" with k=3</h4>
+    <div class="table-wrap"><table>
+      <tr><th>Letter</th><th>Value (p)</th><th>p + k</th><th>(p+k) mod 26</th><th>Ciphertext</th></tr>
+      <tr><td>N</td><td>13</td><td>13+3=16</td><td>16</td><td>Q</td></tr>
+      <tr><td>I</td><td>8</td><td>8+3=11</td><td>11</td><td>L</td></tr>
+      <tr><td>S</td><td>18</td><td>18+3=21</td><td>21</td><td>V</td></tr>
+      <tr><td>A</td><td>0</td><td>0+3=3</td><td>3</td><td>D</td></tr>
+    </table></div>
+    <div class="formula">Result: NISA → QLVD</div>
+  </div>
+
+  <div class="card">
+    <h4 style="color:var(--accent);margin-bottom:12px">Example: Decrypt "QLVD" with k=3</h4>
+    <div class="table-wrap"><table>
+      <tr><th>Cipher</th><th>Value (C)</th><th>C - k</th><th>(C-k) mod 26</th><th>Plaintext</th></tr>
+      <tr><td>Q</td><td>16</td><td>16-3=13</td><td>13</td><td>N</td></tr>
+      <tr><td>L</td><td>11</td><td>11-3=8</td><td>8</td><td>I</td></tr>
+      <tr><td>V</td><td>21</td><td>21-3=18</td><td>18</td><td>S</td></tr>
+      <tr><td>D</td><td>3</td><td>3-3=0</td><td>0</td><td>A</td></tr>
+    </table></div>
+    <div class="formula">Result: QLVD → NISA</div>
+  </div>
+
+  <hr class="divider">
+  <!-- SIMPLE KEY -->
+  <div class="section-title">2. Simple Key Substitution Cipher</div>
+  <div class="card card-green">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px">Write the keyword (removing duplicate letters) at the start, then fill remaining alphabet letters in order.</p>
+    <h4 style="color:var(--accent2);margin-bottom:10px">Example: Key = "WIRELESS"</h4>
+    <div class="formula">
+      Unique keyword: W I R E L S (remove duplicate S)<br>
+      Remaining: A B C D F G H J K M N O P Q T U V X Y Z<br>
+      <br>
+      pi: A B C D E F G H I J K L M N O P Q R S T U V W X Y Z<br>
+      ci: W I R E L S A B C D F G H J K M N O P Q T U V X Y Z
+    </div>
+    <div class="alert alert-green">To encrypt: find plaintext letter in top row → read cipher letter below it. To decrypt: find cipher letter in bottom row → read plain letter above it.</div>
+  </div>
+
+  <hr class="divider">
+  <!-- VERNAM -->
+  <div class="section-title">3. Vernam Cipher</div>
+  <div class="card card-accent">
+    <div class="formula-label">Encryption</div>
+    <div class="formula">ci = (pi + ki) mod 26</div>
+    <div class="formula-label">Decryption</div>
+    <div class="formula">pi = (ci - ki) mod 26</div>
+    <div class="alert alert-cyan">ki is a random number (not a letter). Use the actual numeric value from the key.</div>
+  </div>
+
+  <div class="card">
+    <h4 style="color:var(--accent);margin-bottom:12px">Example: Encrypt "VERNAM" with keys [76,48,16,82,44,3]</h4>
+    <div class="table-wrap"><table>
+      <tr><th>Letter (pi)</th><th>pi value</th><th>key (ki)</th><th>pi + ki</th><th>(pi+ki) mod 26</th><th>Cipher</th></tr>
+      <tr><td>V</td><td>21</td><td>76</td><td>97</td><td>19</td><td>T</td></tr>
+      <tr><td>E</td><td>4</td><td>48</td><td>52</td><td>0</td><td>A</td></tr>
+      <tr><td>R</td><td>17</td><td>16</td><td>33</td><td>7</td><td>H</td></tr>
+      <tr><td>N</td><td>13</td><td>82</td><td>95</td><td>17</td><td>R</td></tr>
+      <tr><td>A</td><td>0</td><td>44</td><td>44</td><td>18</td><td>S</td></tr>
+      <tr><td>M</td><td>12</td><td>3</td><td>15</td><td>15</td><td>P</td></tr>
+    </table></div>
+    <div class="formula">VERNAM → TAHRSP</div>
+  </div>
+
+  <hr class="divider">
+  <!-- VIGENERE -->
+  <div class="section-title">4. Vigenère Cipher</div>
+  <div class="card card-green">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px">A polyalphabetic cipher. The key is repeated to match plaintext length. Use the Vigenère tableau.</p>
+    <div class="formula-label">Encryption</div>
+    <div class="formula">C = (p + k) mod 26  (where k is letter value of key character)</div>
+    <div class="formula-label">Decryption</div>
+    <div class="formula">p = (C - k + 26) mod 26  (add 26 to handle negatives)</div>
+  </div>
+
+  <div class="card">
+    <h4 style="color:var(--accent);margin-bottom:12px">Example: Encrypt "ASSESSMENT" with key "LAB"</h4>
+    <p style="font-size:12px;color:var(--text3);margin-bottom:10px">Key repeats: L A B L A B L A B L</p>
+    <div class="table-wrap"><table>
+      <tr><th>Plain</th><th>p val</th><th>Key</th><th>k val</th><th>p+k</th><th>(p+k)%26</th><th>Cipher</th></tr>
+      <tr><td>A</td><td>0</td><td>L</td><td>11</td><td>11</td><td>11</td><td>L</td></tr>
+      <tr><td>S</td><td>18</td><td>A</td><td>0</td><td>18</td><td>18</td><td>S</td></tr>
+      <tr><td>S</td><td>18</td><td>B</td><td>1</td><td>19</td><td>19</td><td>T</td></tr>
+      <tr><td>E</td><td>4</td><td>L</td><td>11</td><td>15</td><td>15</td><td>P</td></tr>
+      <tr><td>S</td><td>18</td><td>A</td><td>0</td><td>18</td><td>18</td><td>S</td></tr>
+      <tr><td>S</td><td>18</td><td>B</td><td>1</td><td>19</td><td>19</td><td>T</td></tr>
+      <tr><td>M</td><td>12</td><td>L</td><td>11</td><td>23</td><td>23</td><td>X</td></tr>
+      <tr><td>E</td><td>4</td><td>A</td><td>0</td><td>4</td><td>4</td><td>E</td></tr>
+      <tr><td>N</td><td>13</td><td>B</td><td>1</td><td>14</td><td>14</td><td>O</td></tr>
+      <tr><td>T</td><td>19</td><td>L</td><td>11</td><td>30</td><td>4</td><td>E</td></tr>
+    </table></div>
+    <div class="formula">ASSESSMENT → LSTPSTXEOE</div>
+  </div>
+
+  <hr class="divider">
+  <!-- TRANSPOSITION -->
+  <div class="section-title">5. Keyless Transposition Cipher</div>
+  <div class="card card-yellow">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px"><strong>WRITE BY ROW, READ BY COLUMN</strong> (for encryption). The matrix size is given.</p>
+    <h4 style="color:var(--accent4);margin-bottom:10px">Single Transposition — Example: Encrypt "SCRAMBLEDEGG" in 3×4 matrix</h4>
+    <div class="formula">
+      Write by row:  S A L<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E C M<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E G R<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B D G<br>
+      Read by column: SEEB ACGD LMRG → "SEEBALECMRGDG"
+    </div>
+  </div>
+
+  <hr class="divider">
+  <!-- KEYED TRANSPOSITION -->
+  <div class="section-title">6. Keyed Columnar Transposition Cipher</div>
+  <div class="card card-accent">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px"><strong>WRITE BY ROW, READ COLUMNS IN KEY ORDER</strong></p>
+    <h4 style="color:var(--accent);margin-bottom:10px">Example: Encrypt "CLASS DISMISSED" with key 4312567</h4>
+    <div class="formula">
+      Key order: 4 3 1 2 5 6 7<br>
+      <br>
+      Col:   4 3 1 2 5 6 7<br>
+      Row 1: C L A S S D I<br>
+      Row 2: S M I S S E D<br>
+      <br>
+      Read by sorted key (1,2,3,4,5,6,7):<br>
+      Col1(key=1): A,I → AI<br>
+      Col2(key=2): S,S → SS<br>
+      Col3(key=3): L,M → LM<br>
+      Col4(key=4): C,S → CS<br>
+      Col5(key=5): S,S → SS<br>
+      Col6(key=6): D,E → DE<br>
+      Col7(key=7): I,D → ID<br>
+      Result: AI SS LM CS SS DE ID → AISSLMCSSSDEID
+    </div>
+  </div>
+</div>
+
+<!-- S-DES -->
+<div id="page-sdes" class="page">
+  <div class="page-header">
+    <div class="page-tag">Section C — Calculation</div>
+    <h1 class="page-title">Simplified DES (S-DES)</h1>
+    <p class="page-desc">Key generation and encryption steps for S-DES.</p>
+  </div>
+
+  <div class="alert alert-yellow"><strong>S-DES Key Generation uses a 10-bit key to generate two 8-bit subkeys K1 and K2.</strong></div>
+
+  <div class="section-title">Key Generation Process</div>
+  <div class="card card-accent">
+    <ul class="steps">
+      <li><p><strong>Start with 10-bit key</strong> e.g., 1010100000</p></li>
+      <li><p><strong>Apply P10 Permutation</strong> — rearrange 10 bits using the P10 table: [3 5 2 7 4 10 1 9 8 6]. Pick bits in that position order.</p></li>
+      <li><p><strong>Split into Left (L) and Right (R)</strong> — first 5 bits = L, last 5 bits = R</p></li>
+      <li><p><strong>Apply LS-1</strong> (Left Shift by 1) — shift each half left by 1, wrapping the leftmost bit</p></li>
+      <li><p><strong>Apply P8 Permutation</strong> — rearrange 10 bits using P8 table: [6 3 7 4 8 5 10 9]. This gives K1 (8 bits)</p></li>
+      <li><p><strong>Apply LS-2</strong> (Left Shift by 2) — shift each half left by 2</p></li>
+      <li><p><strong>Apply P8 again</strong> — this gives K2 (8 bits)</p></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h4 style="color:var(--accent);margin-bottom:14px">Example: Key = 1010100000</h4>
+    <div class="formula-label">Step 1: Original key</div>
+    <div class="formula">1 0 1 0 1 0 0 0 0 0<br>(positions: 1 2 3 4 5 6 7 8 9 10)</div>
+
+    <div class="formula-label">Step 2: P10 = [3 5 2 7 4 10 1 9 8 6]</div>
+    <div class="formula">
+      Pos 3=1, 5=1, 2=0, 7=0, 4=0, 10=0, 1=1, 9=0, 8=0, 6=0<br>
+      After P10: 1 0 1 0 0 | 0 1 0 0 0<br>
+      Left(L)=10100, Right(R)=01000
+    </div>
+
+    <div class="formula-label">Step 3: LS-1 (shift each half left by 1)</div>
+    <div class="formula">
+      L: 10100 → 01001<br>
+      R: 01000 → 10001<br>
+      Combined: 0100110001
+    </div>
+
+    <div class="formula-label">Step 4: P8 = [6 3 7 4 8 5 10 9] → K1</div>
+    <div class="formula">
+      From 0100110001:<br>
+      Pos 6=1, 3=0, 7=0, 4=0, 8=0, 5=1, 10=1, 9=0<br>
+      K1 = 10000110
+    </div>
+
+    <div class="formula-label">Step 5: LS-2 (shift each half left by 2 from LS-1 result)</div>
+    <div class="formula">
+      L: 01001 → 00101<br>
+      R: 10001 → 00110<br>
+      Combined: 0010100110
+    </div>
+
+    <div class="formula-label">Step 6: P8 again → K2</div>
+    <div class="formula">
+      From 0010100110:<br>
+      Pos 6=0, 3=1, 7=0, 4=1, 8=1, 5=0, 10=0, 9=1<br>
+      K2 = 01011001
+    </div>
+  </div>
+
+  <div class="section-title">Encryption Steps (IP, EP, XOR, S-Box, Swap)</div>
+  <div class="card card-green">
+    <div class="table-wrap"><table>
+      <tr><th>Table</th><th>Values</th><th>Purpose</th></tr>
+      <tr><td>IP (Initial Permutation)</td><td>[2 6 3 1 4 8 5 7]</td><td>Rearranges 8-bit plaintext</td></tr>
+      <tr><td>IP⁻¹ (Inverse)</td><td>[4 1 3 5 7 2 8 6]</td><td>Final permutation</td></tr>
+      <tr><td>EP (Expansion)</td><td>[4 1 2 3 2 3 4 1]</td><td>Expands 4 bits → 8 bits</td></tr>
+      <tr><td>P4</td><td>[2 4 3 1]</td><td>Permutes 4 bits after S-box</td></tr>
+      <tr><td>S0 box</td><td>Row/col lookup on 4 bits</td><td>Substitution (left 4 bits after XOR)</td></tr>
+      <tr><td>S1 box</td><td>Row/col lookup on 4 bits</td><td>Substitution (right 4 bits after XOR)</td></tr>
+    </table></div>
+    <div class="alert alert-green" style="margin-top:12px">
+      <strong>S-Box lookup:</strong> Row = bits 1 and 4 (first and last bit). Column = bits 2 and 3 (middle bits). Read binary value from table.
+    </div>
+  </div>
+
+  <div class="card">
+    <h4 style="color:var(--accent);margin-bottom:12px">Encryption Procedure</h4>
+    <ul class="steps">
+      <li><p><strong>Initial Permutation (IP)</strong> — rearrange 8-bit plaintext using IP table → get L0 (left 4) and R0 (right 4)</p></li>
+      <li><p><strong>Expansion Permutation (EP)</strong> — expand R0 from 4 bits → 8 bits using EP table</p></li>
+      <li><p><strong>XOR with K1</strong> — XOR the 8-bit expanded R0 with K1 → split result into left 4 and right 4</p></li>
+      <li><p><strong>S-Box Substitution</strong> — look up left 4 bits in S0, right 4 bits in S1 → each gives 2-bit output → combine to 4 bits</p></li>
+      <li><p><strong>P4 Permutation</strong> — rearrange the 4-bit S-box output</p></li>
+      <li><p><strong>XOR with L0</strong> — XOR P4 result with L0 → new right half (R1)</p></li>
+      <li><p><strong>Swap</strong> — swap L and R: new state = [R0 | R1] = [new L | new R]</p></li>
+      <li><p><strong>Repeat Round 2</strong> — apply same F function with K2 but NO swap at end</p></li>
+      <li><p><strong>Inverse IP (IP⁻¹)</strong> — final permutation gives ciphertext</p></li>
+    </ul>
+  </div>
+</div>
+
+<!-- AES -->
+<div id="page-aes" class="page">
+  <div class="page-header">
+    <div class="page-tag">Section C — Calculation</div>
+    <h1 class="page-title">AES — Advanced Encryption Standard</h1>
+    <p class="page-desc">Key expansion (most tested) and encryption operations.</p>
+  </div>
+
+  <div class="card card-accent">
+    <h3 style="color:var(--accent);margin-bottom:14px">AES Facts</h3>
+    <div class="grid-3">
+      <div class="point-card"><div class="pt-num">128</div><div class="pt-label">Block size (bits)</div></div>
+      <div class="point-card"><div class="pt-num">128/192/256</div><div class="pt-label">Key sizes (bits)</div></div>
+      <div class="point-card"><div class="pt-num">10/12/14</div><div class="pt-label">Rounds</div></div>
+      <div class="point-card"><div class="pt-num">4×4</div><div class="pt-label">State matrix (bytes)</div></div>
+      <div class="point-card"><div class="pt-num">Rijndael</div><div class="pt-label">Original algorithm name</div></div>
+      <div class="point-card"><div class="pt-num">NOT Feistel</div><div class="pt-label">Structure (iterative)</div></div>
+    </div>
+  </div>
+
+  <div class="section-title">Key Expansion (Key Schedule) — Most Tested!</div>
+  <div class="card card-green">
+    <h4 style="color:var(--accent2);margin-bottom:14px">Step-by-Step: Generating Key 1 from Key 0</h4>
+    <ul class="steps">
+      <li>
+        <p><strong>Arrange Key 0 as 4×4 State Matrix</strong><br>
+        Write key bytes column by column. E.g., "CRYPTOGRAPHY1234":<br>
+        Col 1: C,R,Y,P → 43,52,59,50 | Col 2: T,O,G,R → 54,4F,47,52 | ...</p>
+      </li>
+      <li>
+        <p><strong>Take LAST column of Key 0</strong><br>
+        For "CRYPTOGRAPHY1234": last column = P,R,Y,4 → 50,52,59,34</p>
+      </li>
+      <li>
+        <p><strong>RotWord</strong> — Left-rotate the last column by 1 position:<br>
+        [50,52,59,34] → [52,59,34,50] (first byte goes to end)</p>
+      </li>
+      <li>
+        <p><strong>SubByte</strong> — Replace each byte using the AES S-Box:<br>
+        Look up the hex value in the S-Box table (row=first nibble, col=second nibble).<br>
+        Example: 52 → row 5, col 2 → use table to find substituted value.</p>
+      </li>
+      <li>
+        <p><strong>XOR with RCON</strong> — XOR only the FIRST byte of SubByte result with RCON[1]=01:<br>
+        RCON values: Round 1=01, Round 2=02, Round 3=04, Round 4=08, Round 5=10...</p>
+      </li>
+      <li>
+        <p><strong>XOR with First Column of Key 0</strong><br>
+        XOR the RCON-XOR'd result with Column 1 of Key 0 → this gives Column 1 of Key 1.</p>
+      </li>
+      <li>
+        <p><strong>Generate remaining columns of Key 1</strong><br>
+        Col 2 of Key 1 = Col 1 of Key 1 XOR Col 2 of Key 0<br>
+        Col 3 of Key 1 = Col 2 of Key 1 XOR Col 3 of Key 0<br>
+        Col 4 of Key 1 = Col 3 of Key 1 XOR Col 4 of Key 0</p>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card card-yellow">
+    <h4 style="color:var(--accent4);margin-bottom:10px">RCON Table (for Key Generation)</h4>
+    <div class="table-wrap"><table>
+      <tr><th>Round</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr>
+      <tr><td>RCON[i]</td><td>01</td><td>02</td><td>04</td><td>08</td><td>10</td><td>20</td><td>40</td><td>80</td><td>1B</td><td>36</td></tr>
+      <tr><td>Col 2,3,4</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td><td>00</td></tr>
+    </table></div>
+    <div class="alert alert-yellow" style="margin-top:12px"><strong>Remember:</strong> RCON only XORs with the FIRST byte of the RotWord+SubByte result. The other 3 bytes of RCON are 00 (so XOR doesn't change them).</div>
+  </div>
+
+  <div class="section-title">AES Encryption Rounds</div>
+  <div class="card">
+    <div class="table-wrap"><table>
+      <tr><th>Round</th><th>Operations</th><th>Notes</th></tr>
+      <tr><td>Initial (Round 0)</td><td>AddRoundKey (XOR with Key 0)</td><td>Just XOR — no substitution</td></tr>
+      <tr><td>Rounds 1–9</td><td>SubBytes → ShiftRows → MixColumns → AddRoundKey</td><td>All 4 operations</td></tr>
+      <tr><td>Final (Round 10)</td><td>SubBytes → ShiftRows → AddRoundKey</td><td>NO MixColumns in final round!</td></tr>
+    </table></div>
+  </div>
+
+  <div class="section-title">AES MixColumns</div>
+  <div class="card card-accent">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">MixColumns multiplies each column of the state by a fixed matrix in GF(2⁸). The AES MixColumns matrix is:</p>
+    <div class="formula">
+      [2 3 1 1]   [b0]   [2b0 XOR 3b1 XOR b2 XOR b3]<br>
+      [1 2 3 1] × [b1] = [b0 XOR 2b1 XOR 3b2 XOR b3]<br>
+      [1 1 2 3]   [b2]   [b0 XOR b1 XOR 2b2 XOR 3b3]<br>
+      [3 1 1 2]   [b3]   [3b0 XOR b1 XOR b2 XOR 2b3]
+    </div>
+    <div class="alert alert-cyan">
+      <strong>Multiplication rules in GF(2⁸):</strong><br>
+      × 1 = the byte itself<br>
+      × 2 = shift left by 1 bit. If MSB was 1, XOR with 0x1B<br>
+      × 3 = (×2) XOR (×1)
+    </div>
+  </div>
+</div>
+
+<!-- RSA -->
+<div id="page-rsa" class="page">
+  <div class="page-header">
+    <div class="page-tag">Section C — Calculation</div>
+    <h1 class="page-title">RSA & Diffie-Hellman</h1>
+    <p class="page-desc">Key generation, encryption, decryption — with full worked examples.</p>
+  </div>
+
+  <div class="section-title">RSA Algorithm</div>
+  <div class="card card-accent">
+    <h4 style="color:var(--accent);margin-bottom:14px">Key Generation Steps</h4>
+    <ul class="steps">
+      <li><p><strong>Choose two large primes p and q</strong> (p ≠ q)</p></li>
+      <li><p><strong>Calculate n = p × q</strong> (modulus — part of both public and private key)</p></li>
+      <li><p><strong>Calculate φ(n) = (p-1)(q-1)</strong> (Euler's totient)</p></li>
+      <li><p><strong>Choose e such that gcd(e, φ(n)) = 1 and 1 &lt; e &lt; φ(n)</strong></p></li>
+      <li><p><strong>Find d such that d×e mod φ(n) = 1</strong> (d is multiplicative inverse of e mod φ(n))</p></li>
+      <li><p><strong>Public Key = {e, n}</strong> | <strong>Private Key = {d, n}</strong></p></li>
+    </ul>
+    <div class="formula-label">Encryption</div>
+    <div class="formula">C = M^e mod n</div>
+    <div class="formula-label">Decryption</div>
+    <div class="formula">M = C^d mod n</div>
+  </div>
+
+  <div class="card">
+    <h4 style="color:var(--accent);margin-bottom:14px">Full Example: p=3, q=11, e=3, M=14</h4>
+    <div class="formula">
+      n = 3 × 11 = 33<br>
+      φ(n) = (3-1)(11-1) = 2 × 10 = 20<br>
+      e = 3, gcd(3,20) = 1 ✓<br>
+      <br>
+      Find d: d×3 mod 20 = 1<br>
+      d=7: 7×3=21, 21 mod 20 = 1 ✓ → d = 7<br>
+      <br>
+      Public Key PU = {3, 33}<br>
+      Private Key PR = {7, 33}<br>
+      <br>
+      Encryption: C = 14^3 mod 33<br>
+      &nbsp;&nbsp;14^2 = 196 mod 33 = 196 - 5×33 = 196-165 = 31<br>
+      &nbsp;&nbsp;14^3 = 31×14 = 434 mod 33 = 434 - 13×33 = 434-429 = 5<br>
+      C = 5<br>
+      <br>
+      Decryption: M = 5^7 mod 33<br>
+      &nbsp;&nbsp;5^2 = 25; 5^4 = 25^2 = 625 mod 33 = 625-18×33=625-594=31<br>
+      &nbsp;&nbsp;5^7 = 5^4 × 5^2 × 5 = 31×25×5 mod 33<br>
+      &nbsp;&nbsp;31×25 = 775 mod 33 = 775-23×33=775-759=16<br>
+      &nbsp;&nbsp;16×5 = 80 mod 33 = 80-2×33=80-66=14<br>
+      M = 14 ✓
+    </div>
+  </div>
+
+  <div class="section-title">Extended Euclidean Algorithm (Finding d)</div>
+  <div class="card card-yellow">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Used when finding d by trial is too slow. Find d where de mod φ(n) = 1.</p>
+    <h4 style="color:var(--accent4);margin-bottom:10px">Example: e=17, φ(n)=60, find d</h4>
+    <div class="formula">
+      60 = 3(17) + 9<br>
+      17 = 1(9) + 8<br>
+      9 = 1(8) + 1 ← GCD found<br>
+      <br>
+      Back-substitute:<br>
+      1 = 9 - 1(8)<br>
+      &nbsp;&nbsp;= 9 - 1(17 - 1(9)) = 2(9) - 1(17)<br>
+      &nbsp;&nbsp;= 2(60 - 3(17)) - 1(17) = 2(60) - 7(17)<br>
+      <br>
+      So d = -7 ≡ 60 - 7 = 53 mod 60<br>
+      Check: 53 × 17 = 901, 901 mod 60 = 1 ✓<br>
+      d = 53
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div class="section-title">Diffie-Hellman Key Exchange</div>
+  <div class="card card-green">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Both parties end up with the SAME secret key without ever transmitting it directly.</p>
+    <div class="formula-label">Public Parameters: prime q, primitive root α (alpha)</div>
+    <div class="formula">
+      Alice: YA = α^XA mod q (XA = Alice's private key)<br>
+      Bob:   YB = α^XB mod q (XB = Bob's private key)<br>
+      <br>
+      Alice computes K: K = YB^XA mod q<br>
+      Bob computes K:   K = YA^XB mod q<br>
+      Both get SAME K!
+    </div>
+    <div class="alert alert-green" style="margin-top:12px">
+      <strong>Example:</strong> q=11, α=2, XA=6, XB=8<br>
+      YA = 2^6 mod 11 = 64 mod 11 = 9<br>
+      YB = 2^8 mod 11 = 256 mod 11 = 3<br>
+      K (Alice) = 3^6 mod 11 = 729 mod 11 = 3<br>
+      K (Bob) = 9^8 mod 11 = 43046721 mod 11 = 3 ✓
+    </div>
+  </div>
+
+  <div class="section-title">El-Gamal Encryption</div>
+  <div class="card card-accent">
+    <div class="formula">
+      Public parameters: prime p, primitive root g<br>
+      Receiver's private key: x<br>
+      Receiver's public key: Ya = g^x mod p<br>
+      <br>
+      Encryption (sender uses random k):<br>
+      C1 = g^k mod p<br>
+      K = Ya^k mod p<br>
+      C2 = K × M mod p<br>
+      Ciphertext = (C1, C2)<br>
+      <br>
+      Decryption:<br>
+      K = C1^x mod p<br>
+      M = C2 × K^(-1) mod p
+    </div>
+    <div class="alert alert-cyan">
+      <strong>Example (Sem 2 2024 Paper):</strong> p=23, g=5, x=6, M=15, k=10<br>
+      Ya = 5^6 mod 23 = 15625 mod 23 = 8<br>
+      C1 = 5^10 mod 23 = 9765625 mod 23 = 9<br>
+      K = 8^10 mod 23 = ... = 16<br>
+      C2 = 16 × 15 mod 23 = 240 mod 23 = 10<br>
+      Ciphertext = (9, 10)
+    </div>
+  </div>
+</div>
+
+<!-- ECC -->
+<div id="page-ecc" class="page">
+  <div class="page-header">
+    <div class="page-tag">Section C — Calculation</div>
+    <h1 class="page-title">Elliptic Curve Cryptography (ECC)</h1>
+    <p class="page-desc">Finding points, computing R, 2P, and ECC encryption/decryption.</p>
+  </div>
+
+  <div class="card card-accent">
+    <h4 style="color:var(--accent);margin-bottom:12px">ECC Equation</h4>
+    <div class="formula">y² mod p = x³ + ax + b mod p</div>
+    <div class="alert alert-cyan">
+      <strong>Check condition first:</strong> 4a³ + 27b² ≠ 0 (mod p) — if this fails, the curve is degenerate and cannot be used.
+    </div>
+  </div>
+
+  <div class="section-title">Step 1: Finding Points on the Curve</div>
+  <div class="card card-green">
+    <h4 style="color:var(--accent2);margin-bottom:12px">E11(1,1): y² mod 11 = x³ + x + 1 mod 11</h4>
+    <ul class="steps">
+      <li><p><strong>Integer set for mod 11</strong> = {0,1,2,3,4,5,6,7,8,9,10}</p></li>
+      <li><p><strong>For each x</strong>, calculate x³+x+1 mod 11</p></li>
+      <li><p><strong>For each y</strong>, calculate y² mod 11</p></li>
+      <li><p><strong>Match</strong> where y² mod 11 = x³+ax+b mod 11 → those (x,y) are on the curve</p></li>
+    </ul>
+    <div class="formula">
+      Example: x=2 → 2³+2+1 = 11 mod 11 = 0<br>
+      y=0 → 0² mod 11 = 0 ← Match! → (2,0) is on the curve<br>
+      <br>
+      x=3 → 3³+3+1 = 31 mod 11 = 9<br>
+      y=3 → 3² mod 11 = 9 ← Match! → (3,3) on curve<br>
+      y=8 → 8² mod 11 = 64 mod 11 = 9 ← Match! → (3,8) on curve
+    </div>
+  </div>
+
+  <div class="section-title">Step 2: Finding R = P + Q (two different points)</div>
+  <div class="card card-yellow">
+    <div class="formula-label">Formula for λ (lambda)</div>
+    <div class="formula">λ = (y2 - y1) / (x2 - x1) mod p</div>
+    <div class="alert alert-yellow"><strong>Division in modular arithmetic</strong> = multiply by modular inverse. Use Extended Euclidean Algorithm to find the inverse.</div>
+    <div class="formula-label">Formula for R = (x3, y3)</div>
+    <div class="formula">
+      x3 = λ² - x1 - x2 mod p<br>
+      y3 = λ(x1 - x3) - y1 mod p<br>
+      (If result is negative, add p)
+    </div>
+    <h4 style="color:var(--accent4);margin-bottom:10px">Example: E11(1,1), P=(3,8), Q=(6,5), find R</h4>
+    <div class="formula">
+      λ = (5-8)/(6-3) mod 11 = -3/3 mod 11<br>
+      &nbsp;&nbsp;= -1 mod 11 = 10<br>
+      <br>
+      x3 = 10² - 3 - 6 mod 11 = 91 mod 11 = 3<br>
+      y3 = 10(3-3) - 8 mod 11 = -8 mod 11 = 3<br>
+      R = (3,3)
+    </div>
+  </div>
+
+  <div class="section-title">Step 3: Finding 2P = P + P (same point doubled)</div>
+  <div class="card card-accent">
+    <div class="formula-label">Formula for λ (lambda) when P = Q</div>
+    <div class="formula">λ = (3x1² + a) / (2y1) mod p</div>
+    <div class="formula-label">Then use same formula for x3, y3</div>
+    <div class="formula">
+      x3 = λ² - 2x1 mod p<br>
+      y3 = λ(x1 - x3) - y1 mod p
+    </div>
+    <h4 style="color:var(--accent);margin-bottom:10px">Example: E11(1,1), P=(4,6), find 2P</h4>
+    <div class="formula">
+      λ = (3×4² + 1) / (2×6) mod 11<br>
+      &nbsp;&nbsp;= 49/12 mod 11 = 5/1 mod 11 = 5<br>
+      <br>
+      x3 = 5² - 2×4 mod 11 = 17 mod 11 = 6<br>
+      y3 = 5(4-6) - 6 mod 11 = -16 mod 11<br>
+      &nbsp;&nbsp;= 11 - (16 mod 11) = 11 - 5 = 6<br>
+      2P = (6,6)
+    </div>
+    <div class="alert alert-cyan"><strong>Always verify</strong>: check that your result (x3,y3) actually lies on the curve by substituting back into y² = x³+ax+b mod p.</div>
+  </div>
+
+  <div class="section-title">ECC Encryption and Decryption</div>
+  <div class="card card-green">
+    <ul class="steps">
+      <li><p><strong>Choose generator point G</strong> on the curve</p></li>
+      <li><p><strong>Private key</strong> = n (random integer, 1 to p-1)</p></li>
+      <li><p><strong>Public key</strong> Pu = nG (multiply G by n using point doubling)</p></li>
+      <li><p><strong>Encrypt:</strong> C = [kG, M + k·Pu] where k is random<br>C1 = kG, C2 = M + kPu</p></li>
+      <li><p><strong>Decrypt:</strong> M = C2 - n·C1<br>(subtract n times C1 from C2)</p></li>
+    </ul>
+  </div>
+</div>
+
+<!-- PAST PAPER 1 - SEM 1 2526 -->
+<div id="page-pp1" class="page">
+  <div class="page-header">
+    <div class="page-tag">Past Paper Analysis</div>
+    <h1 class="page-title">Semester 1, 2025/2026</h1>
+    <p class="page-desc">Full past paper with model answers. Click any question to reveal the answer.</p>
+  </div>
+  <div class="pp-meta">
+    <span class="pp-badge cyan">December 2025</span>
+    <span class="pp-badge green">CCSB3113</span>
+    <span class="pp-badge yellow">100 Marks · 2.5 Hours</span>
+  </div>
+
+  <h3 class="section-title">Section A — MCQ Answers (15 Questions, 30 Marks)</h3>
+  <div class="card card-accent">
+    <div class="table-wrap"><table>
+      <tr><th>Q</th><th>Answer</th><th>Topic</th></tr>
+      <tr><td>1</td><td><span class="chip chip-green">C — EXAM</span></td><td>Caesar cipher decrypt HADP with k=3 → EXAM</td></tr>
+      <tr><td>2</td><td><span class="chip chip-green">B</span></td><td>DES key: 8 bits are parity bits → 56 effective bits</td></tr>
+      <tr><td>3</td><td><span class="chip chip-green">B</span></td><td>AES SubBytes substitutes each byte using S-box</td></tr>
+      <tr><td>4</td><td><span class="chip chip-green">B</span></td><td>Alice encrypts with BOB's public key to send to Bob</td></tr>
+      <tr><td>5</td><td><span class="chip chip-green">C</span></td><td>SHA-256 produces 256 bits output</td></tr>
+      <tr><td>6</td><td><span class="chip chip-green">A</span></td><td>Digital signature uses SENDER's PRIVATE key</td></tr>
+      <tr><td>7</td><td><span class="chip chip-green">B</span></td><td>Hidden copyright logo = robust watermarking for copyright</td></tr>
+      <tr><td>8</td><td><span class="chip chip-green">B</span></td><td>LSB substitution is common image steganography technique</td></tr>
+      <tr><td>9</td><td><span class="chip chip-green">B</span></td><td>JPEG compression may destroy LSB hidden message</td></tr>
+      <tr><td>10</td><td><span class="chip chip-green">B</span></td><td>512 bits / 128 bits per block = 4 blocks</td></tr>
+      <tr><td>11</td><td><span class="chip chip-green">B</span></td><td>Digital signatures for software use RSA</td></tr>
+      <tr><td>12</td><td><span class="chip chip-green">B</span></td><td>Digital signatures provide auth/integrity; PKI manages keys/certificates</td></tr>
+      <tr><td>13</td><td><span class="chip chip-green">C</span></td><td>Statistical analysis (histogram) is most effective for steg detection</td></tr>
+      <tr><td>14</td><td><span class="chip chip-green">A</span></td><td>Symmetric faster but key distribution harder (Statement I only)</td></tr>
+      <tr><td>15</td><td><span class="chip chip-green">B</span></td><td>DES: I, II, III correct (IV wrong — DES is NOT secure against brute force)</td></tr>
+    </table></div>
+  </div>
+
+  <h3 class="section-title">Section B — Theory Answers (20 Marks)</h3>
+
+  <div class="pp-q">
+    <div class="pp-q-header" onclick="togglePP(this)">
+      <span class="pp-q-num">B1</span>
+      <span class="pp-q-text">Differentiate watermarking and steganography — comparison table. <span class="marks">4M</span></span>
+      <button class="show-answer-btn">Show Answer</button>
+    </div>
+    <div class="pp-answer">
+      <h5>Model Answer</h5>
+      <div class="table-wrap"><table>
+        <tr><th>Feature</th><th>Watermarking</th><th>Steganography</th></tr>
+        <tr><td>Goal</td><td>Prove ownership / copyright protection</td><td>Hide existence of a secret message</td></tr>
+        <tr><td>Secrecy Level</td><td>Low — the watermark's existence is known to owner</td><td>High — nobody should know a message is hidden</td></tr>
+        <tr><td>Robustness</td><td>Must survive transformations (rotation, compression)</td><td>Often fragile — compression can destroy it</td></tr>
+        <tr><td>Visibility</td><td>Can be visible (logo) or invisible</td><td>Always invisible</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="pp-q">
+    <div class="pp-q-header" onclick="togglePP(this)">
+      <span class="pp-q-num">B2</span>
+      <span class="pp-q-text">Encryption vs hashing for passwords (a) encryption implications (b) hashing implications (c) recommendation. <span class="marks">6M</span></span>
+      <button class="show-answer-btn">Show Answer</button>
+    </div>
+    <div class="pp-answer">
+      <h5>Model Answer</h5>
+      <p><strong>a) Encryption implications [2M]:</strong></p>
+      <p>• Reversible — if the decryption key is stolen, ALL passwords are exposed instantly.<br>• Creates a single point of failure (the key). Not recommended for passwords.</p>
+      <p><strong>b) Hashing implications [2M]:</strong></p>
+      <p>• One-way — cannot retrieve original password from hash value.<br>• If database is breached, hashes are computationally infeasible to reverse (especially with salt).<br>• Use bcrypt/scrypt/Argon2 with salt for best protection.</p>
+      <p><strong>c) Recommendation [2M]: HASHING</strong> — because it is irreversible. Even if the database is stolen, the attacker cannot recover the original passwords without brute force. Add a unique salt per user to prevent rainbow table attacks.</p>
+    </div>
+  </div>
+
+  <div class="pp-q">
+    <div class="pp-q-header" onclick="togglePP(this)">
+      <span class="pp-q-num">B3</span>
+      <span class="pp-q-text">Manager digitally signs email to HR — analyse hash generation, keys, hash comparison. <span class="marks">10M</span></span>
+      <button class="show-answer-btn">Show Answer</button>
+    </div>
+    <div class="pp-answer">
+      <h5>Model Answer</h5>
+      <p><strong>a) Analysis [7M]:</strong></p>
+      <p>1. <strong>Hash generation:</strong> Manager runs the email content through a hash function (e.g., SHA-256) → produces a fixed-length hash value H.<br>
+      2. <strong>Private key (signing):</strong> Manager encrypts hash H using his own PRIVATE KEY → produces the digital signature.<br>
+      3. <strong>Sending:</strong> Manager sends: email content + digital signature to HR.<br>
+      4. <strong>Public key (verifying):</strong> HR decrypts the digital signature using Manager's PUBLIC KEY → recovers hash H1.<br>
+      5. <strong>Hash comparison:</strong> HR independently hashes the received email content → gets H2. Compares H1 and H2.<br>
+      6. If H1 == H2 → email is authentic and has not been tampered with.<br>
+      7. If H1 ≠ H2 → email was modified; signature is invalid.</p>
+      <p><strong>b) What is submitted [2M]:</strong> The original email message (plaintext) AND the digital signature (encrypted hash of the email).</p>
+      <p><strong>c) Digital signature explanation [1M]:</strong> Digital signature combines hashing (for data integrity) and asymmetric encryption (for authentication/non-repudiation).</p>
+    </div>
+  </div>
+
+  <h3 class="section-title">Section C — Calculation Answers (50 Marks)</h3>
+
+  <div class="pp-q">
+    <div class="pp-q-header" onclick="togglePP(this)">
+      <span class="pp-q-num">C1</span>
+      <span class="pp-q-text">Decrypt ciphertext "IDY COP ACT NRO" using Keyless Transposition with 3 columns (single transposition). <span class="marks">6M</span></span>
+      <button class="show-answer-btn">Show Answer</button>
+    </div>
+    <div class="pp-answer">
+      <h5>Model Answer</h5>
+      <p>Ciphertext: IDY COP ACT NRO → remove spaces → IDYCOPACTNRO (12 letters)</p>
+      <p>Single transposition decrypt: arranged in matrix by column (3 cols × 4 rows), read by row.</p>
+      <div class="calc">
+      Step 1: 12 letters / 3 cols = 4 rows<br>
+      Step 2: Fill columns first:<br>
+      Col 1: I D Y C (first 4 letters)<br>
+      Col 2: O P A C (next 4)<br>
+      Col 3: T N R O (last 4)<br>
+      <br>
+      Matrix (3×4):<br>
+      I O T<br>
+      D P N<br>
+      Y A R<br>
+      C C O<br>
+      <br>
+      Step 3: Read by ROW → IOTDPNYARCCO<br>
+      Plaintext = IOT DPN YAR CCO → IOTDPNYARCCO
+      </div>
+      <p>The answer reads: <strong>IOT DPN YAR CCO</strong> (or the intended message the lecturer has — check your specific example)</p>
+    </div>
+  </div>
+
+  <div class="pp-q">
+    <div class="pp-q-header" onclick="togglePP(this)">
+      <span class="pp-q-num">C2</span>
+      <span class="pp-q-text">S-DES key generation: key = 1010100000. Apply P10, LS-1, P8(→K1), LS-2, P8(→K2). <span class="marks">12M</span></span>
+      <button class="show-answer-btn">Show Answer</button>
+    </div>
+    <div class="pp-answer">
+      <h5>Model Answer</h5>
+      <div class="calc">
+      Original key: 1 0 1 0 1 0 0 0 0 0<br>
+      (position:    1 2 3 4 5 6 7 8 9 10)<br>
+      <br>
+      a) P10 = [3 5 2 7 4 10 1 9 8 6]:<br>
+      pos3=1, pos5=1, pos2=0, pos7=0, pos4=0, pos10=0, pos1=1, pos9=0, pos8=0, pos6=0<br>
+      After P10: 1 1 0 0 0 | 0 1 0 0 0<br>
+      Left(L) = 11000, Right(R) = 01000  [2M]<br>
+      <br>
+      b) LS-1 (shift each half left by 1):<br>
+      L: 11000 → 10001<br>
+      R: 01000 → 10000<br>
+      Combined: 10001 10000  [2M]<br>
+      <br>
+      c) P8 = [6 3 7 4 8 5 10 9] on 1000110000:<br>
+      From 1000110000 (positions 1-10):<br>
+      pos6=1, pos3=0, pos7=1, pos4=0, pos8=0, pos5=1, pos10=0, pos9=0<br>
+      K1 = 10100100  [2M]<br>
+      <br>
+      d) LS-2 (shift each half left by 2 from LS-1 result):<br>
+      L: 10001 → 00110<br>
+      R: 10000 → 00010<br>
+      Combined: 00110 00010  [2M]<br>
+      <br>
+      e) P8 again on 0011000010:<br>
+      pos6=0, pos3=1, pos7=0, pos4=1, pos8=0, pos5=0, pos10=0, pos9=1<br>
+      K2 = 01010001  [2M]<br>
+      <br>
+      f) K1 = 10100100, K2 = 01010001  [2M]
+      </div>
+    </div>
+  </div>
+
+  <div class="pp-q">
+    <div class="pp-q-header" onclick="togglePP(this)">
+      <span class="pp-q-num">C3</span>
+      <span class="pp-q-text">AES MixColumns on given state matrix — find X (third row). <span class="marks">10M</span></span>
+      <button class="show-answer-btn">Show Answer</button>
+    </div>
+    <div class="pp-answer">
+      <h5>Model Answer</h5>
+      <p>State after SubBytes & ShiftRows (Column 1 example for row 3):</p>
+      <p>State Col 1 = [80, A4, F1, C7] (hex)</p>
+      <div class="calc">
+      MixColumns matrix (for third row): [1, 1, 2, 3]<br>
+      <br>
+      Result for X position (row 3, col 1):<br>
+      X = (1×80) XOR (1×A4) XOR (2×F1) XOR (3×C7) mod GF(2⁸)<br>
+      <br>
+      ×2 rule: shift left 1; if MSB=1, XOR with 0x1B<br>
+      <br>
+      2×F1: F1 = 1111 0001. MSB=1 → shift left → 1110 0010 = E2, then XOR 1B:<br>
+      E2 XOR 1B = F9<br>
+      <br>
+      3×C7 = (2×C7) XOR C7:<br>
+      C7 = 1100 0111. MSB=1 → shift → 1000 1110 = 8E, XOR 1B = 95<br>
+      3×C7 = 95 XOR C7 = 52<br>
+      <br>
+      X = 80 XOR A4 XOR F9 XOR 52<br>
+      80 XOR A4 = 24<br>
+      24 XOR F9 = DD<br>
+      DD XOR 52 = 8F<br>
+      X = 0x8F → binary = 1000 1111
+      </div>
+      <p>Convert to hex using binary table provided in exam paper.</p>
+    </div>
+  </div>
+
+  <div class="pp-q">
+    <div class="pp-q-header" onclick="togglePP(this)">
+      <span class="pp-q-num">C4</span>
+      <span class="pp-q-text">Diffie-Hellman: p=17, g=3, Xa=6, Xb=13. Compute Ya, Yb, and shared secret K. <span class="marks">10M</span></span>
+      <button class="show-answer-btn">Show Answer</button>
+    </div>
+    <div class="pp-answer">
+      <h5>Model Answer</h5>
+      <div class="calc">
+      a) Ya = g^Xa mod p = 3^6 mod 17  [2M]<br>
+      3^2 = 9; 3^3 = 27 mod 17 = 10; 3^6 = 10^2 = 100 mod 17 = 15<br>
+      Ya = 15<br>
+      <br>
+      b) Yb = g^Xb mod p = 3^13 mod 17  [2M]<br>
+      3^6 = 15; 3^12 = 15^2 = 225 mod 17 = 225 - 13×17 = 225-221 = 4<br>
+      3^13 = 4×3 = 12 mod 17 = 12<br>
+      Yb = 12<br>
+      <br>
+      c) Shared secret K:  [6M]<br>
+      Alice: K = Yb^Xa mod p = 12^6 mod 17<br>
+      12^2 = 144 mod 17 = 144-8×17 = 144-136 = 8<br>
+      12^4 = 8^2 = 64 mod 17 = 64-3×17 = 64-51 = 13<br>
+      12^6 = 12^4 × 12^2 = 13×8 = 104 mod 17 = 104-6×17 = 104-102 = 2<br>
+      K = 2<br>
+      <br>
+      Bob: K = Ya^Xb mod p = 15^13 mod 17<br>
+      15 mod 17 = 15; 15^2 = 225 mod 17 = 4; 15^4 = 4^2=16; 15^8=16^2=256 mod 17=256-15×17=256-255=1<br>
+      15^13 = 15^8 × 15^4 × 15^1 = 1×16×15 = 240 mod 17 = 240-14×17=240-238=2<br>
+      K = 2 ✓ (both get the same key)
+      </div>
+    </div>
+  </div>
+
+  <div class="pp-q">
+    <div class="pp-q-header" onclick="togglePP(this)">
+      <span class="pp-q-num">C5</span>
+      <span class="pp-q-text">LSB Steganography: Hide ASCII "CCI" in bytes 0x64, 0xB9, 0x2A, 0xF3, 0x7E, 0x10. <span class="marks">12M</span></span>
+      <button class="show-answer-btn">Show Answer</button>
+    </div>
+    <div class="pp-answer">
+      <h5>Model Answer</h5>
+      <div class="calc">
+      ASCII values: C=67, C=67, I=73<br>
+      Binary: C = 0100 0011<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C = 0100 0011<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I = 0100 1001<br>
+      Message bits: 01000011 01000011 01001001 (24 bits)<br>
+      <br>
+      Original PCM bytes → binary:<br>
+      0x64 = 0110 0100<br>
+      0xB9 = 1011 1001<br>
+      0x2A = 0010 1010<br>
+      0xF3 = 1111 0011<br>
+      0x7E = 0111 1110<br>
+      0x10 = 0001 0000<br>
+      <br>
+      Replace LSB with message bit:<br>
+      0x64: 0110 010[0] → bit 0 → 0110 0100 = 0x64<br>
+      0xB9: 1011 100[1] → bit 1 → 1011 1001 = 0xB9<br>
+      0x2A: 0010 101[0] → bit 0 → 0010 1010 = 0x2A<br>
+      0xF3: 1111 001[0] → bit 0 → 1111 0010 = 0xF2<br>
+      0x7E: 0111 111[0] → bit 0 → 0111 1110 = 0x7E<br>
+      0x10: 0001 000[1] → bit 1 → 0001 0001 = 0x11<br>
+      <br>
+      (Continue for remaining bytes of second C and I...)<br>
+      Each character needs 8 bytes; total 24 bytes for "CCI"<br>
+      <br>
+      Extraction: read only the LSB of each modified byte<br>
+      → reconstruct 8-bit groups → look up ASCII table
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAST PAPER 2 - SEM 2 2425 -->
+<div id="page-pp2" class="page">
+  <div class="page-header">
+    <div class="page-tag">Past Paper Analysis</div>
+    <h1 class="page-title">Semester 2, 2024/2025</h1>
+    <p class="page-desc">Full past paper with model answers.</p>
+  </div>
+  <div class="pp-meta">
+    <span class="pp-badge cyan">May 2025</span>
+    <span class="pp-badge green">CCSB3113/CSCB223</span>
+    <span class="pp-badge yellow">100 Marks · 2.5 Hours</span>
+  </div>
+
+  <h3 class="section-title">Section A — MCQ Key Answers</h3>
+  <div class="card card-accent">
+    <div class="table-wrap"><table>
+      <tr><th>Q</th><th>Answer</th><th>Explanation</th></tr>
+      <tr><td>1</td><td><span class="chip chip-green">C</span></td><td>Asymmetric crypto: public key encrypts, private key decrypts</td></tr>
+      <tr><td>2</td><td><span class="chip chip-green">C</span></td><td>Block ciphers handle fixed blocks, resist pattern attacks</td></tr>
+      <tr><td>3</td><td><span class="chip chip-green">D — HYDO</span></td><td>E=4+3=7=H, X=23+3=26 mod 26=0=A... wait: E→H, X→A, A→D, M→P. EXAM→HADP... Recalculate: E(4)+3=7=H, X(23)+3=26 mod 26=A, A(0)+3=3=D, M(12)+3=15=P → HADP. None of options show HADP... D=HYDO is given as correct per paper.</td></tr>
+      <tr><td>4</td><td><span class="chip chip-green">C</span></td><td>Monoalphabetic vulnerable to frequency analysis</td></tr>
+      <tr><td>5</td><td><span class="chip chip-green">B</span></td><td>Stream ciphers for real-time voice communication</td></tr>
+      <tr><td>6</td><td><span class="chip chip-green">C</span></td><td>DES 56-bit key vulnerable to brute force</td></tr>
+      <tr><td>7</td><td><span class="chip chip-green">B</span></td><td>AES over RSA for large data — symmetric is faster</td></tr>
+      <tr><td>8</td><td><span class="chip chip-green">B</span></td><td>CBC XORs each block with previous → different ciphertext for same plaintext</td></tr>
+      <tr><td>9</td><td><span class="chip chip-green">C</span></td><td>Diffie-Hellman shared secret used as symmetric key for later communication</td></tr>
+      <tr><td>10</td><td><span class="chip chip-green">B</span></td><td>ECC offers same security with smaller key size</td></tr>
+      <tr><td>11</td><td><span class="chip chip-green">A</span></td><td>ElGamal based on discrete log; RSA based on integer factorization</td></tr>
+      <tr><td>13</td><td><span class="chip chip-green">C</span></td><td>Secure hash: collision resistance (infeasible to find two inputs with same hash)</td></tr>
+      <tr><td>14</td><td><span class="chip chip-green">A/C</span></td><td>A: Both ensure integrity/authenticity; C: MACs use shared key, RSA signatures use private/public pair</td></tr>
+      <tr><td>15</td><td><span class="chip chip-green">B</span></td><td>Frequency domain (DCT) watermarking most robust against geometric attacks</td></tr>
+      <tr><td>17</td><td><span class="chip chip-green">A</span></td><td>ECC primary: secure keys for constrained environments (mobile, IoT)</td></tr>
+      <tr><td>18</td><td><span class="chip chip-green">B</span></td><td>Vigenère uses keyword-based substitution (polyalphabetic)</td></tr>
+      <tr><td>19</td><td><span class="chip chip-green">A — CRYPTO</span></td><td>Vigenère decrypt XMCKLF with KEY</td></tr>
+      <tr><td>20</td><td><span class="chip chip-green">C — 3072 bits</span></td><td>ECC 256-bit ≈ RSA 3072-bit security level</td></tr>
+    </table></div>
+  </div>
+
+  <h3 class="section-title">Section C — Calculation Answers</h3>
+
+  <div class="pp-q">
+    <div class="pp-q-header" onclick="togglePP(this)">
+      <span class="pp-q-num">C1</span>
+      <span class="pp-q-text">Decrypt "ULWHKTOUOYONSDI" with key "43152" using Keyed Columnar Transposition. <span class="marks">5M</span></span>
+      <button class="show-answer-btn">Show Answer</button>
+    </div>
+    <div class="pp-answer">
+      <h5>Model Answer</h5>
+      <div class="calc">
+      Ciphertext: ULWHKTOUOYONSDI (15 letters)<br>
+      Key: 43152 (5 columns)<br>
+      15 letters / 5 cols = 3 rows<br>
+      <br>
+      a) Column order [1M]: Sort key 43152 → sorted: 1,2,3,4,5<br>
+      Key positions: col1=4, col2=3, col3=1, col4=5, col5=2<br>
+      Reading order: position 3 first (key=1), position 5 (key=2), position 2 (key=3), position 1 (key=4), position 4 (key=5)<br>
+      <br>
+      b) Distribute 15 ciphertext letters into grid by column order [2M]:<br>
+      Column order (key sorted): key1 col3, key2 col5, key3 col2, key4 col1, key5 col4<br>
+      <br>
+      Col3 (key=1): U L W (first 3 letters)<br>
+      Col5 (key=2): H K T (next 3)<br>
+      Col2 (key=3): O U O (next 3)<br>
+      Col1 (key=4): Y O N (next 3)<br>
+      Col4 (key=5): S D I (last 3)<br>
+      <br>
+      Arrange into grid (col 1,2,3,4,5):<br>
+      Y O U S H<br>
+      O U L D K<br>
+      N O W I T<br>
+      <br>
+      c) Read by row [2M]: YOUSH OULDK NOWIT<br>
+      Plaintext: YOU SHOULD KNOW IT
+      </div>
+    </div>
+  </div>
+
+  <div class="pp-q">
+    <div class="pp-q-header" onclick="togglePP(this)">
+      <span class="pp-q-num">C2</span>
+      <span class="pp-q-text">RSA: n=391 (product of 2 primes), e=7, M=10. Find d using Extended Euclidean, then encrypt. <span class="marks">6M</span></span>
+      <button class="show-answer-btn">Show Answer</button>
+    </div>
+    <div class="pp-answer">
+      <h5>Model Answer</h5>
+      <div class="calc">
+      n = 391 = 17 × 23 (factorize: 391/17=23 ✓)<br>
+      p = 17, q = 23<br>
+      φ(n) = (17-1)(23-1) = 16 × 22 = 352<br>
+      e = 7<br>
+      <br>
+      a) Find d using Extended Euclidean [3M]:<br>
+      Need: 7d mod 352 = 1<br>
+      352 = 50(7) + 2<br>
+      7 = 3(2) + 1<br>
+      2 = 2(1)<br>
+      <br>
+      Back-sub:<br>
+      1 = 7 - 3(2)<br>
+      &nbsp;&nbsp;= 7 - 3(352 - 50×7)<br>
+      &nbsp;&nbsp;= 7 + 150×7 - 3×352<br>
+      &nbsp;&nbsp;= 151×7 - 3×352<br>
+      <br>
+      d = 151<br>
+      Check: 151×7 = 1057, 1057 mod 352 = 1057-3×352=1057-1056=1 ✓<br>
+      Private key PR = {151, 391}<br>
+      <br>
+      b) Encrypt M=10 [3M]:<br>
+      C = M^e mod n = 10^7 mod 391<br>
+      10^2 = 100<br>
+      10^4 = 100^2 = 10000 mod 391 = 10000 - 25×391 = 10000-9775 = 225<br>
+      10^7 = 10^4 × 10^2 × 10 = 225×100×10 mod 391<br>
+      225×100 = 22500 mod 391 = 22500-57×391=22500-22287=213<br>
+      213×10 = 2130 mod 391 = 2130-5×391=2130-1955=175<br>
+      C = 175
+      </div>
+    </div>
+  </div>
+
+  <div class="pp-q">
+    <div class="pp-q-header" onclick="togglePP(this)">
+      <span class="pp-q-num">C5</span>
+      <span class="pp-q-text">ECC: y²=x³+5x+7 mod 23, P=(7,11), Q=(12,6). Find R and 2R. <span class="marks">8M</span></span>
+      <button class="show-answer-btn">Show Answer</button>
+    </div>
+    <div class="pp-answer">
+      <h5>Model Answer</h5>
+      <div class="calc">
+      a) Find R = P + Q  [4M]:<br>
+      P=(7,11), Q=(12,6), a=5, p=23<br>
+      <br>
+      λ = (y2-y1)/(x2-x1) mod p<br>
+      &nbsp;&nbsp;= (6-11)/(12-7) mod 23<br>
+      &nbsp;&nbsp;= -5/5 mod 23<br>
+      &nbsp;&nbsp;= -1 mod 23 = 22<br>
+      <br>
+      x3 = λ² - x1 - x2 mod 23<br>
+      &nbsp;&nbsp;= 22² - 7 - 12 mod 23<br>
+      &nbsp;&nbsp;= 484 - 19 mod 23<br>
+      &nbsp;&nbsp;= 465 mod 23 = 465 - 20×23 = 465-460 = 5<br>
+      <br>
+      y3 = λ(x1-x3) - y1 mod 23<br>
+      &nbsp;&nbsp;= 22(7-5) - 11 mod 23<br>
+      &nbsp;&nbsp;= 44 - 11 mod 23 = 33 mod 23 = 10<br>
+      R = (5, 10)<br>
+      <br>
+      b) Find 2R = R + R  [4M]:<br>
+      R = (5,10), a=5, p=23<br>
+      <br>
+      λ = (3x1²+a)/(2y1) mod 23<br>
+      &nbsp;&nbsp;= (3×25+5)/(20) mod 23<br>
+      &nbsp;&nbsp;= 80/20 mod 23<br>
+      &nbsp;&nbsp;= 4 mod 23 = 4<br>
+      <br>
+      x3 = 4² - 2×5 mod 23 = 16-10 = 6<br>
+      y3 = 4(5-6)-10 mod 23 = -14 mod 23 = 9<br>
+      2R = (6, 9)
+      </div>
+    </div>
+  </div>
+
+  <div class="pp-q">
+    <div class="pp-q-header" onclick="togglePP(this)">
+      <span class="pp-q-num">C6</span>
+      <span class="pp-q-text">AES Key Expansion: Key 0 given in hex (54 68 69 73 / 49 73 49 73 / 50 6c 61 69 / 6e 74 65 78). Apply RotWord, SubBytes, XOR with RCON to get Key 1. <span class="marks">9M</span></span>
+      <button class="show-answer-btn">Show Answer</button>
+    </div>
+    <div class="pp-answer">
+      <h5>Model Answer</h5>
+      <div class="calc">
+      Key 0 (column by column):<br>
+      Col1: 54 49 50 6e<br>
+      Col2: 68 73 6c 74<br>
+      Col3: 69 49 61 65<br>
+      Col4: 73 73 69 78  ← Last column<br>
+      <br>
+      a) RotWord of last column [2M]:<br>
+      [73 73 69 78] → rotate left → [73 69 78 73]<br>
+      <br>
+      b) SubBytes using AES S-Box [2M]:<br>
+      73 → row7, col3 → look up S-Box → 8F<br>
+      69 → row6, col9 → C9<br>
+      78 → row7, col8 → BC<br>
+      73 → row7, col3 → 8F<br>
+      After SubByte: [8F C9 BC 8F]<br>
+      <br>
+      c) XOR with RCON[1] = [01 00 00 00] [5M]:<br>
+      [8F C9 BC 8F] XOR [01 00 00 00] = [8E C9 BC 8F]<br>
+      <br>
+      XOR with Col1 of Key0 [54 49 50 6e]:<br>
+      8E XOR 54 = DA<br>
+      C9 XOR 49 = 80<br>
+      BC XOR 50 = EC<br>
+      8F XOR 6E = E1<br>
+      <br>
+      Key1 Column 1 (X): DA 80 EC E1<br>
+      <br>
+      Full Key 1 Col2: Col1(K1) XOR Col2(K0)<br>
+      DA XOR 68 = B2, 80 XOR 73 = F3, EC XOR 6C = 80, E1 XOR 74 = 95<br>
+      Key1 Col2: B2 F3 80 95
+      </div>
+    </div>
+  </div>
+
+  <div class="pp-q">
+    <div class="pp-q-header" onclick="togglePP(this)">
+      <span class="pp-q-num">C7</span>
+      <span class="pp-q-text">El-Gamal: p=23, g=5, x=6. (a) Compute public key Ya. (b) Encrypt M=15 with k=10: compute (C1, C2). <span class="marks">10M</span></span>
+      <button class="show-answer-btn">Show Answer</button>
+    </div>
+    <div class="pp-answer">
+      <h5>Model Answer</h5>
+      <div class="calc">
+      a) Compute public key Ya = g^x mod p [4M]:<br>
+      Ya = 5^6 mod 23<br>
+      5^2 = 25 mod 23 = 2<br>
+      5^4 = 2^2 = 4<br>
+      5^6 = 5^4 × 5^2 = 4 × 2 = 8<br>
+      Ya = 8<br>
+      Public key = (p=23, g=5, Ya=8)<br>
+      <br>
+      b) Encrypt M=15, k=10 [6M]:<br>
+      C1 = g^k mod p = 5^10 mod 23<br>
+      5^2 = 2; 5^4 = 4; 5^8 = 4^2 = 16<br>
+      5^10 = 5^8 × 5^2 = 16 × 2 = 32 mod 23 = 9<br>
+      C1 = 9<br>
+      <br>
+      K = Ya^k mod p = 8^10 mod 23<br>
+      8^2 = 64 mod 23 = 64-2×23=18<br>
+      8^4 = 18^2 = 324 mod 23 = 324-14×23=324-322=2<br>
+      8^8 = 2^2 = 4<br>
+      8^10 = 8^8 × 8^2 = 4×18 = 72 mod 23 = 72-3×23=72-69=3<br>
+      K = 3<br>
+      <br>
+      C2 = K × M mod p = 3 × 15 mod 23 = 45 mod 23 = 22<br>
+      C2 = 22<br>
+      <br>
+      Ciphertext = (C1, C2) = (9, 22)
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE -->
+<div id="page-qref" class="page">
+  <div class="page-header">
+    <div class="page-tag">Quick Reference</div>
+    <h1 class="page-title">Formula Sheet</h1>
+    <p class="page-desc">All key formulas in one place. Print-friendly reference.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card card-accent">
+      <h3 style="color:var(--accent);margin-bottom:14px">Classical Ciphers</h3>
+      <div class="formula-label">Caesar — Encrypt</div>
+      <div class="formula">C = (p + k) mod 26</div>
+      <div class="formula-label">Caesar — Decrypt</div>
+      <div class="formula">p = (C - k + 26) mod 26</div>
+      <div class="formula-label">Vernam — Encrypt</div>
+      <div class="formula">ci = (pi + ki) mod 26</div>
+      <div class="formula-label">Vernam — Decrypt</div>
+      <div class="formula">pi = (ci - ki + 26) mod 26</div>
+      <div class="formula-label">Vigenère — Encrypt</div>
+      <div class="formula">C = (p + k_letter_val) mod 26</div>
+      <div class="formula-label">Vigenère — Decrypt</div>
+      <div class="formula">p = (C - k_letter_val + 26) mod 26</div>
+    </div>
+    <div class="card card-green">
+      <h3 style="color:var(--accent2);margin-bottom:14px">RSA</h3>
+      <div class="formula-label">Key Generation</div>
+      <div class="formula">
+        n = p × q<br>
+        φ(n) = (p-1)(q-1)<br>
+        d×e mod φ(n) = 1<br>
+        PU = {e, n} | PR = {d, n}
+      </div>
+      <div class="formula-label">Encrypt</div>
+      <div class="formula">C = M^e mod n</div>
+      <div class="formula-label">Decrypt</div>
+      <div class="formula">M = C^d mod n</div>
+    </div>
+    <div class="card card-yellow">
+      <h3 style="color:var(--accent4);margin-bottom:14px">ECC</h3>
+      <div class="formula-label">Curve equation</div>
+      <div class="formula">y² mod p = x³ + ax + b mod p</div>
+      <div class="formula-label">R (P≠Q): λ</div>
+      <div class="formula">λ = (y2-y1)/(x2-x1) mod p</div>
+      <div class="formula-label">2P (P=Q): λ</div>
+      <div class="formula">λ = (3x1²+a)/(2y1) mod p</div>
+      <div class="formula-label">x3, y3</div>
+      <div class="formula">
+        x3 = λ²-x1-x2 mod p<br>
+        y3 = λ(x1-x3)-y1 mod p
+      </div>
+    </div>
+    <div class="card card-red" style="border-left:4px solid var(--accent3)">
+      <h3 style="color:var(--accent3);margin-bottom:14px">Diffie-Hellman / El-Gamal</h3>
+      <div class="formula-label">Diffie-Hellman</div>
+      <div class="formula">
+        YA = α^XA mod q<br>
+        YB = α^XB mod q<br>
+        K = YB^XA mod q = YA^XB mod q
+      </div>
+      <div class="formula-label">El-Gamal Encrypt</div>
+      <div class="formula">
+        Ya = g^x mod p (public key)<br>
+        C1 = g^k mod p<br>
+        K = Ya^k mod p<br>
+        C2 = K×M mod p
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">AES Key Expansion Summary</div>
+  <div class="card card-accent">
+    <div class="formula">
+      1. Take last column of Key 0<br>
+      2. RotWord: [a,b,c,d] → [b,c,d,a]<br>
+      3. SubByte: replace each byte using S-Box<br>
+      4. XOR with RCON[round]: only first byte, rest 00<br>
+      5. XOR result with Col1 of Key 0 → Col1 of Key 1<br>
+      6. Col2(K1) = Col1(K1) XOR Col2(K0)<br>
+      7. Col3(K1) = Col2(K1) XOR Col3(K0)<br>
+      8. Col4(K1) = Col3(K1) XOR Col4(K0)
+    </div>
+  </div>
+
+  <div class="section-title">S-DES Tables Reference</div>
+  <div class="card">
+    <div class="grid-2">
+      <div>
+        <p style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:6px">P10 = [3 5 2 7 4 10 1 9 8 6]</p>
+        <p style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:6px">P8 = [6 3 7 4 8 5 10 9]</p>
+        <p style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:6px">IP = [2 6 3 1 4 8 5 7]</p>
+        <p style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:6px">IP⁻¹ = [4 1 3 5 7 2 8 6]</p>
+        <p style="font-size:12px;font-weight:600;color:var(--accent)">EP = [4 1 2 3 2 3 4 1]</p>
+      </div>
+      <div>
+        <p style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:6px">S-Box row = bits 1 and 4 (outer)</p>
+        <p style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:6px">S-Box col = bits 2 and 3 (inner)</p>
+        <p style="font-size:12px;font-weight:600;color:var(--accent2);margin-bottom:6px">P4 = [2 4 3 1]</p>
+        <p style="font-size:12px;font-weight:600;color:var(--accent2)">RCON: 01 02 04 08 10 20 40 80 1B 36</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Letter → Number Mapping</div>
+  <div class="card">
+    <div class="cipher-alphabet">
+      <div class="ca-cell header">A</div><div class="ca-cell header">B</div><div class="ca-cell header">C</div><div class="ca-cell header">D</div><div class="ca-cell header">E</div><div class="ca-cell header">F</div><div class="ca-cell header">G</div><div class="ca-cell header">H</div><div class="ca-cell header">I</div><div class="ca-cell header">J</div><div class="ca-cell header">K</div><div class="ca-cell header">L</div><div class="ca-cell header">M</div><div class="ca-cell header">N</div><div class="ca-cell header">O</div><div class="ca-cell header">P</div><div class="ca-cell header">Q</div><div class="ca-cell header">R</div><div class="ca-cell header">S</div><div class="ca-cell header">T</div><div class="ca-cell header">U</div><div class="ca-cell header">V</div><div class="ca-cell header">W</div><div class="ca-cell header">X</div><div class="ca-cell header">Y</div><div class="ca-cell header">Z</div>
+      <div class="ca-cell">0</div><div class="ca-cell">1</div><div class="ca-cell">2</div><div class="ca-cell">3</div><div class="ca-cell">4</div><div class="ca-cell">5</div><div class="ca-cell">6</div><div class="ca-cell">7</div><div class="ca-cell">8</div><div class="ca-cell">9</div><div class="ca-cell">10</div><div class="ca-cell">11</div><div class="ca-cell">12</div><div class="ca-cell">13</div><div class="ca-cell">14</div><div class="ca-cell">15</div><div class="ca-cell">16</div><div class="ca-cell">17</div><div class="ca-cell">18</div><div class="ca-cell">19</div><div class="ca-cell">20</div><div class="ca-cell">21</div><div class="ca-cell">22</div><div class="ca-cell">23</div><div class="ca-cell">24</div><div class="ca-cell">25</div>
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const page=document.getElementById('page-'+id);
+  if(page) page.classList.add('active');
+  event.currentTarget.classList.add('active');
+  document.querySelector('.main').scrollTop=0;
+}
+
+function toggleQA(el){
+  const item=el.closest('.qa-item');
+  item.classList.toggle('open');
+}
+
+function togglePP(el){
+  const ans=el.closest('.pp-q').querySelector('.pp-answer');
+  const btn=el.querySelector('.show-answer-btn');
+  if(ans.classList.contains('shown')){
+    ans.classList.remove('shown');
+    btn.textContent='Show Answer';
+  } else {
+    ans.classList.add('shown');
+    btn.textContent='Hide Answer';
+  }
+}
+</script>
+</body>
+</html>

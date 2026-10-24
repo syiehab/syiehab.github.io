@@ -1,0 +1,2694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIS – Critical Infrastructure Security | Complete Study Notes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0a0e1a;
+    --bg2: #111827;
+    --bg3: #1a2235;
+    --border: #1e2d45;
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --accent3: #7c3aed;
+    --green: #10b981;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --muted: #8899aa;
+    --card: #111827;
+    --sidebar-w: 280px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* SIDEBAR */
+  #sidebar {
+    position: fixed; left: 0; top: 0; bottom: 0;
+    width: var(--sidebar-w);
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 100;
+    transition: transform .3s;
+    display: flex; flex-direction: column;
+  }
+
+  .sidebar-header {
+    padding: 20px 16px 12px;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0;
+    background: var(--bg2);
+    z-index: 2;
+  }
+
+  .sidebar-header h1 {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .sidebar-header p {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  #search-bar {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-top: 10px;
+    font-family: 'Sora', sans-serif;
+    outline: none;
+    transition: border-color .2s;
+  }
+
+  #search-bar:focus { border-color: var(--accent); }
+
+  .nav-group { padding: 8px 0; }
+
+  .nav-group-title {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 6px 16px 2px;
+    font-weight: 600;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 16px;
+    font-size: 12.5px;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all .15s;
+    border-left: 2px solid transparent;
+    text-decoration: none;
+  }
+
+  .nav-item:hover, .nav-item.active {
+    color: var(--text);
+    background: var(--bg3);
+    border-left-color: var(--accent);
+  }
+
+  .nav-item .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-vc { background: var(--red); }
+  .dot-imp { background: var(--yellow); }
+  .dot-bas { background: var(--green); }
+
+  /* MAIN */
+  #main {
+    margin-left: var(--sidebar-w);
+    min-height: 100vh;
+  }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 90;
+    background: rgba(10,14,26,.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all .15s;
+    font-family: 'Sora', sans-serif;
+  }
+
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active-filter { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
+
+  .print-btn {
+    margin-left: auto;
+    padding: 5px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Sora', sans-serif;
+    transition: all .15s;
+  }
+
+  .print-btn:hover { background: var(--accent); color: #000; }
+
+  /* CONTENT */
+  #content {
+    padding: 32px;
+    max-width: 1100px;
+  }
+
+  .section {
+    margin-bottom: 48px;
+    scroll-margin-top: 64px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(0,212,255,.1);
+    padding: 3px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .section h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .importance-tag {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    flex-shrink: 0;
+  }
+
+  .tag-vc { background: rgba(239,68,68,.15); color: #ef4444; border: 1px solid rgba(239,68,68,.3); }
+  .tag-imp { background: rgba(245,158,11,.15); color: #f59e0b; border: 1px solid rgba(245,158,11,.3); }
+  .tag-bas { background: rgba(16,185,129,.15); color: #10b981; border: 1px solid rgba(16,185,129,.3); }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .card h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--yellow);
+    margin: 12px 0 6px;
+  }
+
+  .card p { font-size: 14px; line-height: 1.7; color: var(--text); margin-bottom: 8px; }
+  .card ul, .card ol { padding-left: 20px; margin-bottom: 8px; }
+  .card li { font-size: 13.5px; line-height: 1.7; color: var(--text); margin-bottom: 3px; }
+
+  /* SPECIAL BOXES */
+  .box {
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 12px 0;
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+
+  .box-exam { background: rgba(0,212,255,.07); border-left: 3px solid var(--accent); }
+  .box-assign { background: rgba(124,58,237,.08); border-left: 3px solid var(--accent3); }
+  .box-pattern { background: rgba(245,158,11,.07); border-left: 3px solid var(--yellow); }
+  .box-warn { background: rgba(239,68,68,.07); border-left: 3px solid var(--red); }
+  .box-green { background: rgba(16,185,129,.07); border-left: 3px solid var(--green); }
+
+  .box-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .box-exam .box-label { color: var(--accent); }
+  .box-assign .box-label { color: var(--accent3); }
+  .box-pattern .box-label { color: var(--yellow); }
+  .box-warn .box-label { color: var(--red); }
+  .box-green .box-label { color: var(--green); }
+
+  /* COLLAPSIBLE */
+  .collapsible {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+
+  .collapsible-header {
+    padding: 12px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
+    transition: background .15s;
+    user-select: none;
+  }
+
+  .collapsible-header:hover { background: rgba(255,255,255,.03); }
+  .collapsible-header .arrow { transition: transform .2s; font-size: 10px; color: var(--muted); }
+  .collapsible-header.open .arrow { transform: rotate(180deg); }
+
+  .collapsible-body {
+    display: none;
+    padding: 14px 16px;
+    border-top: 1px solid var(--border);
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+
+  .collapsible-body.open { display: block; }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 12px 0;
+  }
+
+  th {
+    background: var(--bg3);
+    color: var(--accent);
+    padding: 9px 12px;
+    text-align: left;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    font-size: 12px;
+  }
+
+  td {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td { background: rgba(255,255,255,.02); }
+
+  /* CHECKLIST */
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+  }
+
+  .checklist-item input[type=checkbox] {
+    width: 16px; height: 16px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .checklist-item label { cursor: pointer; }
+  .checklist-item input:checked + label { text-decoration: line-through; color: var(--muted); }
+
+  /* CODE / MONOSPACE */
+  .mono {
+    font-family: 'Space Mono', monospace;
+    background: var(--bg3);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: var(--accent);
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--bg2) 0%, var(--bg3) 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,212,255,.12), transparent 70%);
+  }
+
+  .hero h1 {
+    font-family: 'Space Mono', monospace;
+    font-size: 28px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .hero p { font-size: 14px; color: var(--muted); max-width: 600px; }
+
+  .hero-stats {
+    display: flex;
+    gap: 24px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat {
+    text-align: center;
+  }
+
+  .hero-stat .num {
+    font-family: 'Space Mono', monospace;
+    font-size: 22px;
+    color: var(--accent2);
+    display: block;
+  }
+
+  .hero-stat .lbl {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* HAMBURGER */
+  #hamburger {
+    display: none;
+    position: fixed;
+    top: 12px; left: 12px;
+    z-index: 200;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    cursor: pointer;
+    color: var(--text);
+    font-size: 18px;
+  }
+
+  /* SEARCH HIGHLIGHT */
+  .highlight { background: rgba(0,212,255,.25); border-radius: 2px; }
+
+  /* HIDDEN */
+  .hidden { display: none !important; }
+
+  /* CHEAT SHEET */
+  .cheat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+
+  .cheat-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .cheat-card h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cheat-card p, .cheat-card li { font-size: 12px; line-height: 1.6; color: var(--text); }
+  .cheat-card ul { padding-left: 14px; }
+  .cheat-card li { margin-bottom: 2px; }
+
+  /* ANSWER SCHEME */
+  .answer-scheme {
+    background: rgba(16,185,129,.06);
+    border: 1px solid rgba(16,185,129,.2);
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 10px;
+  }
+
+  .answer-scheme h5 {
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .answer-scheme p, .answer-scheme li { font-size: 13px; line-height: 1.7; }
+
+  /* DIAGRAM ASCII */
+  .ascii-diagram {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--accent);
+    line-height: 1.5;
+    margin: 12px 0;
+  }
+
+  /* PREDICTION TABLE */
+  .pred-high td:first-child { color: var(--red); font-weight: 600; }
+  .pred-med td:first-child { color: var(--yellow); font-weight: 600; }
+  .pred-low td:first-child { color: var(--green); }
+
+  @media (max-width: 768px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
+    #hamburger { display: block; }
+    #content { padding: 16px; padding-top: 56px; }
+    .topbar { padding: 10px 16px; padding-left: 60px; }
+    .hero h1 { font-size: 20px; }
+  }
+
+  @media print {
+    #sidebar, #hamburger, .topbar, .filter-btn, .print-btn { display: none !important; }
+    #main { margin-left: 0; }
+    #content { padding: 0; }
+    .collapsible-body { display: block !important; }
+    body { background: white; color: black; }
+    .card { border: 1px solid #ccc; background: white; }
+    .box { border: 1px solid #ccc; background: #f9f9f9; }
+    .section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<button id="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <h1>CCSB3133</h1>
+    <p>Critical Infrastructure Security</p>
+    <input type="text" id="search-bar" placeholder="🔍 Search topics…" oninput="handleSearch(this.value)">
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">Overview</div>
+    <a class="nav-item active" href="#hero" onclick="setActive(this)">🏠 Dashboard</a>
+    <a class="nav-item" href="#checklist" onclick="setActive(this)">✅ Study Checklist</a>
+    <a class="nav-item" href="#pattern" onclick="setActive(this)">📊 Exam Pattern Analysis</a>
+    <a class="nav-item" href="#prediction" onclick="setActive(this)">🎯 Final Exam Prediction</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">Lecture Notes</div>
+    <a class="nav-item" href="#ch0" onclick="setActive(this)"><span class="dot dot-bas"></span>Intro & Course</a>
+    <a class="nav-item" href="#ch1" onclick="setActive(this)"><span class="dot dot-vc"></span>Ch1: CI & ICS Intro</a>
+    <a class="nav-item" href="#ch2" onclick="setActive(this)"><span class="dot dot-vc"></span>Ch2: ICS History & Trends</a>
+    <a class="nav-item" href="#ch3" onclick="setActive(this)"><span class="dot dot-vc"></span>Ch3: Threats to ICS</a>
+    <a class="nav-item" href="#ch4" onclick="setActive(this)"><span class="dot dot-vc"></span>Ch4: Vulnerabilities</a>
+    <a class="nav-item" href="#ch5" onclick="setActive(this)"><span class="dot dot-vc"></span>Ch5: Hacking Trends</a>
+    <a class="nav-item" href="#ch6" onclick="setActive(this)"><span class="dot dot-vc"></span>Ch6: Risk Assessment</a>
+    <a class="nav-item" href="#ch7" onclick="setActive(this)"><span class="dot dot-vc"></span>Ch7: Defense in Depth</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">Assignments</div>
+    <a class="nav-item" href="#assignments" onclick="setActive(this)">📝 All Assignments Guide</a>
+    <a class="nav-item" href="#midterm" onclick="setActive(this)">📋 Mid Term Assignment</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">Past Year Papers</div>
+    <a class="nav-item" href="#py2324" onclick="setActive(this)">📄 SEM 2 2023/2024</a>
+    <a class="nav-item" href="#py2425" onclick="setActive(this)">📄 SEM 1 2024/2025</a>
+    <a class="nav-item" href="#py2526" onclick="setActive(this)">📄 SEM 1 2025/2026</a>
+  </div>
+
+  <div class="nav-group">
+    <div class="nav-group-title">Quick Reference</div>
+    <a class="nav-item" href="#cheatsheet" onclick="setActive(this)">🗒️ Cheat Sheet</a>
+    <a class="nav-item" href="#keywords" onclick="setActive(this)">🔑 Key Definitions</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+  <div class="topbar">
+    <span style="font-size:12px;color:var(--muted);">Filter:</span>
+    <button class="filter-btn active-filter" onclick="filterSections('all',this)">All Topics</button>
+    <button class="filter-btn" onclick="filterSections('vc',this)">🔴 Very Critical</button>
+    <button class="filter-btn" onclick="filterSections('imp',this)">🟡 Important</button>
+    <button class="filter-btn" onclick="filterSections('bas',this)">🟢 Basic</button>
+    <button class="print-btn" onclick="window.print()">🖨️ Print / PDF</button>
+  </div>
+
+  <div id="content">
+
+    <!-- HERO -->
+    <div class="hero" id="hero">
+      <h1>Critical Infrastructure Security</h1>
+      <p>CCSB3133 · Uniten · Complete interactive study notes compiled from all lecture slides, past year papers, and assignments. You do not need to open the slides again.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><span class="num">7</span><span class="lbl">Chapters</span></div>
+        <div class="hero-stat"><span class="num">3</span><span class="lbl">Past Papers</span></div>
+        <div class="hero-stat"><span class="num">4</span><span class="lbl">Assignments</span></div>
+        <div class="hero-stat"><span class="num">100</span><span class="lbl">Marks Exam</span></div>
+        <div class="hero-stat"><span class="num">2.5h</span><span class="lbl">Duration</span></div>
+      </div>
+      <div class="box box-exam" style="margin-top:18px;">
+        <span class="box-label">📌 Lecturer Tip</span>
+        Focus on <strong>understanding</strong>, not memorizing. The lecturer emphasized studying the assignments given in the lecture slides. All past papers follow the same structure: Section A (MCQ 20 marks), Section B (Structured 60–80 marks), and sometimes Section C (Scenario 20 marks).
+      </div>
+    </div>
+
+    <!-- STUDY CHECKLIST -->
+    <div class="section" id="checklist" data-importance="bas">
+      <div class="section-header">
+        <span class="section-num">✅</span>
+        <h2>Study Progress Checklist</h2>
+        <span class="importance-tag tag-bas">BASIC</span>
+      </div>
+      <div class="card">
+        <h3>Track Your Study Progress</h3>
+        <div id="checklist-items">
+          <div class="checklist-item"><input type="checkbox" id="c1"><label for="c1">Ch1: Definition of CI, CNII sectors, ICS types, ICS components (PLC, RTU, IED, HMI)</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c2"><label for="c2">Ch1: IT vs OT comparison table, CIA Triad priority difference</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c3"><label for="c3">Ch2: ICS history & convergence with IP, Air gap concept</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c4"><label for="c4">Ch2: APT definition, APT vs Weaponized Malware comparison</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c5"><label for="c5">Ch2: Stuxnet case study – how it worked</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c6"><label for="c6">Ch3: Threat agents to ICS (7 types), Insiders vs Outsiders</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c7"><label for="c7">Ch3: Malware spread, BYOD risks, Social engineering</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c8"><label for="c8">Ch3: Direct vs Indirect threats, Motivations of ICS attacks</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c9"><label for="c9">Ch4: ICS data states (at rest / in use / in motion)</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c10"><label for="c10">Ch4: Business / Operational / Technical vulnerabilities</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c11"><label for="c11">Ch4: 6 functional vulnerability types (DoV, LoV, MoV, DoC, LoC, MoC)</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c12"><label for="c12">Ch4: Technical attack vectors (8 types)</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c13"><label for="c13">Ch5: Consequences of cyber incidents, MITM, DoS, Replay attacks</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c14"><label for="c14">Ch5: Compromising HMI and EWS, Blended attacks</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c15"><label for="c15">Ch5: Dealing with infection (3-step process), Bare metal reload</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c16"><label for="c16">Ch6: Risk definition, Risk Triad, 6-step risk assessment methodology</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c17"><label for="c17">Ch6: Security tests (Audit, Vulnerability Assessment, Pen Test, Physical)</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c18"><label for="c18">Ch6: White box vs Black box testing</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c19"><label for="c19">Ch7: Defense in Depth – 7 layers, Zones and Conduits</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c20"><label for="c20">Assignments 1–4 content and how they may appear in exams</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c21"><label for="c21">Past year MCQ answers memorized</label></div>
+          <div class="checklist-item"><input type="checkbox" id="c22"><label for="c22">Practice answering scenario-based questions (APT malware / BYOD)</label></div>
+        </div>
+        <p style="margin-top:14px;font-size:12px;color:var(--muted);">Click checkboxes to track progress. Progress saves in this session.</p>
+      </div>
+    </div>
+
+    <!-- CH0: INTRO -->
+    <div class="section" id="ch0" data-importance="bas">
+      <div class="section-header">
+        <span class="section-num">CH0</span>
+        <h2>Introduction & Course Information</h2>
+        <span class="importance-tag tag-bas">BASIC</span>
+      </div>
+      <div class="card">
+        <h3>Assessment Breakdown</h3>
+        <table>
+          <tr><th>Assessment</th><th>Percentage</th><th>Note</th></tr>
+          <tr><td>Mid Term Exam</td><td>20%</td><td>During semester</td></tr>
+          <tr><td>Quizzes</td><td>20%</td><td>During semester</td></tr>
+          <tr><td>Assignments</td><td>20%</td><td>Assg 1–4 + Group Mid Term</td></tr>
+          <tr><td><strong>Final Exam</strong></td><td><strong>40%</strong></td><td><strong>This is what we are preparing for</strong></td></tr>
+        </table>
+        <h4>Textbook</h4>
+        <p>Eric D. Knapp and Joel Thomas Langill. <em>Industrial Network Security: Securing Critical Infrastructure Networks for Smart Grid, SCADA, and other Industrial Control Systems</em>, Elsevier, 3rd Edition, 2024.</p>
+        <h4>Lecturer's Key Message</h4>
+        <p>"Focus more on <strong>understanding</strong> and NOT memorizing. Hope you will have fun learning about this subject."</p>
+      </div>
+    </div>
+
+    <!-- CH1 -->
+    <div class="section" id="ch1" data-importance="vc">
+      <div class="section-header">
+        <span class="section-num">CH 1</span>
+        <h2>Introduction to Critical Infrastructure & ICS</h2>
+        <span class="importance-tag tag-vc">VERY CRITICAL</span>
+      </div>
+
+      <div class="box box-pattern">
+        <span class="box-label">📊 Past Year Pattern</span>
+        This chapter appears in ALL 3 past year papers. Q1 in Section B of every exam asks about ICS definition, tasks, and components. MCQ always tests CI definition, ICS types, IT vs OT, and CIA triad priority.
+      </div>
+
+      <div class="card">
+        <h3>1.1 What is Critical Infrastructure (CI)?</h3>
+        <p><strong>Definition:</strong> Assets (real or virtual), systems and functions that are vital to the nation, whose incapacity or destruction would have a devastating impact on:</p>
+        <ol>
+          <li>Public health and safety</li>
+          <li>National economic strength</li>
+          <li>National defense and security</li>
+          <li>National image</li>
+          <li>The government's capability to function</li>
+        </ol>
+        <div class="box box-exam">
+          <span class="box-label">📌 Exam Tip</span>
+          The definition question is worth 1–2 marks. Always mention "assets vital to the nation" and the 5 impact areas. Memorize these 5 impacts — they appear in MCQ options.
+        </div>
+
+        <h4>Malaysian CI Sectors (CNII – defined by CyberSecurity Malaysia):</h4>
+        <ol>
+          <li>National defense and security</li>
+          <li>Banking and finance</li>
+          <li>Information and communication</li>
+          <li>Energy</li>
+          <li>Transportation</li>
+          <li>Water</li>
+          <li>Health services</li>
+          <li>Government</li>
+          <li>Emergency services</li>
+          <li>Food and agriculture</li>
+        </ol>
+
+        <h4>US Homeland Security CI Sectors (16 sectors) — examples for MCQ:</h4>
+        <p>Chemical, Commercial Facilities, Communication, Dams, Energy, Financial Services, Food & Agriculture, Healthcare, IT, Nuclear, Transportation, Water & Wastewater.</p>
+      </div>
+
+      <div class="card">
+        <h3>1.2 What is an Industrial Control System (ICS)?</h3>
+        <p><strong>Definition:</strong> A broad class of automation systems used for control and monitoring functionality in manufacturing and industrial facilities.</p>
+        <p><strong>Why ICS matters for cybersecurity:</strong> ICS is extensively used in many critical infrastructures. The use of ICS is the <em>main reason</em> why critical infrastructure requires cyber security protection.</p>
+
+        <h4>Types of ICS (commonly used in CI):</h4>
+        <table>
+          <tr><th>Type</th><th>Full Name</th><th>Key Role</th></tr>
+          <tr><td>PCS</td><td>Process Control System</td><td>Controls industrial processes</td></tr>
+          <tr><td>DCS</td><td>Distributed Control System</td><td>Distributed across many nodes</td></tr>
+          <tr><td>SCADA</td><td>Supervisory Control and Data Acquisition</td><td>Remote monitoring & control</td></tr>
+          <tr><td>SIS</td><td>Safety Instrumented System</td><td>Safety shutdown systems</td></tr>
+        </table>
+
+        <h4>General Tasks of ICS (memorize these 3 — they appear in exam every year):</h4>
+        <ol>
+          <li>Collect data from endpoint devices</li>
+          <li>Send collected data to an HMI to be displayed</li>
+          <li>Apply automatic, semi-automatic or operator-controlled changes to endpoint devices</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3>1.3 ICS Components</h3>
+        <p>Components in an ICS are commonly referred to as <strong>assets</strong>. There are two categories:</p>
+
+        <h4>Field Components:</h4>
+        <ul>
+          <li>Sensors</li>
+          <li>Actuators</li>
+          <li>Motor drives</li>
+          <li>Gauges</li>
+          <li>Indicators</li>
+        </ul>
+
+        <h4>Control System Components (these are the exam targets):</h4>
+        <table>
+          <tr><th>Component</th><th>Full Name</th><th>Function</th></tr>
+          <tr><td><strong>PLC</strong></td><td>Programmable Logic Controller</td><td>Specialized industrial computer that automates functions within manufacturing facilities</td></tr>
+          <tr><td><strong>RTU</strong></td><td>Remote Terminal Unit</td><td>Collects data from field devices and transmits to central monitoring station. May also relay control signals back to field devices. Requires communication capability.</td></tr>
+          <tr><td><strong>IED</strong></td><td>Intelligent Electronic Device</td><td>Microprocessor-based controllers for power system equipment (circuit breakers, transformers). Issues control commands (e.g. tripping a circuit breaker). Used for substation automation.</td></tr>
+          <tr><td><strong>HMI</strong></td><td>Human-Machine Interface</td><td>Device used by human operators to VIEW data from field devices. May also enable control. Can be touch screens, push buttons, graphs. Provides topological diagrams, charts, dials.</td></tr>
+          <tr><td><strong>Data Historian</strong></td><td>—</td><td>Specialized software that collects point values, alarm events, batch records from ICS devices and stores them. Data stored is called "tags".</td></tr>
+          <tr><td><strong>Engineering Workstation (EWS)</strong></td><td>—</td><td>Can configure role-based access control. Has specialized tools to directly communicate with and configure primary control equipment (PLCs, IEDs, SIS).</td></tr>
+        </table>
+
+        <div class="box box-exam">
+          <span class="box-label">📌 Exam Tip – Q1(c) repeated every year</span>
+          "Provide THREE (3) components of ICS and explain each." Always choose PLC, RTU, and HMI (or IED). Give a full explanation for each — 2 marks each = 6 marks total. Include the key function!
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>1.4 Industrial Protocols</h3>
+        <p>Protocols used by ICS components to communicate with each other.</p>
+
+        <h4>Proprietary Protocols:</h4>
+        <ul><li>Honeywell CDA</li><li>General Electric SRTP</li><li>Siemens S7</li></ul>
+
+        <h4>Non-proprietary / Licensed Protocols:</h4>
+        <ul><li>OPC, Modbus, DNP3, ICCP, CIP, PROFIBUS, IEC 60870-5-101/104</li></ul>
+
+        <div class="box box-exam">
+          <span class="box-label">📌 Key Exam Point – "Security Through Obscurity"</span>
+          Proprietary protocols rely on "security through obscurity" — keeping the protocol secret so no one knows how to exploit it. <strong>This does NOT work anymore</strong> because: (1) attackers can always reverse-engineer proprietary protocols, and (2) most equipment now uses open/non-proprietary protocols for interoperability — everyone knows how they work. This is a very common MCQ!
+        </div>
+
+        <p><strong>Why ICS protocols are easy to exploit:</strong> They were originally designed for serial communication within isolated ICS networks. <strong>Security was NOT a concern</strong> since they were assumed to only be used within the ICS. When adapted for TCP/IP and the Internet, they became vulnerable.</p>
+      </div>
+
+      <div class="card">
+        <h3>1.5 IT vs OT – Critical Comparison Table</h3>
+        <div class="box box-pattern">
+          <span class="box-label">📊 Appears Every Exam</span>
+          This comparison is tested in MCQ and structured questions every semester. Know the key differences by heart.
+        </div>
+        <table>
+          <tr><th>Aspect</th><th>IT (Information Technology)</th><th>OT (Operational Technology / ICS)</th></tr>
+          <tr><td><strong>CIA Priority</strong></td><td>Confidentiality → Integrity → Availability</td><td><strong>Availability → Integrity → Confidentiality</strong></td></tr>
+          <tr><td><strong>Process Type</strong></td><td>Transactional process</td><td>Real-time process</td></tr>
+          <tr><td><strong>Risk Type</strong></td><td>Information Risk</td><td>Automation Risk</td></tr>
+          <tr><td><strong>Component Lifetime</strong></td><td>3–5 years</td><td><strong>15–20 years</strong></td></tr>
+          <tr><td><strong>Failure Impact</strong></td><td>Loss of data</td><td><strong>Loss of life</strong></td></tr>
+          <tr><td><strong>Recovery Method</strong></td><td>Recover by reboot</td><td>Fault tolerance essential</td></tr>
+          <tr><td><strong>Throughput</strong></td><td>High throughput, high delay accepted</td><td>Modest throughput, <strong>time critical</strong></td></tr>
+          <tr><td><strong>Security Maturity</strong></td><td>Matured cybersecurity</td><td>First steps, lack of awareness</td></tr>
+          <tr><td><strong>Patching</strong></td><td>Straightforward, automated</td><td><strong>Difficult, planned outage, vendor needed</strong></td></tr>
+          <tr><td><strong>Personnel</strong></td><td>Computer Scientists</td><td>Engineers, Technicians</td></tr>
+          <tr><td><strong>Incident Cost</strong></td><td>Linear cost, easy to predict</td><td>Difficult to predict, possibly very high</td></tr>
+        </table>
+
+        <h4>Why IT security practices don't apply well to ICS:</h4>
+        <ol>
+          <li>Old systems cannot simply be patched or upgraded</li>
+          <li>Downtime for security updates may not be acceptable</li>
+          <li>Not possible to have development and test environments</li>
+          <li>Cannot apply strict access control (systems need easy operator access)</li>
+          <li>Cannot always use conventional antivirus or firewall</li>
+          <li>ICS protocols cannot be blocked due to safety/production needs</li>
+          <li>Government-regulated industries — security adds complexity and cost</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3>1.6 ISA-95 / IEC 62264 Levels in ICS</h3>
+        <div class="ascii-diagram">ISA-95 Purdue Model (Simplified):
+
+Level 4: Enterprise/Business Network (ERP, Business Systems)
+    ↕ [IT/OT boundary - firewall]
+Level 3: Site Operations (MES, Historian, Supervisory)
+Level 2: Supervisory Control (SCADA, HMI servers)
+Level 1: Basic Control (PLCs, RTUs, IEDs)
+Level 0: Field Devices (Sensors, Actuators, Motors)</div>
+        <p style="font-size:13px;color:var(--muted);margin-top:8px;">ICS operates at Levels 0–3; IT operates at Level 4. The convergence of these networks is the main security risk.</p>
+      </div>
+    </div>
+
+    <!-- CH2 -->
+    <div class="section" id="ch2" data-importance="vc">
+      <div class="section-header">
+        <span class="section-num">CH 2</span>
+        <h2>ICS History, Trends & Cyber Threats</h2>
+        <span class="importance-tag tag-vc">VERY CRITICAL</span>
+      </div>
+
+      <div class="card">
+        <h3>2.1 Brief History of ICS</h3>
+        <ul>
+          <li><strong>Before 1960s:</strong> Manual monitoring (gauges on pipes)</li>
+          <li><strong>Early ICS:</strong> Analog — pneumatic (air/steam pressure) and hydraulic (water/fluid) controls</li>
+          <li><strong>Modern ICS:</strong> Made possible by transistors and modern electronics</li>
+          <li><strong>Early digital era:</strong> Many vendors, proprietary technology, no standards</li>
+          <li><strong>Over time:</strong> Vendors reduced via mergers; standard protocols adopted for interoperability</li>
+          <li><strong>IT integration:</strong> Business systems required process control data → network convergence began</li>
+          <li><strong>Final evolution:</strong> Convergence with IP networks</li>
+        </ul>
+
+        <h4>Why early ICS protocols were "lite" (limited/insecure):</h4>
+        <ol>
+          <li>Need to minimize data due to slow communication channels</li>
+          <li>No room for resiliency or security protection</li>
+          <li>Security was not a concern — protocol assumed to only be used within ICS</li>
+        </ol>
+
+        <h4>Benefits of IP convergence:</h4>
+        <ol>
+          <li>Use cheap and widely available IP network equipment</li>
+          <li>Easier to deploy and support (available skill pools)</li>
+          <li>Facilitates interfacing with IT business systems</li>
+          <li>Better, faster, cheaper monitoring and management</li>
+        </ol>
+
+        <div class="box box-warn">
+          <span class="box-label">⚠️ The Problem with Convergence</span>
+          Convergence of ICS onto IP platforms comes with <strong>increased security risk</strong>. Commercial off-the-shelf (COTS) hardware/software is used — the same vulnerabilities that affect business IT now affect ICS.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>2.2 The Air Gap — What Is It?</h3>
+        <p><strong>Air gap:</strong> Physical separation between the industrial network and business/external networks, with no common electronic system crossing the gap.</p>
+        <p><strong>Historical claim:</strong> ICS was "air-gapped" so cyber threats from the internet couldn't reach it.</p>
+        <p><strong>Reality:</strong> Since the 1990s, organizations began integrating business applications with ICS → the air gap was bypassed. Separation is now done through VLANs and firewalls, not true physical separation.</p>
+
+        <div class="box box-exam">
+          <span class="box-label">📌 Key Exam Concept</span>
+          "Any path that exists can be found and exploited." The air gap no longer provides security. This idea links to the Stuxnet case study — Stuxnet bypassed the air gap via USB drives (physical media). In 2525/26 exam, Q6(b) asks about zones and conduits — this is the modern replacement for the air gap.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>2.3 Cyber Threat Evolution</h3>
+        <h4>Historical Milestones:</h4>
+        <ul>
+          <li>1902: First security attack — Marconi Wireless Telegraph system</li>
+          <li>1988: Morris worm (first major internet worm)</li>
+          <li>2001: Code Red | 2003: Slammer | 2008: Conficker | <strong>2010: Stuxnet</strong></li>
+        </ul>
+
+        <h4>Trends in ICS Cyber Threats:</h4>
+        <ol>
+          <li>Most attacks are opportunistic, some are targeted</li>
+          <li>Majority of ICS incidents are <em>unintentional</em> (software/control bugs)</li>
+          <li>Initial attacks use simpler exploits; if thwarted, become more sophisticated</li>
+          <li>Majority of attacks are <strong>financially motivated</strong>; espionage and sabotage are common too</li>
+          <li>Most attacks originate externally using <strong>weak or stolen credentials</strong></li>
+          <li>New malware samples increasing rapidly and becoming more sophisticated</li>
+          <li>AutoRun malware (from USB) bypasses network security perimeters</li>
+          <li>"Hacking as a Service" increasingly available</li>
+          <li>Incidents via remote access are increasing</li>
+        </ol>
+
+        <h4>Most Common Initial Attack Vectors:</h4>
+        <ol>
+          <li><strong>Spear phishing</strong> — targeted phishing at specific individuals</li>
+          <li><strong>Watering hole</strong> — infecting websites the target is likely to visit</li>
+          <li><strong>Database injection</strong> — SQL injection or similar</li>
+        </ol>
+
+        <h4>After infection — "Pivoting":</h4>
+        <p>Malware propagates to other systems to: find new systems with higher authorization, find lower-level devices, and find specific devices to attack.</p>
+      </div>
+
+      <div class="card">
+        <h3>2.4 Advanced Persistent Threat (APT)</h3>
+        <p><strong>APT Definition:</strong> Malware that is <em>difficult to detect</em> and can continue to operate even if detected and removed or the system is rebooted (persistent).</p>
+        <p>APT also describes cyber campaigns where the attacker actively infiltrates systems or exfiltrates data using <em>multiple, parallel infiltration vectors</em>.</p>
+
+        <h4>APT vs Weaponized Malware — Key Comparison:</h4>
+        <table>
+          <tr><th>Aspect</th><th>APT</th><th>Weaponized Malware</th></tr>
+          <tr><td>Initial infection</td><td>Often uses simple exploits</td><td>Uses sophisticated vectors</td></tr>
+          <tr><td>Detection avoidance</td><td>Designed to avoid detection over long periods</td><td>Designed to avoid detection over long periods</td></tr>
+          <tr><td>C&C</td><td>Communicates back to attacker covertly</td><td>Operates in isolation, not dependent on remote C&C</td></tr>
+          <tr><td>Persistence</td><td>Mechanisms for persistent operation if detected</td><td>Mechanisms for persistent operation OR reinfection</td></tr>
+          <tr><td>Network impact</td><td>Not intended to disrupt network</td><td>Possible intentions include network disruption</td></tr>
+        </table>
+
+        <div class="box box-exam">
+          <span class="box-label">📌 Exam Tip — MCQ Favourite</span>
+          "Modern malware is considered APT because it is very difficult to detect, remove and cease its operation." This is the MCQ answer! Not because of "advanced hackers with persistent motivation."
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>2.5 Stuxnet — The Landmark Case Study</h3>
+        <p>Stuxnet (discovered 2010) is the most important case study in this subject. It appears in almost every exam question.</p>
+
+        <h4>How Stuxnet Avoided Detection:</h4>
+        <ol>
+          <li>Used zero-day exploits not detectable prior to its discovery (bypassed host IDS)</li>
+          <li>Disguised itself as legitimate software</li>
+          <li>Covered its tracks by removing trace files</li>
+          <li>Automatically removed itself from a host if it was not the intended target (after infecting other hosts a specific number of times)</li>
+        </ol>
+
+        <h4>Why Stuxnet is "Weaponized" Malware:</h4>
+        <ol>
+          <li>Highly sophisticated and extremely targeted</li>
+          <li>Clear purpose: discover, infiltrate and sabotage a specific target system</li>
+          <li>Utilized multiple zero-day exploits for infection</li>
+          <li>Used "insider intelligence" to focus on its target control system (Siemens PLC)</li>
+        </ol>
+
+        <div class="box box-assign">
+          <span class="box-label">📝 Assignment 1 Connection</span>
+          Assignment 1 required investigating a famous CI attack (Stuxnet, BlackEnergy, WannaCry, Colonial Pipeline, or recent attack). The exam will likely test your ability to describe these attacks in structured question format.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>2.6 Threat Actor Types (Hierarchy of Motivation)</h3>
+        <div class="ascii-diagram">
+THREAT ACTOR HIERARCHY (most sophisticated → least):
+
+Nation-States / State-Sponsored  ←── Most resources, most dangerous
+    └── Objectives: Espionage, Sabotage, Cyberwar
+Organized Crime
+    └── Objectives: Financial gain, Ransomware
+Industrial Espionage
+    └── Objectives: Steal IP, trade secrets
+Cyber Terrorism / Activists
+    └── Objectives: Sabotage, disruption
+Script Kiddies / Hacktivists
+    └── Use off-the-shelf exploit kits</div>
+      </div>
+    </div>
+
+    <!-- CH3 -->
+    <div class="section" id="ch3" data-importance="vc">
+      <div class="section-header">
+        <span class="section-num">CH 3</span>
+        <h2>Threats to the ICS</h2>
+        <span class="importance-tag tag-vc">VERY CRITICAL</span>
+      </div>
+
+      <div class="box box-pattern">
+        <span class="box-label">📊 Past Year Pattern</span>
+        Threats chapter tested in Q2 of every past year paper. Key questions: "Differentiate direct vs indirect threats", "List threat agents", "Policy to protect ICS from outsiders", "BYOD risks", "Social engineering".
+      </div>
+
+      <div class="card">
+        <h3>3.1 Threat Definitions</h3>
+        <p><strong>Threat:</strong> A possible danger that might exploit a vulnerability to breach security and therefore cause possible harm.</p>
+        <p><strong>Threat Agent:</strong> An individual or group that can cause a security threat (can be anyone from a malicious hacker to an inept computer operator to a rat chewing a data cable).</p>
+
+        <h4>5 Actions a Threat Agent Can Take Against an Asset:</h4>
+        <ol>
+          <li><strong>Access</strong> — unauthorized access</li>
+          <li><strong>Misuse</strong> — unauthorized use of assets</li>
+          <li><strong>Disclose</strong> — illegally disclose sensitive information</li>
+          <li><strong>Modify</strong> — make unauthorized changes to an asset</li>
+          <li><strong>Deny access</strong> — prevent authorized access</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3>3.2 Motivations of ICS Attacks</h3>
+        <h4>For general IT attacks — MONEY is the main motive:</h4>
+        <ol>
+          <li>Steal banking data (identity theft, credit card fraud)</li>
+          <li>Steal intellectual property to sell</li>
+          <li>Sell services of compromised computers (spam, DDoS)</li>
+          <li>Hold data hostage for ransom (ransomware)</li>
+        </ol>
+
+        <h4>For ICS attacks — SABOTAGE is an additional significant motive:</h4>
+        <ol>
+          <li>Cause utility outages (blackouts)</li>
+          <li>Cause manufacturing to stop (cease production)</li>
+          <li>Damage equipment</li>
+          <li>Cause equipment to malfunction</li>
+          <li>Cause injuries and death</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3>3.3 Direct vs Indirect Threats — EXAM FAVOURITE</h3>
+        <table>
+          <tr><th>Aspect</th><th>Direct Threat</th><th>Indirect Threat</th></tr>
+          <tr><td>Definition</td><td>Loss of control of compromised ICS devices (sensors, controllers, HMI). Control/monitoring can be executed, interrupted, cancelled, delayed or changed by the new master.</td><td>Impacts from probing, scanning and attacking that <em>inadvertently</em> affect fragile ICS devices. Impact is unintentional but can still be disastrous.</td></tr>
+          <tr><td>Intent</td><td>Intentional — the ICS is the target</td><td>Unintentional — the ICS is collateral damage</td></tr>
+          <tr><td>Example</td><td>Attacker takes control of a PLC and changes pump speed</td><td>A malware scanning IP ranges generates so much traffic it causes a DoS on an ICS device</td></tr>
+        </table>
+
+        <div class="answer-scheme">
+          <h5>📝 Exam Answer Format — 4 Marks</h5>
+          <p><strong>Direct Threat (2 marks):</strong> A direct threat involves unauthorized access to ICS devices such as sensors, controllers, or HMIs. The attacker gains control over the device, enabling them to execute, interrupt, cancel, delay, or change control and monitoring operations. [Example: An attacker sends malicious commands to a PLC to shut down a water pump]</p>
+          <p><strong>Indirect Threat (2 marks):</strong> An indirect threat refers to impacts caused by activities such as probing, scanning or attacking that inadvertently affect fragile ICS devices. The impact is unintentional but can still be disastrous. [Example: Network scanning malware generates large amounts of traffic that overwhelms an ICS network, causing unintended denial of service]</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>3.4 Threat Agents to ICS (7 Types)</h3>
+        <table>
+          <tr><th>#</th><th>Threat Agent</th><th>Description</th><th>Primary Goal</th></tr>
+          <tr><td>1</td><td>Professional Bot Herders</td><td>Develop and manage botnets; attempt to take control of ICS devices; sell botnet services</td><td>Financial</td></tr>
+          <tr><td>2</td><td>Organized Crime</td><td>Gangs/syndicates; credit card fraud, identity theft, personal banking info</td><td>Financial</td></tr>
+          <tr><td>3</td><td>Industrial Espionage</td><td>Mercenary entities targeting corporate assets; steal IP, product info, financial data</td><td>Industrial secrets</td></tr>
+          <tr><td>4</td><td>Foreign Intelligence / Nation States</td><td>State-sponsored; steal national/industrial secrets, plans, strategies</td><td>Geopolitical</td></tr>
+          <tr><td>5</td><td>Spammers</td><td>Email harvesting; generate massive email lists for spamming</td><td>Spam campaigns</td></tr>
+          <tr><td>6</td><td>Phishers</td><td>Attract users to malware-loaded websites; turn devices into bots, data theft</td><td>Financial / Control</td></tr>
+          <tr><td>7</td><td>Activists & Terrorists</td><td>Ideologically motivated; limited resources — buy services from bot herders; mostly sabotage</td><td>Ideological</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>3.5 Insiders vs Outsiders</h3>
+        <table>
+          <tr><th>Aspect</th><th>Insiders</th><th>Outsiders</th></tr>
+          <tr><td>Location</td><td>Physically inside the organization</td><td>Physically outside the organization</td></tr>
+          <tr><td>Identity</td><td>Employees, contractors, vendors with trusted access</td><td>Everyone else</td></tr>
+          <tr><td>Access method</td><td>Use internal resources within the security perimeter</td><td>Must compromise security perimeter first</td></tr>
+          <tr><td>Danger</td><td>Already have trusted access; can bypass many controls</td><td>Need to find entry points; may use valid credentials</td></tr>
+          <tr><td>Stuxnet link</td><td>USB drives inserted by trusted personnel (contractors/engineers)</td><td>Nation-state actors behind the operation</td></tr>
+        </table>
+        <div class="box box-exam">
+          <span class="box-label">📌 ICS Prefers White Box Testing</span>
+          ICS security assessment prefers the white-box approach because the higher threat in ICS comes from <strong>insiders</strong>, not outsiders. White box = tester knows everything (insider knowledge). Black box = minimal info (outsider perspective).
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>3.6 Malware Spread & BYOD Risks</h3>
+        <h4>How devices get infected with malware:</h4>
+        <ol>
+          <li>Downloading questionable software (pirated, games, music)</li>
+          <li>Clicking bad links to malicious websites</li>
+          <li>Opening infected email attachments</li>
+          <li>Inserting infected USB drives (Bad USB)</li>
+        </ol>
+
+        <h4>BYOD (Bring Your Own Device) risks:</h4>
+        <ol>
+          <li>Same device used at home AND at work → infection can come from home</li>
+          <li>Device connects to both corporate network (WiFi) AND external ISP (mobile data)</li>
+          <li>Mobile data bypasses network security perimeter</li>
+          <li>Firewall and web filtering don't work when using mobile data</li>
+          <li>When device switches to corporate WiFi — infection can spread to corporate network</li>
+        </ol>
+
+        <div class="box box-assign">
+          <span class="box-label">📝 Assignment / Exam Scenario — BYOD</span>
+          "Linda is a programmer at KTM and uses BYOD..." — This scenario from past year Q6 tests BYOD risks. The risk is that Linda's personal device, used both at home and work, can introduce malware into the critical rail system. The BYOD policy bypasses network perimeters.
+        </div>
+
+        <h4>Why even the best antivirus fails:</h4>
+        <ul>
+          <li>Statistics show even the best antivirus allows 40% of malware to pass undetected</li>
+          <li>Antivirus relies on signatures of past malware — new malware has no signature yet</li>
+          <li>Existing malware can always be altered to pass signature tests</li>
+        </ul>
+
+        <h4>Why malware is so difficult to detect:</h4>
+        <ol>
+          <li>Arrives in packed format, unrecognizable to detection systems</li>
+          <li>Once installed, malware can disable antivirus and IDS</li>
+          <li>Reverts to packed form; hides deep in file system (system, hidden, read-only attributes)</li>
+          <li>Some malware can morph itself during replication (code variants to avoid detection)</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3>3.7 Social Engineering</h3>
+        <h4>Steps in modern social engineering attack:</h4>
+        <ol>
+          <li>Compromise a social network account (via compromised device, sloppy passwords, insecure WiFi)</li>
+          <li>Leverage trusted social network to infect others</li>
+          <li>Send phishing message to contact/friend list — "trusted" because it comes from a "friend"</li>
+          <li>Lure receiver to visit malicious website or download file</li>
+          <li>Once new account infected, process repeats (propagation)</li>
+        </ol>
+
+        <div class="box box-assign">
+          <span class="box-label">📝 Exam Scenario — "Jonny at Singapore Power"</span>
+          "Jonny shares his work ID card on Facebook/Instagram and checks in his location." Assets at risk: his identity (can be used for physical access), his location (enables targeted physical attacks), potentially revealing CI facility details. Mitigation: Social media policy, security awareness training, ban sharing of work-related information on social media.
+        </div>
+      </div>
+    </div>
+
+    <!-- CH4 -->
+    <div class="section" id="ch4" data-importance="vc">
+      <div class="section-header">
+        <span class="section-num">CH 4</span>
+        <h2>Vulnerabilities of the ICS</h2>
+        <span class="importance-tag tag-vc">VERY CRITICAL</span>
+      </div>
+
+      <div class="box box-pattern">
+        <span class="box-label">📊 Past Year Pattern</span>
+        Chapter 4 is heavily tested in EVERY exam. Functional vulnerabilities (DoV/LoV/MoV/DoC/LoC/MoC), data states, and the 3 categories of vulnerabilities (Business/Operational/Technical) are repeated questions.
+      </div>
+
+      <div class="card">
+        <h3>4.1 ICS Data States</h3>
+        <p>ICS data exists in three states: <strong>at rest, in use, and in motion</strong>.</p>
+        <table>
+          <tr><th>State</th><th>Definition</th><th>ICS Priority</th><th>Safeguard</th></tr>
+          <tr><td><strong>Data at Rest</strong></td><td>Retained within memory/storage of a device (non-volatile — retained even if turned off). Databases, hard disk, USB drive.</td><td>Low — historical data value decreases rapidly</td><td>Encryption, access control, physical security</td></tr>
+          <tr><td><strong>Data in Use</strong></td><td>Present in volatile memory or displayed on screen. Disappears if device turned off. ICS devices have limited memory/processing — little scope for manipulation.</td><td>Medium</td><td>System integrity, access control</td></tr>
+          <tr><td><strong>Data in Motion</strong></td><td>Moving through a network in packets (each packet may take different routes). May be encrypted (rare in ICS).</td><td><strong>HIGHEST</strong> — ICS depends on live operation data</td><td>Encryption, authentication, integrity checks</td></tr>
+        </table>
+
+        <h4>Data in Motion — How it can be compromised:</h4>
+        <ol>
+          <li>Injecting erroneous packets</li>
+          <li>MITM: intercept → transform to data at rest → change data → send back out</li>
+        </ol>
+
+        <div class="box box-exam">
+          <span class="box-label">📌 Past Year Q3(c) SEM 1 24/25</span>
+          "Name THREE (3) types of data states and describe the mechanism available to safeguard the data in each state." — 6 marks. 2 marks each. For each: name the state, define it, name the safeguard mechanism.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>4.2 ICS Vulnerability Categories (3 Types)</h3>
+        <p>Security control features are categorized into: Business (Management), Operational (or Technical). Vulnerabilities follow the same 3 categories:</p>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            📋 Business / Management Vulnerabilities (click to expand)
+            <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <ol>
+              <li><strong>Enterprise Risk Management (ERM) not implemented</strong> — without ERM, resources for ICS security are hard to obtain; no link between ICS security and corporate goals</li>
+              <li><strong>Lack of policies defining roles and responsibilities</strong> — ownership of ICS security poorly defined; without responsibility, no accountability</li>
+              <li><strong>Ad hoc or one-time investment</strong> — ICS security is a program (continuous), not a point-in-time exercise; budget must be allocated every year</li>
+              <li><strong>Lack of management engagement</strong> — management should provide guidance such as: refer to NIST 800-82, use defense in depth, identify access control requirements, use cryptography</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            📋 Operational Vulnerabilities (click to expand)
+            <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <ol>
+              <li><strong>Lack of segregation between ICS and business data traffic</strong> — malware can travel unimpeded into ICS</li>
+              <li><strong>Lack of separation of duties for administrative accounts</strong> — sharing admin accounts, complete overlap of duties, common passwords → impossible to attribute accountability or perform forensics</li>
+              <li><strong>Lack of remote access procedures</strong> — third-party suppliers need proper control over remote access accounts</li>
+              <li><strong>Poor wireless system design/architecture</strong> — susceptible to eavesdropping and masquerade attacks</li>
+              <li><strong>Lack of hardening for Internet-connected devices</strong> — poorly hardened systems can easily be compromised</li>
+              <li><strong>Lack of incident detection, response and reporting procedure</strong> — without proper evaluation procedure, consistent response is impossible; reports should contain quantifiable metrics</li>
+              <li><strong>Lack of change management controls</strong> — system upgrades, patches, reconfiguration must be managed carefully</li>
+              <li><strong>Lack of acceptance testing and vulnerability testing</strong> — new assets must be tested to ensure no new vulnerabilities are introduced</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            📋 Technical Vulnerabilities (click to expand)
+            <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p>Sources for technical vulnerabilities: <strong>CVE database</strong> (cve.mitre.org) and antivirus/security companies.</p>
+            <p>ICS devices have two distinct communication interfaces:</p>
+            <ol>
+              <li><strong>IP communication interface</strong> — where operators issue commands; subject to remote/local cyber attacks; vulnerabilities cause: denial/loss/manipulation of VIEW</li>
+              <li><strong>I/O control interface</strong> — physically connected to field devices (sensors, valves, drives); controls physical functions through analog communication; vulnerabilities cause: denial/loss/manipulation of CONTROL</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>4.3 Functional Vulnerability Impact Classification — 6 TYPES</h3>
+        <p>This is one of the most tested topics. There are 6 types — 3 affecting VIEW and 3 affecting CONTROL.</p>
+        <table>
+          <tr><th>Type</th><th>Definition</th><th>Causes</th><th>Risk to Operators</th></tr>
+          <tr><td><strong>DoV</strong><br>Denial of View</td><td>Temporary IP interface failure</td><td>Short-term communication failure</td><td>May take inappropriate actions due to inaccurate system state knowledge; PLC control logic may still function</td></tr>
+          <tr><td><strong>LoV</strong><br>Loss of View</td><td>Sustained/permanent IP interface failure</td><td>Prolonged communication failure; requires hands-on intervention</td><td>PLC may still work but operators cannot see the state; risk of inappropriate operator actions</td></tr>
+          <tr><td><strong>MoV</strong><br>Manipulation of View</td><td>Forged ICS data sent to operators</td><td>Attacker sends false data; does NOT impact IP or I/O interfaces</td><td>Operators get false status ("OK" when actually failing); encouraged to take inappropriate actions; can hide malicious activity</td></tr>
+          <tr><td><strong>DoC</strong><br>Denial of Control</td><td>Temporary inability to control ICS asset</td><td>Intentional or unintentional (operator accident, hardware failure)</td><td>Temporary loss of control ability</td></tr>
+          <tr><td><strong>LoC</strong><br>Loss of Control</td><td>Sustained loss where operators cannot issue ANY command even if threat receded</td><td>Intentional or unintentional; requires local intervention (device restart)</td><td>Complete loss of control; may need physical intervention</td></tr>
+          <tr><td><strong>MoC</strong><br>Manipulation of Control</td><td>Attacker overrides/intercepts operator commands and applies inappropriate control sequences</td><td>Does NOT impact IP or I/O interfaces; malicious third party controls ICS</td><td>ICS may be controlled by attacker; can deliberately invoke critical errors, ruining production or destroying infrastructure</td></tr>
+        </table>
+
+        <div class="box box-exam">
+          <span class="box-label">📌 Exam Tip — LoV vs MoV</span>
+          LoV = operator CAN'T see (communication is down). MoV = operator SEES but it's WRONG (communication still works, but data is falsified). Both create risk of wrong operator actions, but MoV is more dangerous because operators think everything is fine.
+        </div>
+
+        <div class="box box-exam">
+          <span class="box-label">📌 Exam Tip — MCQ Trick</span>
+          "Which functional vulnerability results in forged ICS data being sent to operators, not impacting the communication interface itself?" → Answer: <strong>Manipulation of View (MoV)</strong>. The key phrase is "does not impact the communication interface" — that's MoV.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>4.4 Technical Attack Vectors (8 Types)</h3>
+        <ol>
+          <li><strong>IT devices on ICS network</strong> — Compromised IT devices serve as staging points; ICS suffers collateral damage</li>
+          <li><strong>Interdependency with IT</strong> — ICS workstations use Windows/Unix; same protocols → IT devices can "illegally" operate in ICS network</li>
+          <li><strong>Green network stacks</strong> — Immature and poorly tested network protocols/IP stacks in ICS devices; vendors rushed products to market assuming isolation</li>
+          <li><strong>Legacy ICS protocols</strong> — Still actively used due to long device lifecycle; designed without security consideration</li>
+          <li><strong>Limited processing power/memory</strong> — Cannot be upgraded with security enhancements; replacement requires shutdown (unacceptable); new devices may introduce unknown risks</li>
+          <li><strong>Storms / DoS attacks</strong> — Flood devices with excessive traffic; causes DoV/DoC/LoV/LoC</li>
+          <li><strong>Fuzzing</strong> — Sending packets that don't conform to protocol specs (invalid size, flags, gibberish payload); can be accidental (electromagnetic interference)</li>
+          <li><strong>MITM and packet injection</strong> — Intercept, alter and resend packets; packet injection sends fake packets to target device; can also cause DoS</li>
+        </ol>
+
+        <div class="box box-exam">
+          <span class="box-label">📌 Key MCQ — Green Network Stack</span>
+          "Green network stacks" refers to vulnerability due to <strong>immature and poorly tested network protocols/IP stacks</strong> in ICS devices — not "interdependency with IT", not "hardware limitations". This is a frequently confused MCQ option.
+        </div>
+      </div>
+    </div>
+
+    <!-- CH5 -->
+    <div class="section" id="ch5" data-importance="vc">
+      <div class="section-header">
+        <span class="section-num">CH 5</span>
+        <h2>Hacking Trends on the ICS</h2>
+        <span class="importance-tag tag-vc">VERY CRITICAL</span>
+      </div>
+
+      <div class="card">
+        <h3>5.1 Consequences of Successful Cyber Incidents</h3>
+        <p>Consequences range from:</p>
+        <ol>
+          <li>Relatively benign indirect disruptions</li>
+          <li>Data theft (company secrets, information leaks)</li>
+          <li>Alteration of operational processes / sabotage (financial loss, loss of life, shutdown)</li>
+        </ol>
+
+        <h4>Impacts on the Company:</h4>
+        <ul>
+          <li>Loss of production</li>
+          <li>Loss of intellectual property (information theft)</li>
+          <li>Replacing/fixing damaged equipment</li>
+          <li>Penalties for regulatory noncompliance</li>
+          <li>Liability claims from customers</li>
+          <li>Damage to business reputation</li>
+        </ul>
+
+        <h4>Impacts on the Public:</h4>
+        <ul>
+          <li>Economic impact</li>
+          <li>Generalized panic</li>
+          <li>Loss of life</li>
+        </ul>
+
+        <h4>Common ICS Targets:</h4>
+        <table>
+          <tr><th>Target</th><th>What attacker can do</th></tr>
+          <tr><td>Engineering Workstations</td><td>Exfiltrate, alter or overwrite process logic</td></tr>
+          <tr><td>Operator Consoles (HMI)</td><td>Trick human operators into performing unintended tasks</td></tr>
+          <tr><td>Industrial Applications (SCADA, Historian)</td><td>Manipulate process data, steal data</td></tr>
+          <tr><td>Network Services (Active Directory, IAM)</td><td>Commonly shared between business and ICS — compromise both</td></tr>
+          <tr><td>Industrial Protocols (Modbus, DNP3)</td><td>Alter, manipulate, blind or destroy almost any aspect of ICS</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>5.2 Specific Attack Types in ICS</h3>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            ⚔️ Man-in-the-Middle (MITM) Attack
+            <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p>Attacker goes between communicating devices, intercepts traffic and injects new traffic.</p>
+            <p><strong>Why easy in ICS:</strong> Lack of encryption and authentication. Even when authentication is used, it's done in clear plain text.</p>
+            <p><strong>Impact:</strong> Can manipulate data, issue commands, or monitor operations.</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            ⚔️ Denial-of-Service (DoS) Attack
+            <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p>Floods devices with excessive traffic. In ICS, causes LoV or LoC, which may require physical process shutdown.</p>
+            <p><strong>Consequences of process shutdown:</strong></p>
+            <ul>
+              <li>Environmental releases (e.g., oil spills)</li>
+              <li>Plant shutdown</li>
+              <li>Mechanical failures → fire or explosion</li>
+              <li>Spoiled products</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            ⚔️ Replay Attack
+            <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p>Capture packets and retransmit them to perform a desired action. An exploitation of <em>functionality</em> (not a vulnerability).</p>
+            <p><strong>Examples:</strong></p>
+            <ul>
+              <li>Enable/disable security alarms or logging</li>
+              <li>Transmit new programmable codes</li>
+              <li>Report false values</li>
+              <li>Perform malicious control (e.g., open circuit breaker)</li>
+            </ul>
+            <p><strong>Why easy in ICS:</strong> Control traffic is mostly transmitted in plain text. Commands/values can be easily modified to create custom packets.</p>
+            <p><strong>Even with auth/encryption:</strong> Authentication messages can also be replayed to allow the attacker to authenticate.</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            ⚔️ Compromising the HMI
+            <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p>Exploit HMI device vulnerability to install remote access (e.g., VNC server).</p>
+            <p><strong>Result:</strong> Attacker can directly monitor and control whatever the console is responsible for.</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            ⚔️ Compromising the Engineering Workstation (EWS)
+            <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p><strong>EWS is especially dangerous because it can:</strong></p>
+            <ol>
+              <li>Configure role-based access control</li>
+              <li>Use specialized tools to directly communicate with and configure primary control equipment (PLCs, IEDs, SIS)</li>
+              <li>Contains sensitive documentation (ICS design, configuration, plant operation)</li>
+            </ol>
+            <div class="box box-exam">
+              <span class="box-label">📌 Section C 2526 Exam</span>
+              The Section C scenario-based question (20 marks) in the latest exam asks about a compromised EWS in a water treatment facility. Know the 3 things an attacker can gain from EWS: access credentials, process logic/PLC configuration, and sensitive documentation.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>5.3 Functionality vs Vulnerability</h3>
+        <p>Many ICS devices can be attacked via exploitation of <strong>functionality</strong> vs exploitation of <strong>vulnerability</strong>.</p>
+        <p><strong>Example:</strong> Issuing a "shutdown" command to a device does not represent any weakness in the device. However, the <em>lack of authentication</em> that enables a malicious user to inject a shutdown command IS a major vulnerability.</p>
+        <p>→ Replay attacks and some DoS attacks exploit functionality, not vulnerabilities.</p>
+
+        <h4>Attack vs Compromise:</h4>
+        <table>
+          <tr><th>Attack</th><th>Compromise</th></tr>
+          <tr><td>Proactive attempt to breach a system (phishing, malware delivery)</td><td>Result of a successful breach — systems/data accessed, manipulated, stolen</td></tr>
+          <tr><td>ATTACK happens before/during breach</td><td>COMPROMISE is the result</td></tr>
+          <tr><td>Responder focuses on activity/behavior</td><td>Responder focuses on forensic evidence</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>5.4 Attack Trends</h3>
+        <ul>
+          <li><strong>"Up the stack" trend:</strong> Moving from link-layer/network-layer vulnerabilities → application-specific exploits</li>
+          <li><strong>Client-side application shift:</strong> Web browsers, mobile apps (run on all platforms, easily exploited via chat/social media)</li>
+          <li><strong>Industrial application-layer attacks:</strong> Target SCADA, PLC, RTU communications directly</li>
+          <li><strong>AI-assisted threats:</strong> Deepfakes, AI-assisted spoofing, AI-written malware</li>
+        </ul>
+        <div class="box box-exam">
+          <span class="box-label">📌 MCQ — "Up the Stack"</span>
+          "Up the stack trends means threats are focusing more towards <strong>application-specific exploits</strong>." Not "threats from OT to IT" or "threats from physical stacks".
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>5.5 Dealing with an Infection — 3-Step Process</h3>
+        <div class="box box-warn">
+          <span class="box-label">⚠️ Key Principle</span>
+          Upon detecting an infection, do <strong>NOT</strong> immediately clean the system! There may be dormant subsequent infections that get activated, and valuable forensic information may be lost.
+        </div>
+
+        <h4>Step 1: Isolate (don't clean yet)</h4>
+        <p>Logically isolate the infected host. Allow malware to communicate on C&C channel (to gather intelligence) BUT isolate it from the rest of the network and remove access to sensitive information.</p>
+
+        <h4>Step 2: Investigate / Collect Forensics</h4>
+        <ul>
+          <li>Collect system logs, captured network traffic, memory analysis</li>
+          <li>Clone disk images to preserve original state for offline analysis</li>
+          <li>Use sandboxing technology to analyze malware behavior</li>
+          <li>Reverse-engineer the malware to determine capabilities, attack vectors, propagation</li>
+          <li>Retain all information for disclosure to authorities</li>
+        </ul>
+
+        <h4>Step 3: Recover — Bare Metal Reload</h4>
+        <p><strong>Bare metal reload:</strong> Device is completely erased and reduced to a bare, inoperable state. Hardware must be reimaged completely (erase and reinstall all firmware).</p>
+        <p><strong>Prerequisite:</strong> Clean versions of OS, applications, and asset firmware must be kept in a safe, clean environment (secure virtual backup or secured removable media in a locked cabinet at a separate physical location).</p>
+
+        <div class="box box-exam">
+          <span class="box-label">📌 MCQ — "Bare Metal Reload"</span>
+          "Bare metal reload means an infected device is completely erased and reset as new." NOT "a reboot to recover forensic evidence."
+        </div>
+      </div>
+    </div>
+
+    <!-- CH6 -->
+    <div class="section" id="ch6" data-importance="vc">
+      <div class="section-header">
+        <span class="section-num">CH 6</span>
+        <h2>Risk and Vulnerability Assessments</h2>
+        <span class="importance-tag tag-vc">VERY CRITICAL</span>
+      </div>
+
+      <div class="box box-pattern">
+        <span class="box-label">📊 Past Year Pattern</span>
+        Q5 in every past year paper tests risk assessment. Key questions: "Define risk", "6 steps of risk assessment methodology", "Difference between risk assessment and security testing", "Types of security tests", "White box vs black box".
+      </div>
+
+      <div class="card">
+        <h3>6.1 Risk Definition & Risk Triad</h3>
+        <p><strong>Risk Definition:</strong> The potential that a given threat will exploit the vulnerabilities of an asset, and thereby cause harm to the organization.</p>
+
+        <div class="ascii-diagram">RISK TRIAD:
+
+Threat Agent ──gives rise to──► Threat
+                                    │
+                                    │ exploits
+                                    ▼
+                              Vulnerabilities
+                                    │
+                                    │ leading to
+                                    ▼
+                                  Risk ──── to ────► Asset (has Value)
+                                    │                      │
+                                    │ reduce               │ owned by
+                                    ▼                      ▼
+                              Countermeasure ◄──── Owner (imposes)</div>
+
+        <p><strong>Why risk assessment?</strong> To identify the acceptable level of risk (also called "risk tolerance"). Not all security controls can be implemented. Given a fixed budget and time, risk assessment helps decide what to prioritize.</p>
+
+        <h4>Risk Assessment vs Security Testing:</h4>
+        <table>
+          <tr><th>Aspect</th><th>Risk Assessment</th><th>Security Testing</th></tr>
+          <tr><td>Purpose</td><td>Identify security controls to implement based on presumed risk</td><td>Verify whether appropriate security controls are deployed and effective</td></tr>
+          <tr><td>Method</td><td>Theoretical analysis of threats and vulnerabilities</td><td>Practical testing of the actual system</td></tr>
+          <tr><td>Relationship</td><td>Done before/alongside security testing</td><td>Validates the risk assessment findings</td></tr>
+        </table>
+
+        <div class="box box-exam">
+          <span class="box-label">📌 Key Exam Q — Are they related?</span>
+          Yes! Risk assessment and security testing are related. Risk assessment blends with security testing — risk assessment identifies what to test, and security testing verifies whether controls are effective. They are complementary processes.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>6.2 Risk Assessment Methodology — 6 Steps</h3>
+        <p>This is Q5(a) in the 2023/24 paper with 6 marks. Know all 6 steps.</p>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Step 01: System Characterization <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p>Identify:</p>
+            <ol>
+              <li>All physical and logical assets that comprise the system</li>
+              <li>Trust boundaries and entry points (including hidden ones like built-in WiFi/Bluetooth)</li>
+              <li>Data that is normally introduced through entry points</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Step 02: Threat Identification <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p>Identify threat agents/sources, threat vectors, and threat events. Map logical assets identified in Step 1 to the threats. Very difficult — must describe all aspects of unmitigated risk. Threats can also be found during security testing.</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Step 03: Vulnerability Identification <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p>Perform vulnerability assessment exercise using automated tools:</p>
+            <ul>
+              <li>Vulnerability scanning</li>
+              <li>Configuration auditing</li>
+              <li>Manual analysis</li>
+            </ul>
+            <p>Vulnerabilities found are ranked using <strong>Common Vulnerability Scoring System (CVSS)</strong> (https://www.first.org/cvss/calculator/3.0)</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Step 04: Risk Classification <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p>Compare threats and vulnerabilities using two parameters:</p>
+            <ol>
+              <li><strong>Consequences / Impact</strong> — What are the consequences if this vulnerability is exploited?</li>
+              <li><strong>Likelihood</strong> — What is the probability that this vulnerability can be exploited to cause an incident?</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Step 05: Risk Ranking <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p>Use a metric (e.g., risk score = Impact × Likelihood) to give a risk rating to each vulnerability. Rank vulnerabilities based on risk rating. This rank determines which vulnerabilities should be prioritized to address.</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Step 06: Control Recommendation <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p>Create a mitigation plan to reduce risk:</p>
+            <ul>
+              <li>Control measures</li>
+              <li>Countermeasures</li>
+              <li>Improvements</li>
+            </ul>
+            <p>Apply a range of cybersecurity controls to assets within the ICS to reduce and mitigate risk.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>6.3 Types of Security Tests</h3>
+        <table>
+          <tr><th>Test Type</th><th>Description</th><th>Pros</th><th>Cons</th><th>ICS Suitability</th></tr>
+          <tr><td><strong>Security Audit</strong></td><td>Tests against specific policies, procedures, standards. Active (direct access) or Passive (questionnaires)</td><td>Less resources needed; does not disrupt system</td><td>Does NOT uncover new/hidden vulnerabilities</td><td>Good — passive and non-disruptive</td></tr>
+          <tr><td><strong>Vulnerability Assessment</strong></td><td>Evaluates entire solution including assets, configuration, communication. Theoretical or Physical.</td><td>Comprehensive; identifies most vulnerabilities</td><td>Not practical on ALL assets; select critical subset</td><td>Good — can be done theoretically</td></tr>
+          <tr><td><strong>Penetration Testing</strong></td><td>Actual security attacks performed on the system by an ethical hacker</td><td>Provides REAL proof that vulnerability can be exploited — convinces management</td><td><strong>Negatively impacts the system; rarely done on operational ICS</strong></td><td>Poor for live ICS</td></tr>
+          <tr><td><strong>Physical Security Test</strong></td><td>Online (live system) or Offline (test environment/testbed)</td><td>Offline: safer; can use backup image of live system</td><td>Online: too risky; results may not represent overall system</td><td>Offline preferred</td></tr>
+        </table>
+
+        <div class="box box-exam">
+          <span class="box-label">📌 MCQ — Penetration Testing</span>
+          "Which security test negatively impacts the system and is rarely performed on operational ICS?" → <strong>Penetration Testing</strong>. But it provides the best evidence of exploitability (convinces management).
+        </div>
+
+        <h4>White Box vs Black Box Testing:</h4>
+        <table>
+          <tr><th>Aspect</th><th>White Box</th><th>Black Box</th></tr>
+          <tr><td>Information given to tester</td><td>ALL information: topology, assets, configuration, etc.</td><td>Minimal info (e.g., only IP address range)</td></tr>
+          <tr><td>Reflects knowledge of</td><td>Insider (trusted employee)</td><td>Outsider attacker</td></tr>
+          <tr><td>ICS preference</td><td><strong>Preferred for ICS</strong></td><td>Less preferred</td></tr>
+          <tr><td>Why ICS prefers it</td><td>Higher threat from <strong>insiders</strong> in ICS</td><td>Outsider attacks are less common in ICS</td></tr>
+        </table>
+
+        <h4>Security Test Evaluation Factors:</h4>
+        <ul>
+          <li><strong>System-specific factors:</strong> Hardware, software, network, vendors</li>
+          <li><strong>Site-specific factors:</strong> Geographical location, compliance with corporate policies, SLAs, project-specific documentation</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>6.4 Nmap in ICS — A Warning</h3>
+        <div class="box box-warn">
+          <span class="box-label">⚠️ Very Important MCQ Answer</span>
+          Nmap (Device Scanner / Vulnerability Scanner) is considered "noisy" and dangerous for online ICS because it injects large amounts of traffic. This can cause unintended DoS on fragile ICS devices. Never run Nmap against live ICS without extreme caution.
+        </div>
+      </div>
+    </div>
+
+    <!-- CH7 -->
+    <div class="section" id="ch7" data-importance="vc">
+      <div class="section-header">
+        <span class="section-num">CH 7</span>
+        <h2>Defense in Depth & Security Implementation in ICS</h2>
+        <span class="importance-tag tag-vc">VERY CRITICAL</span>
+      </div>
+
+      <div class="box box-pattern">
+        <span class="box-label">📊 Past Year Pattern</span>
+        Defense in Depth is tested in Q6 of the 2526 paper (10 marks) and Q7 of the 2324 paper (8 marks). The scenario-based question (Section C) also requires a Defense in Depth strategy. Zones and Conduits are a new critical topic.
+      </div>
+
+      <div class="card">
+        <h3>7.1 Defense in Depth — Definition</h3>
+        <p><strong>Defense in Depth:</strong> The coordinated use of multiple security countermeasures to protect assets.</p>
+        <p>It is a layered approach where each layer provides protection — even if one layer fails, the next layer provides protection. In ICS, <strong>all layers must be enforced</strong>; one weak layer makes the whole system vulnerable.</p>
+      </div>
+
+      <div class="card">
+        <h3>7.2 The 7 Layers of Defense in Depth (Stuxnet Case Study)</h3>
+        <table>
+          <tr><th>Layer</th><th>Name</th><th>What Should Be Done</th><th>What Failed in Stuxnet</th></tr>
+          <tr><td>1 (Outer)</td><td>Policies, Procedures, Awareness</td><td>Strict USB/removable media policy; security awareness for engineers; vendor/contractor access control; ICS-specific cybersecurity governance; change management policy for PLC logic</td><td>Engineers used infected USB drives; overconfidence in "air-gap"; lack of awareness of cyber-physical attacks</td></tr>
+          <tr><td>2</td><td>Physical Security</td><td>Restricted access to EWS; USB port control/locking; secure control room access; device whitelisting (approved hardware only)</td><td>USB devices were physically inserted; no restriction on portable media</td></tr>
+          <tr><td>3</td><td>Perimeter Security</td><td>Strong IT/OT network separation; firewalls between zones; DMZ for data exchange; strict inbound/outbound filtering</td><td>Air-gap assumed to be enough; no layered perimeter enforcement</td></tr>
+          <tr><td>4</td><td>Internal Network Security</td><td>Network segmentation (zones & conduits); east-west traffic monitoring; ICS-aware IDS/IPS; strict communication rules</td><td>Malware spread laterally; no internal monitoring</td></tr>
+          <tr><td>5</td><td>Host Security</td><td>Patch management (Windows); application whitelisting; EDR (Endpoint Detection & Response); least privilege access; device hardening</td><td>Multiple zero-day exploits succeeded; no strong endpoint protection</td></tr>
+          <tr><td>6</td><td>Application Security</td><td>Secure PLC programming environment; code signing for control logic; integrity verification; secure SCADA configuration</td><td>Step7 software trusted blindly; malicious code injected into PLC logic</td></tr>
+          <tr><td>7 (Core)</td><td>Data Security</td><td>Integrity monitoring of PLC data; anomaly detection (e.g., abnormal centrifuge speed); independent sensor validation; logging and alerting</td><td>Operators saw false normal readings; data was manipulated (not just stolen)</td></tr>
+        </table>
+
+        <div class="box box-exam">
+          <span class="box-label">📌 Exam Discussion Question (appears in latest paper)</span>
+          "Which layer would have stopped Stuxnet earliest?" → <strong>Layer 1 (Policies)</strong> — if strict USB policies were enforced, Stuxnet could never have entered. OR Layer 2 (Physical Security) — if USB ports were locked, physical insertion was impossible.<br><br>
+          "Which layer is most ignored in ICS?" → Layer 1 (Policies) and Layer 7 (Data integrity) are most commonly overlooked.<br><br>
+          "Why is data integrity more important than confidentiality in ICS?" → Because ICS controls physical processes. Manipulated data (MoV/MoC) can cause physical destruction. In IT, confidentiality is most important; in ICS, availability and integrity are more critical.<br><br>
+          "Is air-gap a perimeter control or a misconception?" → It is largely a misconception because in reality, air gaps rarely exist — they are bypassed by USB drives, remote access, and network convergence.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>7.3 Zones and Conduits</h3>
+        <p><strong>Zone:</strong> A logical grouping of assets that share similar security requirements. Assets within the same zone can communicate freely with each other.</p>
+        <p><strong>Conduit:</strong> A communication flow arrangement that groups communications into a logical flow of information <em>within and between</em> various security zones. Controls what can pass between zones.</p>
+
+        <div class="ascii-diagram">ZONES AND CONDUITS ARCHITECTURE:
+
+┌─────────────────────────────────────────────────────┐
+│            ENTERPRISE ZONE (Level 4)                 │
+│  Business Systems, ERP, Corporate Network            │
+└─────────────┬───────────────────────────────────────┘
+              │ CONDUIT (Firewall + DMZ)
+              │ ← strict filtering: only approved data flow →
+┌─────────────▼───────────────────────────────────────┐
+│           SUPERVISORY ZONE (Level 3)                 │
+│  SCADA Server, Historian, Data Exchange              │
+└─────────────┬───────────────────────────────────────┘
+              │ CONDUIT (ICS-aware Firewall)
+              │ ← industrial protocol inspection →
+┌─────────────▼───────────────────────────────────────┐
+│           CONTROL ZONE (Level 2)                     │
+│  HMI, Engineering Workstation                        │
+└─────────────┬───────────────────────────────────────┘
+              │ CONDUIT (Protocol gateway, authentication)
+┌─────────────▼───────────────────────────────────────┐
+│          FIELD DEVICE ZONE (Level 0-1)               │
+│  PLCs, RTUs, IEDs, Sensors, Actuators                │
+└─────────────────────────────────────────────────────┘
+
+Remote Access: DMZ → Conduit (VPN + MFA + monitoring) → Supervisory Zone</div>
+
+        <div class="box box-exam">
+          <span class="box-label">📌 Section C 2526 Exam — 10 marks</span>
+          "Propose a Defense in Depth strategy using Zones and Conduits to mitigate VPN access vulnerability and contain EWS compromise." Structure your answer: (1) Identify the zones, (2) Describe the conduits between zones, (3) Specify security controls on the remote access conduit (VPN + MFA + logging + time-limited access), (4) Describe how EWS compromise is contained (zone isolation, limited lateral movement).
+        </div>
+      </div>
+    </div>
+
+    <!-- ASSIGNMENTS -->
+    <div class="section" id="assignments" data-importance="vc">
+      <div class="section-header">
+        <span class="section-num">📝</span>
+        <h2>All Assignment Questions — Exam Guidance</h2>
+        <span class="importance-tag tag-vc">VERY CRITICAL</span>
+      </div>
+
+      <div class="box box-assign">
+        <span class="box-label">📌 Lecturer's Tip</span>
+        "Study the assignments given in the lecture slides." All four assignments test real-world application of ICS security concepts. These are very likely to appear in the final exam as scenario-based or structured questions.
+      </div>
+
+      <div class="card">
+        <h3>Assignment 1 — Famous CI Attack Investigation (1 person)</h3>
+        <h4>Choices:</h4>
+        <ul>
+          <li>Stuxnet</li>
+          <li>BlackEnergy</li>
+          <li>WannaCry</li>
+          <li>Colonial Pipeline Ransomware Attack</li>
+          <li>Any latest CI Attack (2023–2026)</li>
+        </ul>
+        <h4>6 Required Discussion Points:</h4>
+        <ol>
+          <li>Synopsis of the attack</li>
+          <li>Which critical infrastructure was affected?</li>
+          <li>What malware/APT was involved? Explain the attack.</li>
+          <li>What failed on the target?</li>
+          <li>Could the attack be prevented? How?</li>
+          <li>What were the real-world impacts?</li>
+        </ol>
+
+        <div class="answer-scheme">
+          <h5>📝 Exam Version — Stuxnet (Most Likely to Appear)</h5>
+          <p><strong>1. Synopsis:</strong> Stuxnet (2010) was a sophisticated cyberweapon that targeted Iran's nuclear enrichment program at Natanz. It was the world's first known cyber weapon designed to cause physical damage.</p>
+          <p><strong>2. CI Affected:</strong> Nuclear critical infrastructure (energy sector). Specifically, Natanz uranium enrichment facility (Iran).</p>
+          <p><strong>3. Malware involved:</strong> Stuxnet — a weaponized worm. Used 4 zero-day Windows exploits. Targeted Siemens Step7 software and S7-315/317 PLCs. Manipulated centrifuge speeds (between 1,410Hz and 2Hz while reporting normal to operators — MoV). Used stolen digital certificates to appear legitimate.</p>
+          <p><strong>4. What failed:</strong> Business: no USB policy, over-reliance on air-gap. Operational: engineers used infected USBs, no PLC logic integrity checking. Technical: Windows zero-days, weak PLC authentication, no anomaly detection.</p>
+          <p><strong>5. Prevention:</strong> Strict USB policy, application whitelisting, network segmentation, PLC integrity monitoring, anomaly detection for centrifuge behavior, regular security audits.</p>
+          <p><strong>6. Real-world impact:</strong> ~1,000 centrifuges destroyed out of 6,000. Significantly delayed Iran's nuclear program. Revealed possibility of cyber-physical warfare. Changed ICS cybersecurity awareness globally.</p>
+        </div>
+
+        <div class="answer-scheme">
+          <h5>📝 Colonial Pipeline Ransomware (2021)</h5>
+          <p><strong>Synopsis:</strong> DarkSide ransomware group attacked Colonial Pipeline's IT network, which caused the company to proactively shut down OT/ICS systems to prevent spread.</p>
+          <p><strong>CI Affected:</strong> Energy sector — fuel pipeline infrastructure. Colonial Pipeline supplies ~45% of East Coast US fuel.</p>
+          <p><strong>Malware:</strong> DarkSide ransomware. Entered via compromised VPN credentials (legacy account, no MFA). Encrypted IT systems and exfiltrated data.</p>
+          <p><strong>What failed:</strong> Weak credential management, no MFA on VPN, poor IT/OT segregation (shutdown of OT was precautionary), lack of incident response plan.</p>
+          <p><strong>Prevention:</strong> Multi-factor authentication, regular credential audits, proper IT/OT separation so OT can continue if IT is compromised, incident response planning.</p>
+          <p><strong>Impact:</strong> 6-day pipeline shutdown. Fuel shortages across US East Coast. Panic buying. $4.4 million ransom paid (partly recovered). Price spikes at gas stations.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Assignment 3 — ICS Security Scenario Vulnerability Mapping</h3>
+        <p>Deadline: 2 March 2026. Based on chosen ICS Security Scenario.</p>
+        <h4>3 Required Components:</h4>
+        <ol>
+          <li>List the succession of events in the scenario</li>
+          <li>List the related business, operational and technical vulnerabilities</li>
+          <li>Create combined relationship mapping between the three vulnerabilities to each affected component</li>
+        </ol>
+        <div class="box box-exam">
+          <span class="box-label">📌 Exam Relevance</span>
+          This assignment directly maps to the 2526 exam Q2 (vulnerabilities), Q3 (functional vulnerabilities), and Section C (scenario analysis). The 3-category vulnerability framework (Business/Operational/Technical) is the backbone of vulnerability analysis.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Assignment 4 — Browser-Based Observation of Exposed HMIs</h3>
+        <p>This assignment demonstrates real-world exposure of ICS devices on the internet.</p>
+        <h4>Tasks:</h4>
+        <ol>
+          <li>Use Google dorks to find 5 exposed HMIs: <code class="mono">intitle:"Miniweb Start Page" intext:"siemens" & inurl:"/portal/portal.mwsl"</code></li>
+          <li>Find product and vendor information of each HMI</li>
+          <li>Find default credentials for the HMI</li>
+          <li>Use Censys.io to find country and other information for the IP addresses</li>
+        </ol>
+        <div class="box box-exam">
+          <span class="box-label">📌 Exam Relevance</span>
+          This demonstrates: (1) ICS devices are accessible on the public Internet (the "air gap" is a myth), (2) Default credentials are a major vulnerability, (3) Open-source intelligence (OSINT) can be used to discover and profile ICS targets — relevant to threat identification and reconnaissance phases.
+        </div>
+      </div>
+    </div>
+
+    <!-- MID TERM ASSIGNMENT -->
+    <div class="section" id="midterm" data-importance="imp">
+      <div class="section-header">
+        <span class="section-num">📋</span>
+        <h2>Mid Term Group Assignment</h2>
+        <span class="importance-tag tag-imp">IMPORTANT</span>
+      </div>
+      <div class="card">
+        <h3>Group Assignment: Critical Infrastructure Assessment & Evaluation</h3>
+        <p>Each group analyzes THREE past CI case studies from a list. The four components mirror the entire course:</p>
+        <table>
+          <tr><th>Component</th><th>Chapter Reference</th><th>Task</th></tr>
+          <tr><td>1. Synopsis & Impact</td><td>Ch1, Ch2, Ch5</td><td>Attack synopsis table, CI affected, APT/malware involved, real-world impact</td></tr>
+          <tr><td>2. Threat Agent Mapping</td><td>Ch3</td><td>Compare threat agents across case studies; similarities and differences</td></tr>
+          <tr><td>3. Vulnerability Assessment</td><td>Ch4</td><td>Business, Operational, Technical vulnerabilities; similarities and differences across case studies</td></tr>
+          <tr><td>4. The Way Forward</td><td>Ch6, Ch7</td><td>Would today's technology prevent the attack? At least 3 improvements per case study.</td></tr>
+        </table>
+        <div class="box box-exam">
+          <span class="box-label">📌 Exam Relevance</span>
+          The group assignment structure is essentially a blueprint for the final exam Section C (scenario-based question). Practice answering in this structured format: synopsis → threats → vulnerabilities → mitigations.
+        </div>
+      </div>
+    </div>
+
+    <!-- PAST YEAR 2324 -->
+    <div class="section" id="py2324" data-importance="vc">
+      <div class="section-header">
+        <span class="section-num">📄</span>
+        <h2>Past Year — SEM 2, 2023/2024</h2>
+        <span class="importance-tag tag-vc">VERY CRITICAL</span>
+      </div>
+
+      <div class="card">
+        <h3>Exam Structure (SEM 2, 2023/24)</h3>
+        <p>2 Sections: Section A (MCQ, 20 marks) + Section B (Short Answers, 80 marks). 7 Questions. 2.5 hours.</p>
+      </div>
+
+      <div class="card">
+        <h3>Section B — All Questions with Answer Schemes</h3>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q1: ICS Definition, Tasks & Components [10 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p><strong>(a) Define ICS [1 mark]:</strong> An Industrial Control System (ICS) is a broad class of automation systems used for control and monitoring functionality in manufacturing and industrial facilities.</p>
+            <p><strong>(b) THREE general tasks of ICS [3 marks]:</strong></p>
+            <ol><li>Collect data from endpoint devices</li><li>Send collected data to an HMI (Human-Machine Interface) to be displayed</li><li>Apply automatic, semi-automatic or operator-controlled changes to endpoint devices</li></ol>
+            <p><strong>(c) THREE components of ICS [6 marks — 2 each]:</strong></p>
+            <p><em>PLC (Programmable Logic Controller):</em> A specialized industrial computer that can be programmed to automate functions within manufacturing facilities. It executes control logic based on sensor inputs and controls actuators/outputs accordingly.</p>
+            <p><em>RTU (Remote Terminal Unit):</em> Collects data from field devices and transmits the data back to a central monitoring station. May also receive control signals from a process control computer and relay them to field devices. Requires communication capability for data transmission.</p>
+            <p><em>HMI (Human-Machine Interface):</em> The device used by human operators to view data collected from field devices. May also enable human operators to control certain devices. Can be touch-based screens, computer terminals, push buttons, auditory feedback, or graphical displays providing topological diagrams, charts, and dials.</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q2: Threats — Direct/Indirect, Motivations, Policy [10 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p><strong>(a) Direct vs Indirect Threats [4 marks]:</strong></p>
+            <p>See Ch3 section 3.3 for full answer. Key: Direct = intentional, attacker controls ICS. Indirect = unintentional, collateral damage from scanning/probing.</p>
+            <p><strong>(b) TWO motivations for ICS attacks [2 marks]:</strong></p>
+            <ol><li>Financial gain (ransomware, data theft, credential theft)</li><li>Sabotage — to cause physical damage, equipment malfunction, injuries, utility outages</li></ol>
+            <p><strong>(c) Policy to safeguard ICS from outsider threats [4 marks]:</strong></p>
+            <p>Sample policy with justification:</p>
+            <ol>
+              <li><strong>Network Segmentation Policy:</strong> Mandatory separation between IT business network and OT/ICS network using firewalls and DMZ. Justification: prevents malware from traveling from compromised business systems to ICS.</li>
+              <li><strong>Remote Access Policy:</strong> All remote access must use VPN with multi-factor authentication. Only approved vendor accounts allowed with time-limited, monitored sessions. Justification: attackers exploit weak remote access credentials (as seen in Colonial Pipeline attack).</li>
+              <li><strong>Removable Media Policy:</strong> All USB and removable media strictly prohibited unless formally authorized and scanned. Justification: USBs are the primary vector for bypassing air gaps (Stuxnet).</li>
+              <li><strong>Intrusion Detection Policy:</strong> Deploy ICS-aware IDS/IPS to monitor industrial protocol traffic for anomalies. Justification: detect intrusions early before they reach critical ICS assets.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q3: Vulnerabilities — Management, Guides, Functional Impact [10 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p><strong>(a) TWO ICS management vulnerabilities [4 marks]:</strong></p>
+            <p><em>1. Lack of ERM (Enterprise Risk Management) [2 marks]:</em> ERM specifies requirements and guidelines for managing security risks and links ICS security to high-level corporate goals. Without ERM, resources for ICS controls are difficult to obtain, and there is no connection between security activities and organizational objectives.</p>
+            <p><em>2. Lack of policies defining roles and responsibilities [2 marks]:</em> Without clear policies, ownership of ICS security is poorly defined. Without clear responsibility, there is no accountability. This means nobody is specifically responsible when a security breach occurs.</p>
+            <p><strong>(b) TWO guides for better ICS security [2 marks]:</strong></p>
+            <ol><li>NIST 800-82 — Guide to Industrial Control System Security (a widely referenced standard)</li><li>Use defense-in-depth strategies — multiple layers of security countermeasures</li></ol>
+            <p><strong>(c) TWO types of functional vulnerability impacts on CONTROL interface [4 marks]:</strong></p>
+            <p><em>Denial of Control (DoC) [2 marks]:</em> Temporary inability to control an ICS asset. Can be intentional or unintentional. Safeguard: redundant control paths, fault-tolerant design, backup manual controls.</p>
+            <p><em>Manipulation of Control (MoC) [2 marks]:</em> Attacker overrides or intercepts and changes operator commands, applying inappropriate control sequences. May cause catastrophic reactions. Safeguard: integrity checking of control commands, mutual authentication between operators and devices, anomaly detection on control commands.</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q4: Industrial Network, Vulnerabilities, Attacks & Countermeasures [10 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p><strong>(a) Industrial network example + common vulnerability [2 marks]:</strong></p>
+            <p>Example: SCADA network (used in water treatment, power grid). Common vulnerability: Lack of authentication in communication protocols between SCADA master and RTUs — any device can issue commands without proving its identity.</p>
+            <p><strong>(b) TWO attack types exploiting this vulnerability [4 marks]:</strong></p>
+            <p><em>1. MITM Attack:</em> Attacker positions between SCADA master and RTU. Intercepts commands, alters them (e.g., changes valve position command), and forwards modified commands. Because there is no authentication, the RTU accepts the modified command as legitimate.</p>
+            <p><em>2. Replay Attack:</em> Attacker captures valid command packets (e.g., "open valve" packet) and retransmits them repeatedly. Because the protocol lacks authentication timestamps, the RTU accepts and executes the replayed commands, potentially causing uncontrolled valve operations.</p>
+            <p><strong>(c) TWO security countermeasures [4 marks]:</strong></p>
+            <p><em>1. Authentication and Encryption:</em> Implement mutual authentication between SCADA master and field devices. Use encrypted channels (e.g., TLS) to prevent eavesdropping. This prevents MITM and replay attacks as commands are authenticated and cannot be replayed.</p>
+            <p><em>2. Network Segmentation + IDS:</em> Deploy ICS-aware IDS that monitors for anomalous traffic patterns (unusual command frequency, unusual sources). Segment the network so unauthorized devices cannot reach the SCADA master.</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q5: Risk Assessment — All 6 Steps + Security Test Factors [10 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p><strong>(a) SIX risk assessment methodologies [6 marks — 1 each]:</strong></p>
+            <p>1. System Characterization → 2. Threat Identification → 3. Vulnerability Identification → 4. Risk Classification → 5. Risk Ranking → 6. Control Recommendation. (See Ch6 section 6.2 for full details)</p>
+            <p><strong>(b) TWO evaluation factors in security testing [2 marks]:</strong></p>
+            <ol><li>System-specific factors: hardware, software, network, vendors</li><li>Site-specific factors: geographical location, compliance with corporate policies, SLAs, project-specific documentation</li></ol>
+            <p><strong>(c) Difference between the two evaluation factors [2 marks]:</strong></p>
+            <p>System-specific factors focus on the technical characteristics of the ICS assets themselves (what hardware and software are being used, which protocols are running). Site-specific factors focus on the operational and regulatory environment of the facility (where it is located, what policies it must comply with, what service agreements are in place).</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q6: BYOD & Social Media Scenarios — Jonny & Linda [10 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p><strong>Scenario (i): Jonny shares work ID on Facebook/Instagram [3 marks]</strong></p>
+            <p><em>Assets:</em> His work identity, physical access credentials, location information, facility details that can be inferred.</p>
+            <p><em>Threat:</em> Social engineering — attackers can use his identity card for physical access impersonation. His location data reveals when he is at the facility (useful for targeted attacks or physical break-in). Information visible on his ID (name, employer, access level) enables spear-phishing attacks.</p>
+            <p><em>Mitigation:</em> Social media usage policy prohibiting sharing of work-related information. Security awareness training. Regular policy enforcement reminders.</p>
+            <p><strong>Scenario (ii): Linda's BYOD laptop for KTM rail system [3 marks]</strong></p>
+            <p><em>Assets:</em> KTM commuter rail control system (ICS), critical rail operation data.</p>
+            <p><em>Threat:</em> Linda's personal device connects both to her home network and corporate network. If infected at home (via malicious website, pirated software), the device can introduce malware into KTM's ICS network when connected. Mobile data connection bypasses corporate firewall/web filtering.</p>
+            <p><em>Mitigation:</em> BYOD security policy — endpoint security software on personal devices, network access control (NAC), separate VLAN for BYOD devices, mobile device management (MDM).</p>
+            <p><strong>(b) Which scenario poses greater risk to ICS physical security? [4 marks]</strong></p>
+            <p>Answer: <strong>Linda's BYOD scenario poses greater risk</strong> to the physical security of the ICS.</p>
+            <p>Justification: Linda has <em>direct access</em> to the KTM commuter rail ICS network. A compromise of her device can directly impact the ICS control systems. Physical security risks that could be breached include: (1) Control system availability — if malware disrupts the rail control system, trains can be affected causing accidents; (2) Physical access to rail infrastructure — malware could be used to open track switches or disable signals, causing physical collisions; (3) Data integrity — falsified sensor data could cause operators to make wrong decisions about train positions.</p>
+            <p>Jonny's scenario (social media) primarily creates risks to physical perimeter security (someone could use his identity for unauthorized access), but it requires multiple additional steps. Linda's scenario creates a direct digital-to-physical risk path.</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q7: APT Malware Scenario (uSBRootKit) + Defense in Depth [20 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p><em>Scenario: uSBRootKit enters via USB, infects machines, seeks admin credentials, targets historical data, publishes IP/MAC addresses on backup transmissions. Your SCADA is air-gapped with one-way air gap network.</em></p>
+            <p><strong>(a) TWO methods for malware to enter [4 marks]:</strong></p>
+            <ol>
+              <li><strong>Infected USB drive:</strong> A trusted insider (maintenance contractor, engineer) unknowingly inserts an infected USB drive into an ICS workstation. Even in an air-gapped network, USB is a physical medium that bypasses network security controls. This is exactly how Stuxnet spread.</li>
+              <li><strong>One-way air gap network:</strong> Although described as one-way, if the one-way air gap device (data diode) can receive data, there may be covert channels. Alternatively, if maintenance laptops or backup media are shared between the air-gapped network and external networks, they could carry the malware.</li>
+            </ol>
+            <p><strong>(b) TWO mitigation plans [4 marks]:</strong></p>
+            <ol>
+              <li><strong>Strict removable media policy:</strong> All USB drives must be formally approved, scanned for malware, and logged before use. Consider disabling USB ports physically or through software (USB port blockers). All portable media used in the ICS must ONLY be used within the ICS environment.</li>
+              <li><strong>Application whitelisting:</strong> Implement software whitelisting so that only pre-approved applications can run on ICS workstations. The uSBRootKit, when executed, would be blocked because it is not on the approved list. This prevents unauthorized software from running even if a USB is inserted.</li>
+            </ol>
+            <p><strong>(c) TWO actions to detect infection [4 marks]:</strong></p>
+            <ol>
+              <li><strong>Monitoring backup transmissions:</strong> Since the malware activates when backup transmission occurs, set up anomaly detection specifically on backup transmission activities. Look for unexpected outbound connections or unusual data volumes during backup periods.</li>
+              <li><strong>Network traffic analysis:</strong> Monitor the ICS network for unexpected IP/MAC address lookups or anomalous traffic patterns. Use network flow analysis to detect unauthorized communications that should not occur in an air-gapped network.</li>
+            </ol>
+            <p><strong>(d) Defense-in-Depth document [8 marks]:</strong></p>
+            <p>Apply the 7 layers:</p>
+            <ul>
+              <li><strong>Layer 1 (Policy):</strong> Strict USB policy (no unauthorized media), staff security awareness training on APT threats, incident response plan for USB-based malware.</li>
+              <li><strong>Layer 2 (Physical):</strong> Lock/disable all USB ports. Physical access control to engineering workstations — only authorized personnel. CCTV monitoring of control room.</li>
+              <li><strong>Layer 3 (Perimeter):</strong> Maintain strict air gap; verify integrity of one-way connection device. Strictly control all data entering the ICS environment.</li>
+              <li><strong>Layer 4 (Internal Network):</strong> Network segmentation between historian server and other ICS assets. Monitoring of lateral movement within the ICS network.</li>
+              <li><strong>Layer 5 (Host):</strong> Application whitelisting on all hosts. Endpoint protection software. Disable autorun features on all ICS computers.</li>
+              <li><strong>Layer 6 (Application):</strong> Integrity monitoring of historian application. Alert on unexpected data access patterns. Secure the backup transmission application.</li>
+              <li><strong>Layer 7 (Data):</strong> Encrypt backup data. Monitor and alert on any attempt to publish or exfiltrate IP/MAC address information. Data loss prevention (DLP) tools.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAST YEAR 2425 -->
+    <div class="section" id="py2425" data-importance="vc">
+      <div class="section-header">
+        <span class="section-num">📄</span>
+        <h2>Past Year — SEM 1, 2024/2025</h2>
+        <span class="importance-tag tag-vc">VERY CRITICAL</span>
+      </div>
+
+      <div class="card">
+        <h3>Exam Structure (SEM 1, 2024/25)</h3>
+        <p>2 Sections: Section A (MCQ, 20 marks) + Section B (Structured, 80 marks). 7 Questions. 2.5 hours.</p>
+        <div class="box box-exam">
+          <span class="box-label">📌 Note on Scanned Paper</span>
+          This paper was a scanned image. Some OCR may have minor errors. Questions verified against content pattern.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Notable MCQ Topics (2024/25):</h3>
+        <ul>
+          <li>Definition of CI</li>
+          <li>Physical assets in ICS (field and control components)</li>
+          <li>ICS allows EXCEPT: precise identification of security threats (ICS does NOT do this — cybersecurity is a separate concern)</li>
+          <li>Communication features in IT (easy to monitor → this is an IT feature, NOT OT)</li>
+          <li>How air gap can be exploited → via USB/physical media</li>
+          <li>MITM easy in ICS → lack of encryption and authentication</li>
+          <li>Spear phishing → social engineering attack</li>
+          <li>"Up the stack" → application-specific exploits</li>
+          <li>Zero-day → a vulnerability exploit that has NOT been patched</li>
+          <li>Business control of ICS → policies, procedures, standard compliances</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Section B Notable Questions (2024/25):</h3>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q3: Threat vs Vulnerability, IT vs OT, Data States [10 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p><strong>(a) Difference between threat and vulnerability for ICS [2 marks]:</strong></p>
+            <p><em>Threat:</em> A possible danger that might exploit a vulnerability to breach security and cause harm. It is the potential source of risk (e.g., a nation-state actor, malware, a phishing email).</p>
+            <p><em>Vulnerability:</em> A weakness in the ICS that can be exploited by a threat. It is the flaw or gap in security (e.g., lack of authentication in Modbus protocol, unpatched Windows vulnerability).</p>
+            <p>Relationship: A threat exploits a vulnerability to cause harm. Without a vulnerability, a threat cannot cause harm.</p>
+            <p><strong>(b) IT vs OT — communication pattern and network implementation [2 marks]:</strong></p>
+            <p>IT: Client-server communication pattern. Communication is straightforward and easy to monitor. Servers can be located at different locations. Encryption is standard.</p>
+            <p>OT/ICS: A mixture of peer-to-peer AND client-server communication. A single process instruction may cause multiple communications between multiple devices, making traffic inspection difficult. Encryption introduces extra cost and latency (rare in OT). Network implementation is more complex and harder to inspect.</p>
+            <p><strong>(c) THREE data states and safeguards [6 marks — 2 each]:</strong></p>
+            <p>See Ch4 section 4.1 for complete answer. Format: Name → Define → Safeguard mechanism.</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q5: Risk Assessment — Definition, Purpose, Assessment vs Testing [10 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p><strong>(a) Definition of risk in ICS security [2 marks]:</strong> Risk is the potential that a given threat will exploit the vulnerabilities of an asset, and thereby cause harm to the organization. In ICS context, harm includes not only financial loss but also physical damage, safety incidents, and infrastructure disruption.</p>
+            <p><strong>(b) Why perform risk assessment [1 mark]:</strong> To identify the acceptable level of risk (risk tolerance). Given limited budget and time, risk assessment helps prioritize which vulnerabilities must be addressed first.</p>
+            <p><strong>(c) Difference between risk assessment and security testing [2 marks]:</strong> Risk assessment identifies what controls should be implemented based on presumed risk (theoretical analysis). Security testing verifies whether appropriate controls ARE deployed and still effective against the changing threat landscape (practical validation).</p>
+            <p><strong>(d) Example scenario [2 marks]:</strong></p>
+            <p>Risk assessment example: A SCADA administrator reviews the network architecture and identifies that the RTU communicates with the SCADA master over an unencrypted channel. The administrator assesses this as high risk (high likelihood of MITM attack, high impact if control is manipulated).</p>
+            <p>Security testing example: An ethical hacker attempts a MITM attack on the RTU-SCADA communication to verify that the unencrypted channel is actually exploitable and to demonstrate proof of concept to management.</p>
+            <p><strong>(e) Relationship [3 marks]:</strong> Yes, they are related. Risk assessment and security testing are complementary. Risk assessment blends elements of theoretical analysis with security testing. The risk assessment identifies what areas need to be tested, and security testing validates whether the risk assessment was accurate and whether controls are effective. Together they form a complete ICS security evaluation methodology.</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q7: APT Malware Scenario (uSBKiller) [SCADA scenario] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p><em>Same scenario structure as Q7 in 2324 but named "uSBKiller". The malware gathers and publishes IP/MAC addresses. SCADA is air-gapped.</em></p>
+            <p>Answer framework is the same as the 2324 Q7. Use the same defense-in-depth approach. Key distinction: This version asks about "publishing" IP/MAC — the threat to confidentiality of ICS network topology. Mitigation includes data diodes (truly one-way communication), monitoring for outbound connections, and encrypting network addressing information.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAST YEAR 2526 -->
+    <div class="section" id="py2526" data-importance="vc">
+      <div class="section-header">
+        <span class="section-num">📄</span>
+        <h2>Past Year — SEM 1, 2025/2026 (Most Recent)</h2>
+        <span class="importance-tag tag-vc">VERY CRITICAL</span>
+      </div>
+
+      <div class="box box-pattern">
+        <span class="box-label">📊 Most Important Past Paper</span>
+        This is the most recent exam (December 2025). This paper has THREE sections (A, B, C) unlike the earlier papers with only two. Section C is a new 20-mark scenario question. Study this paper extremely carefully.
+      </div>
+
+      <div class="card">
+        <h3>Section A — MCQ Answers (2025/26)</h3>
+        <table>
+          <tr><th>Q#</th><th>Question Summary</th><th>Answer</th></tr>
+          <tr><td>1</td><td>Highest priority in CIA Triad for ICS?</td><td><strong>B) Availability</strong></td></tr>
+          <tr><td>2</td><td>Most prioritized data type in ICS (live operation)?</td><td><strong>A) Data in motion</strong></td></tr>
+          <tr><td>3</td><td>Standard compliance/regulatory, expressed as policy?</td><td><strong>C) Business (Management) Control</strong></td></tr>
+          <tr><td>4</td><td>ICS communication pattern vs IT client-server?</td><td><strong>C) Peer-to-peer and client-server mixes</strong></td></tr>
+          <tr><td>5</td><td>Operational vulnerability from administrative efficiency?</td><td><strong>B) Sharing administrator accounts</strong></td></tr>
+          <tr><td>6</td><td>Intercept, alter, send back to destination attack?</td><td><strong>D) Man-in-the-Middle (MITM)</strong></td></tr>
+          <tr><td>7</td><td>Forged data sent to operators, doesn't impact interface?</td><td><strong>C) Manipulation of View (MoV)</strong></td></tr>
+          <tr><td>8</td><td>Proprietary protocol secret = security concept?</td><td><strong>C) Security Through Obscurity</strong></td></tr>
+          <tr><td>9</td><td>ICS technical control distinguishing feature?</td><td><strong>D) Legacy systems exceedingly difficult to upgrade or patch</strong></td></tr>
+          <tr><td>10</td><td>Primary purpose of risk assessment?</td><td><strong>A) Identify acceptable level of risk (risk tolerance)</strong></td></tr>
+          <tr><td>11</td><td>ICS is main reason which sector needs cybersecurity?</td><td><strong>C) Critical Infrastructures</strong></td></tr>
+          <tr><td>12</td><td>Cyber attack on ICS — impact is on what?</td><td><strong>C) The facility itself and the output from the facility</strong></td></tr>
+          <tr><td>13</td><td>Weaponized malware characteristic?</td><td><strong>B) Shows clear motive and intent (e.g., sabotage)</strong></td></tr>
+          <tr><td>14</td><td>Why not immediately clean infected system?</td><td><strong>C) Dormant infections may activate; valuable forensic info lost</strong></td></tr>
+          <tr><td>15</td><td>Security test that negatively impacts system, rare on ICS?</td><td><strong>D) Penetration Testing (Ethical Hacking)</strong></td></tr>
+          <tr><td>16</td><td>Why ICS practitioners struggle to define ICS security?</td><td><strong>A) ICS and IT share many vulnerabilities</strong> (so IT practices are wrongly imposed)</td></tr>
+          <tr><td>17</td><td>"Noisy" and dangerous tool for online ICS?</td><td><strong>C) Nmap (Device Scanner / Vulnerability Scanner)</strong></td></tr>
+          <tr><td>18</td><td>Communication flow arrangement grouping zones?</td><td><strong>C) Conduit</strong></td></tr>
+          <tr><td>19</td><td>Operational Control major characteristic?</td><td><strong>B) Procedures for operators and technicians to implement policy</strong></td></tr>
+          <tr><td>20</td><td>Why trend toward client-side app exploits?</td><td><strong>C) They run on almost all platforms (larger attack surface)</strong></td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Section B — All Questions with Answer Schemes (2025/26)</h3>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q1: IT vs ICS Failures, IT Security Unsuitability, Data in Use [10 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p><strong>(a) IT failure vs ICS failure consequences [2 marks]:</strong></p>
+            <p>IT failure: Primarily impacts data. Consequences include loss of data availability or confidentiality, which disrupts business operations such as transactions, reporting, or communications. Recovery is typically done by rebooting systems or restoring backups.</p>
+            <p>ICS failure: Has direct physical consequences. A failure in ICS can cause equipment damage, environmental releases, production shutdown, and most critically, injury or loss of life. Symptoms may look like ordinary maintenance failures, making them difficult to diagnose. Recovery may require physical intervention.</p>
+            <p><strong>(b) TWO reasons IT security practices cause delays/unsuitability for ICS [4 marks]:</strong></p>
+            <p><em>1. Patching/upgrading difficulty:</em> IT security assumes that systems can be regularly patched or upgraded with minimal disruption. In ICS, old systems often cannot be patched because there are no patches available from vendors (legacy systems), or because applying patches requires system downtime — which is unacceptable in ICS where continuous availability is critical (e.g., a power plant cannot shut down for security updates).</p>
+            <p><em>2. Downtime unacceptable/no test environments:</em> IT security practices include testing in development/staging environments before production deployment. In ICS, it is often not possible to have separate development and test environments because the equipment is specialized and expensive. Additionally, downtime for security updates may cause regulatory violations or safety incidents.</p>
+            <p><strong>(c) "Data in Use" meaning and why limited manipulation in ICS [4 marks]:</strong></p>
+            <p>Data in use refers to data that is present within the volatile memory of information processing devices or displayed on the screen of interface devices. This data will disappear if the device is turned off.</p>
+            <p>In ICS, data in use on devices like PLCs has little scope for manipulation or change because: ICS-specific devices (PLCs, RTUs, IEDs) are designed with very limited memory and processing power — just enough for their intended control function. They do not possess the memory or processing power that would allow data in use to be changed deliberately by external software. The data simply passes through quickly to control physical processes rather than being stored in ways that allow modification.</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q2: Vulnerability Categories, Wireless Susceptibility, Green Network Stacks [10 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p><strong>(a) THREE main vulnerability categories [3 marks]:</strong></p>
+            <ol><li>Business (Management) Vulnerabilities</li><li>Operational Vulnerabilities</li><li>Technical Vulnerabilities</li></ol>
+            <p><strong>(b) How wireless ICS susceptible to eavesdropping/masquerade [4 marks]:</strong></p>
+            <p>Wireless networks use radio frequencies that broadcast in all directions — any device within range can receive the signals. In ICS, poor wireless system design and architecture makes this especially dangerous:</p>
+            <p><em>Eavesdropping:</em> If wireless communications are unencrypted (common in legacy ICS wireless devices), an attacker with a radio receiver can capture all traffic between field devices and controllers. This reveals process data, commands, sensor readings, and potentially authentication credentials. The attacker can learn the ICS topology and operation without being detected.</p>
+            <p><em>Masquerade (Spoofing):</em> Without proper authentication, an attacker can impersonate a legitimate ICS device. They set up a device with the same wireless address/frequency as a legitimate field device. Commands from the controller go to both the real device and the attacker's device. The attacker can then replay or modify responses, causing the controller to receive falsified sensor data (leading to MoV) or send unauthorized commands to the real field device.</p>
+            <p><strong>(c) "Green network stacks" as technical attack vector [3 marks]:</strong></p>
+            <p>Green network stacks refers to immature and poorly tested network protocols and IP stacks that appear in ICS devices. This vulnerability arises because: (1) ICS vendors rushed their products to adopt Ethernet and IP connectivity without thorough security testing; (2) These vendors still assumed their products would be isolated from business networks and the Internet, so security was not a priority; (3) The resulting network implementations contain bugs, buffer overflow vulnerabilities, and protocol implementation flaws that can be exploited by sending malformed packets (fuzzing) or specific crafted packets that cause crashes or unexpected behavior in the ICS device.</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q3: Two Communication Interfaces, LoV vs MoV [10 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p><strong>(a) TWO ICS device communication interfaces and vulnerabilities [4 marks]:</strong></p>
+            <p><em>1. IP Communication Interface (2 marks):</em> The interface through which operators issue commands to the device via IP network. Vulnerabilities here cause: Denial of View (DoV), Loss of View (LoV), or Manipulation of View (MoV) — i.e., problems with what the operator can SEE about system state.</p>
+            <p><em>2. I/O Control Interface (2 marks):</em> The interface physically connected to field devices (sensors, valves, drives) via analog communication. Controls the actual physical functions of the production infrastructure. Vulnerabilities here cause: Denial of Control (DoC), Loss of Control (LoC), or Manipulation of Control (MoC) — i.e., problems with the ability to CONTROL physical processes.</p>
+            <p><strong>(b) LoV vs MoV differentiation and resulting risks [6 marks]:</strong></p>
+            <p><em>Loss of View (LoV):</em></p>
+            <ul>
+              <li>Cause: A sustained or permanent failure of the IP communication interface</li>
+              <li>What happens: Operator loses all visibility — cannot see any data from the ICS</li>
+              <li>IP interface: Completely down/failed</li>
+              <li>PLC/ICS operation: Control logic may still continue to function normally</li>
+              <li>Recovery: Requires local, hands-on operator intervention to fix the failure</li>
+              <li>Risk: Operator has no information about system state, may make inappropriate decisions or trigger emergency shutdowns unnecessarily</li>
+            </ul>
+            <p><em>Manipulation of View (MoV):</em></p>
+            <ul>
+              <li>Cause: Attacker forges and sends false ICS data to operators</li>
+              <li>What happens: Operator sees data but it is deliberately falsified — may show "everything normal" while system is actually failing</li>
+              <li>IP interface: Still functioning — data still flows, just falsified</li>
+              <li>PLC/ICS operation: Not directly impacted — physical control continues</li>
+              <li>Recovery: Difficult — operators don't know they are being deceived</li>
+              <li>Risk: Operators take inappropriate actions based on false information; can hide ongoing malicious activity while damage occurs; more dangerous than LoV because operators believe they are in control</li>
+            </ul>
+            <p><em>Key difference:</em> In LoV, operators know they have no information (can take precautionary measures). In MoV, operators don't know their information is wrong (they act confidently on false data — more dangerous).</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q4: Direct/Indirect Threats, Insiders vs Outsiders, Malware Hiding [10 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p><strong>(a) Direct vs Indirect Threat with examples [4 marks]:</strong></p>
+            <p>See Ch3 section 3.3 for full answer.</p>
+            <p><strong>(b) Insiders vs Outsiders comparison [3 marks]:</strong></p>
+            <p>See Ch3 section 3.5 for full comparison. Key: Insiders already have trusted access and don't need to compromise the perimeter. Outsiders must first bypass the security perimeter. ICS prefers white-box testing because insider threats are greater.</p>
+            <p><strong>(c) THREE malware tactics to remain hidden [3 marks]:</strong></p>
+            <ol>
+              <li><strong>Deactivating/circumventing anti-malware:</strong> Once installed, malware disables antivirus software and IDS so they cannot detect or remove it. The malware operates in the now-unprotected environment without detection.</li>
+              <li><strong>Installing persistent rootkits:</strong> Rootkits modify the operating system at a low level to hide the malware's presence from the OS itself. Even if the system is scanned, the rootkit makes the malware invisible by intercepting system calls that would reveal its files or processes.</li>
+              <li><strong>Deleting trace files / hiding in file system:</strong> Malware removes its installation footprint by deleting log entries, temporary files, and installer files. It may also set its files as system, hidden, and read-only to prevent them from appearing in normal directory listings. Some malware reverts to a packed/compressed form after installation to evade signature-based detection.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q5: ERM, Poor Security Practices, Vulnerability Testing [10 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p><strong>(a) Critical management vulnerability: Lacking ERM [3 marks]:</strong></p>
+            <p>Enterprise Risk Management (ERM) specifies requirements and guidelines for managing security risks and links the security of ICS to high-level corporate goals and objectives. Without ERM: (1) Resources for ICS security controls are difficult to obtain because there is no formal justification linking ICS security investment to business outcomes; (2) Security activities are disconnected from business strategy — ICS security becomes an afterthought; (3) ICS security becomes ad hoc — done only when there is an incident rather than proactively as an ongoing program. This creates systematic under-investment in ICS security.</p>
+            <p><strong>(b) TWO poor security practices from administrative efficiency [4 marks]:</strong></p>
+            <p><em>1. Sharing administrator accounts [2 marks]:</em> In ICS environments, administrative efficiency encourages sharing a single administrator account among multiple operators (to simplify management). This means: if a security incident occurs, it is impossible to determine which specific individual performed a given action (no non-repudiation). Forensic investigation is severely hampered because audit logs show the shared account but cannot identify the individual. Accountability is lost.</p>
+            <p><em>2. Complete overlap of administrative duties / common passwords [2 marks]:</em> When all administrators have the same role with no separation of duties, and use the same password, a single compromised credential gives an attacker full administrative access to the entire ICS. There is no "least privilege" — every admin can do everything. This makes it impossible to contain the damage when a credential is compromised, and impossible to attribute actions to specific individuals in forensic analysis.</p>
+            <p><strong>(c) Importance of Vulnerability Testing in acceptance testing [3 marks]:</strong></p>
+            <p>Acceptance testing verifies that new, upgraded, patched or changed assets perform as expected functionally. However, Vulnerability Testing specifically ensures that no new vulnerabilities have been introduced as a result of the change. For example: a patch may close one vulnerability but inadvertently open a new port or service, creating a new attack surface. Without vulnerability testing, this new vulnerability goes undetected in production. In ICS, where changes are infrequent but high-stakes, missing a newly introduced vulnerability can have severe consequences as these systems operate for 15–20 years before replacement. Vulnerability testing provides assurance that the security posture has not degraded after any change.</p>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q6: Defense in Depth, Zones & Conduits, Pen Test vs Security Audit [10 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <p><strong>(a) Define Defense in Depth [2 marks]:</strong> Defense in Depth is defined as the coordinated use of multiple security countermeasures to protect assets. It is a layered security strategy where each layer provides protection, so that if one layer is breached, subsequent layers continue to provide defense. No single security measure is relied upon to protect the entire ICS.</p>
+            <p><strong>(b) Zones and Conduits + which scenario poses greater risk [4 marks]:</strong></p>
+            <p><em>Zones:</em> Logical groupings of ICS assets that share similar security requirements. Assets within the same zone can communicate according to defined rules. Zones limit the blast radius of a compromise — if one zone is compromised, proper conduit controls prevent attackers from moving freely to other zones.</p>
+            <p><em>Conduits:</em> Communication flow arrangements that group communications between security zones. A conduit controls exactly what traffic is permitted to flow between zones, through mechanisms like firewalls, protocol inspection, and authentication. A conduit can also be a physical connection (a cable) or logical connection (a VPN tunnel) with security controls at each endpoint.</p>
+            <p><em>Greater risk scenario — Remote vendor access (VPN) to ICS:</em> The scenario where a vendor has direct remote access to the control zone poses the greatest risk. If the VPN credentials are compromised (weak passwords, no MFA), an attacker gains a path directly into the ICS control zone. There is no physical barrier. Mitigation: Place vendor remote access in a separate DMZ zone with a tightly controlled conduit (allowing only specific protocol and specific device access, with full session logging, and time-limited connections).</p>
+            <p><strong>(c) Pen Testing benefit over Security Audit, despite system impact [4 marks]:</strong></p>
+            <p>Security Audit tests against predefined policies, procedures, and standards. It checks whether controls exist on paper and whether compliance is met. However, it cannot reveal unknown vulnerabilities — it only finds what it knows to look for.</p>
+            <p>Penetration Testing provides a REAL proof of exploitability. Even if a vulnerability exists in theory, management may not prioritize fixing it without evidence that it can actually be exploited. A pen test provides this proof — "here is the screenshot showing we accessed your PLC without authorization."</p>
+            <p>The primary benefit: Penetration testing provides an <strong>empirical, evidence-based demonstration</strong> that a vulnerability can be exploited under real-world conditions. This is significantly more persuasive to senior management than a theoretical audit finding. The risk of impact to the ICS is accepted because the benefit of this proof often results in faster, better-funded security improvements that would not occur otherwise.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Section C — Water Treatment Facility Scenario [20 marks]</h3>
+        <div class="box box-warn">
+          <span class="box-label">⚠️ NEW Section — 20 Marks</span>
+          This section did not exist in earlier papers. It is a complex scenario that requires integrating knowledge from multiple chapters. Study this carefully as it is likely to appear in your exam.
+        </div>
+        <p><em>Scenario: Water treatment facility. External vendor has remote access (VPN) to PLC and HMI systems. Attacker exploits weak VPN credentials, compromises EWS on industrial network. Goal: catastrophic Loss of Control (LoC) in water pumps.</em></p>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q1(a): THREE capabilities gained from compromised EWS [6 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <div class="answer-scheme">
+              <h5>📝 Full Answer (2 marks each)</h5>
+              <p><strong>1. PLC Programming Logic and Configuration Access (2 marks):</strong> The EWS contains specialized tools (e.g., Siemens Step7, Rockwell Studio 5000) that are used to directly program and configure PLCs. By accessing the EWS, the attacker can review the existing PLC ladder logic to understand exactly how the water pump control system operates — what sensor thresholds trigger pump activation, what safety limits exist, and what commands control pump speed. This intelligence is essential for crafting a MoC attack that causes LoC without triggering obvious alarms.</p>
+              <p><strong>2. Role-Based Access Control Configuration (2 marks):</strong> The EWS has the capability to configure role-based access control for the ICS. The attacker can use this to: create new administrative accounts for persistent access; modify existing account permissions to elevate privileges; or disable access controls for other operators so that legitimate operators are locked out (contributing to LoC). This gives the attacker sustained, privileged access even after the initial vector is discovered and blocked.</p>
+              <p><strong>3. Sensitive ICS Documentation and Network Topology (2 marks):</strong> The EWS contains sensitive documentation about the ICS design, configuration, and plant operation — including network diagrams, device IP addresses, safety system configurations, and operational procedures. This information allows the attacker to identify all connected PLCs and their functions, plan which devices to target for maximum impact (e.g., the specific PLC controlling water distribution pumps), and understand safety systems that might interrupt the attack.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q1(b): How MoC achieves catastrophic LoC without destroying hardware [4 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <div class="answer-scheme">
+              <h5>📝 Full Answer</h5>
+              <p>Manipulation of Control (MoC) involves overriding or intercepting and changing legitimate operator commands, applying inappropriate control sequences that introduce defects and catastrophic reactions within the production process. The I/O control interface and IP communication interface remain physically intact.</p>
+              <p><strong>How the attacker achieves LoC through MoC in the water facility:</strong></p>
+              <p>The attacker, using the PLC programming access gained from the EWS, reprograms the PLC logic for the water pumps. They insert malicious logic that: (1) Responds to normal operator commands with seemingly normal acknowledgment signals (the operator sees the command was accepted); (2) But executes a different action internally — for example, running pumps at dangerous speeds, closing/opening valves in dangerous sequences, or disabling pump safety interlocks; (3) Simultaneously sends falsified status data back to the HMI showing that the pumps are operating normally (combining MoC with MoV).</p>
+              <p>When operators attempt to regain control by issuing shutdown or adjustment commands, the malicious PLC logic overrides them or acknowledges them without executing them. Eventually, the pump system reaches a state where: operators cannot override the PLC behavior (LoC is achieved), the system may experience physical damage from abnormal operation (cavitation, overheating, over-pressurization), or the water treatment process fails, affecting public water safety.</p>
+              <p>This achieves catastrophic LoC without destroying hardware because the hardware (pumps, PLCs) are intact — it is the control logic that has been subverted, rendering hardware control impossible through normal means.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="collapsible">
+          <div class="collapsible-header" onclick="toggleCollapsible(this)">
+            Q1(c): Defense in Depth Strategy with Zones & Conduits [10 marks] <span class="arrow">▼</span>
+          </div>
+          <div class="collapsible-body">
+            <div class="answer-scheme">
+              <h5>📝 Full Answer — Structure Your Answer as a Strategy Document</h5>
+              <p><strong>Zone Architecture (4 marks):</strong></p>
+              <p>Zone 1 — Enterprise Zone: Business systems, corporate email, finance systems. No direct connection to ICS.</p>
+              <p>Zone 2 — DMZ (Demilitarized Zone): Data exchange buffer between enterprise and ICS. Historian server for data access. Vendor remote access gateway. Email relay for alerts.</p>
+              <p>Zone 3 — Supervisory Zone: SCADA servers, HMI servers, data concentration. Limited access — only from DMZ via controlled conduit.</p>
+              <p>Zone 4 — Control Zone: Engineering Workstations (EWS), PLCs, RTUs, field devices. Highest security. No direct internet access. Access only from Supervisory Zone via strict conduit.</p>
+              <p>Zone 5 — Remote Vendor Access Zone: Isolated network segment specifically for vendor remote access. Strictly limited connectivity — only to specific assets the vendor needs to access.</p>
+              <p><strong>Conduit Controls — Remote Access Conduit (mitigating VPN vulnerability) [4 marks]:</strong></p>
+              <p>The remote access conduit connects Vendor Zone → DMZ → Supervisory Zone (never directly to Control Zone):</p>
+              <ul>
+                <li>Multi-Factor Authentication (MFA) on all VPN accounts — compromised password alone is insufficient</li>
+                <li>Privileged Access Workstation (PAW) — vendor must use a dedicated, locked-down device for ICS access</li>
+                <li>Just-In-Time (JIT) access — vendor accounts are activated only for the duration of the maintenance window, deactivated after</li>
+                <li>Session recording and monitoring — all vendor sessions are recorded and monitored in real-time by security staff</li>
+                <li>Protocol inspection at conduit — only specific ICS protocols (e.g., RDP to specific HMI, Step7 to specific PLC) allowed; all other traffic blocked</li>
+                <li>Network segregation — vendor cannot access the EWS directly; they access only a jump server in the DMZ that has limited connectivity to specific ICS assets they need</li>
+              </ul>
+              <p><strong>Containing EWS compromise [2 marks]:</strong></p>
+              <p>If EWS is compromised despite all controls: EWS is isolated in a micro-segment within the Control Zone. Outbound connections from EWS are strictly controlled — it cannot initiate new connections (only respond to authenticated polling). PLC logic integrity monitoring — any change to PLC programming triggers an alert and requires dual-approval. EWS activity logs are forwarded in real-time to a Security Operations Center (SOC) outside the ICS network, so even if logs on the EWS are tampered with, the SOC retains copies.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXAM PATTERN ANALYSIS -->
+    <div class="section" id="pattern" data-importance="vc">
+      <div class="section-header">
+        <span class="section-num">📊</span>
+        <h2>Exam Pattern Analysis</h2>
+        <span class="importance-tag tag-vc">VERY CRITICAL</span>
+      </div>
+
+      <div class="card">
+        <h3>Exam Structure Comparison</h3>
+        <table>
+          <tr><th>Aspect</th><th>SEM 2, 2023/24</th><th>SEM 1, 2024/25</th><th>SEM 1, 2025/26</th></tr>
+          <tr><td>Sections</td><td>A + B</td><td>A + B</td><td><strong>A + B + C</strong></td></tr>
+          <tr><td>Section A (MCQ)</td><td>20Q, 20 marks</td><td>20Q, 20 marks</td><td>20Q, 20 marks</td></tr>
+          <tr><td>Section B (Structured)</td><td>7Q, 80 marks</td><td>7Q, 80 marks</td><td>6Q, 60 marks</td></tr>
+          <tr><td>Section C (Scenario)</td><td>—</td><td>—</td><td>1Q, 20 marks</td></tr>
+          <tr><td>Total</td><td>100 marks</td><td>100 marks</td><td>100 marks</td></tr>
+          <tr><td>Duration</td><td>2.5 hours</td><td>2.5 hours</td><td>2.5 hours</td></tr>
+        </table>
+        <div class="box box-warn">
+          <span class="box-label">⚠️ Trend Alert</span>
+          The newest exam (2025/26) introduced Section C — a 20-mark scenario-based question. This is a significant format change. Expect your upcoming final exam to also have Section C. You MUST practice scenario-based answers.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Topic Frequency Analysis</h3>
+        <table>
+          <tr><th>Topic</th><th>In Past Papers?</th><th>In Slides?</th><th>Assignment Link?</th><th>Importance</th><th>Notes</th></tr>
+          <tr class="pred-high"><td>ICS Definition, Tasks, Components</td><td>✅ All 3 papers (Q1)</td><td>✅ Ch1</td><td>Assg 1</td><td>VERY CRITICAL</td><td>Asked EVERY paper as Q1 — guaranteed to appear</td></tr>
+          <tr class="pred-high"><td>Direct vs Indirect Threats</td><td>✅ All 3 papers</td><td>✅ Ch3</td><td>—</td><td>VERY CRITICAL</td><td>Repeated verbatim; 4 marks</td></tr>
+          <tr class="pred-high"><td>BYOD/Social Media Scenarios</td><td>✅ All 3 papers (Q6)</td><td>✅ Ch3</td><td>—</td><td>VERY CRITICAL</td><td>Q6 always uses Jonny/Linda or similar scenario</td></tr>
+          <tr class="pred-high"><td>APT Malware Scenario (USB)</td><td>✅ All 3 papers (Q7/last Q)</td><td>✅ Ch3,5</td><td>Assg 1,3</td><td>VERY CRITICAL</td><td>uSBRootKit/uSBKiller repeated; Defense-in-Depth required</td></tr>
+          <tr class="pred-high"><td>Risk Assessment 6 Steps</td><td>✅ All 3 papers (Q5)</td><td>✅ Ch6</td><td>Group Assg</td><td>VERY CRITICAL</td><td>All 6 steps required with explanation</td></tr>
+          <tr class="pred-high"><td>6 Functional Vulnerabilities (DoV/LoV/MoV/DoC/LoC/MoC)</td><td>✅ All 3 papers</td><td>✅ Ch4</td><td>Assg 3</td><td>VERY CRITICAL</td><td>MCQ and structured; LoV vs MoV differentiation asked in 2526</td></tr>
+          <tr class="pred-high"><td>CIA Triad Priority (ICS vs IT)</td><td>✅ All 3 papers (MCQ)</td><td>✅ Ch1,4</td><td>—</td><td>VERY CRITICAL</td><td>ICS = Availability first; IT = Confidentiality first</td></tr>
+          <tr class="pred-high"><td>Defense in Depth</td><td>✅ 2526 paper (Q6, Section C)</td><td>✅ Ch7</td><td>Assg 3, Group</td><td>VERY CRITICAL</td><td>NEW heavy topic — 30 marks in 2526; Zones and Conduits are KEY</td></tr>
+          <tr class="pred-med"><td>3 Vulnerability Categories (Business/Op/Tech)</td><td>✅ 2324, 2526</td><td>✅ Ch4</td><td>Assg 3</td><td>IMPORTANT</td><td>Mapping to Stuxnet is a key lecture activity</td></tr>
+          <tr class="pred-med"><td>IT vs OT Comparison</td><td>✅ All papers (MCQ)</td><td>✅ Ch1</td><td>—</td><td>IMPORTANT</td><td>Frequently tested in MCQ; table format useful</td></tr>
+          <tr class="pred-med"><td>Security Test Types (Audit/Vuln/Pen/Physical)</td><td>✅ 2526, 2324</td><td>✅ Ch6</td><td>—</td><td>IMPORTANT</td><td>Pen test vs Security Audit asked in 2526 Q6(c)</td></tr>
+          <tr class="pred-med"><td>Insiders vs Outsiders</td><td>✅ 2526 (Q4)</td><td>✅ Ch3</td><td>—</td><td>IMPORTANT</td><td>White box = insider perspective; appeared in 2526 for first time</td></tr>
+          <tr class="pred-med"><td>Malware Hiding Tactics</td><td>✅ 2526 (Q4c)</td><td>✅ Ch3</td><td>—</td><td>IMPORTANT</td><td>3 tactics; new in 2526</td></tr>
+          <tr class="pred-med"><td>Data States (At Rest/In Use/In Motion)</td><td>✅ 2425, 2526</td><td>✅ Ch4</td><td>—</td><td>IMPORTANT</td><td>Safeguards for each state required</td></tr>
+          <tr class="pred-low"><td>ICS History & Convergence</td><td>MCQ only</td><td>✅ Ch2</td><td>—</td><td>BASIC</td><td>Mostly MCQ; convergence concept important</td></tr>
+          <tr class="pred-low"><td>Industrial Protocols & Security Through Obscurity</td><td>✅ MCQ</td><td>✅ Ch1</td><td>—</td><td>BASIC</td><td>MCQ topic; key phrase "not designed for public networks"</td></tr>
+          <tr class="pred-low"><td>Bare Metal Reload</td><td>✅ MCQ (2324)</td><td>✅ Ch5</td><td>—</td><td>BASIC</td><td>MCQ: "completely erased and reset as new"</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Command Word Patterns in Exam Questions</h3>
+        <table>
+          <tr><th>Command Word</th><th>What It Expects</th><th>Marks Typically</th></tr>
+          <tr><td><strong>Define</strong></td><td>Precise definition, often 1–2 sentences</td><td>1–2 marks</td></tr>
+          <tr><td><strong>List / Identify / Name</strong></td><td>Bullet points, names only (minimal explanation)</td><td>1–3 marks</td></tr>
+          <tr><td><strong>Explain / Describe</strong></td><td>Mechanism/how it works, with some detail</td><td>2–4 marks per item</td></tr>
+          <tr><td><strong>Differentiate / State the difference</strong></td><td>Two-column or side-by-side comparison; must address BOTH sides</td><td>2–6 marks</td></tr>
+          <tr><td><strong>Analyse / Evaluate</strong></td><td>Go deeper — not just what/how but WHY and impact</td><td>4–6 marks</td></tr>
+          <tr><td><strong>Propose / Formulate / Recommend</strong></td><td>Suggest with justification; include what and why</td><td>4–10 marks</td></tr>
+          <tr><td><strong>Compare</strong></td><td>Side-by-side with similarities AND differences</td><td>4–6 marks</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- PREDICTION -->
+    <div class="section" id="prediction" data-importance="vc">
+      <div class="section-header">
+        <span class="section-num">🎯</span>
+        <h2>Final Exam Prediction</h2>
+        <span class="importance-tag tag-vc">VERY CRITICAL</span>
+      </div>
+
+      <div class="card">
+        <h3>High Probability Topics (Almost Certain to Appear)</h3>
+        <div class="box box-warn">
+          <span class="box-label">🔴 Very Critical — Study These First</span>
+        </div>
+        <ol>
+          <li><strong>Q1 (Guaranteed):</strong> ICS definition, 3 general tasks, 3 ICS components with explanation — same as every previous year</li>
+          <li><strong>Q2:</strong> Direct vs Indirect threats, Threat motivations, Security policy for ICS — repeated every year</li>
+          <li><strong>Q5:</strong> Risk assessment (6 steps), Risk vs Security testing comparison — every year</li>
+          <li><strong>Q6:</strong> Defense in Depth + Zones/Conduits — heavily introduced in 2526; MUST know this</li>
+          <li><strong>Last Q/Section C:</strong> APT/USB malware scenario + Defense in Depth document — every year; expect water treatment, power grid, or rail system</li>
+          <li><strong>BYOD/Social Media Scenario:</strong> Q6 always tests Jonny-type (social media identity sharing) and Linda-type (BYOD) scenarios</li>
+          <li><strong>MCQ:</strong> CIA triad (Availability first in ICS), Data in motion (highest priority), Business/Operational/Technical controls, MoV definition, Security Through Obscurity, Penetration Testing (negatively impacts system), Bare Metal Reload</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3>Medium Probability Topics</h3>
+        <div class="box box-pattern">
+          <span class="box-label">🟡 Important — Study After High Priority</span>
+        </div>
+        <ol>
+          <li>3 Vulnerability Categories (Business/Operational/Technical) with examples — appeared in 2324 and 2526</li>
+          <li>IT vs OT detailed comparison — MCQ and possibly structured</li>
+          <li>Functional vulnerability types: LoV vs MoV differentiation (appeared in 2526 as new structured question)</li>
+          <li>Malware hiding tactics (3 methods) — new in 2526; likely to repeat</li>
+          <li>Security Test types with comparison: Pen Test vs Security Audit</li>
+          <li>Insiders vs Outsiders + White box vs Black box — new structured in 2526</li>
+          <li>Compromising HMI and EWS — appeared in Section C 2526; likely to appear again</li>
+          <li>Green network stacks definition (MCQ)</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3>Predicted Essay / Scenario Questions</h3>
+        <h4>Most Likely Section C Scenarios:</h4>
+        <ul>
+          <li>Power grid attack (energy sector) — water treatment was used in 2526; power grid or gas pipeline may come next</li>
+          <li>Rail system ICS compromise — Linda's KTM scenario scaled up</li>
+          <li>Hospital/healthcare ICS compromise — emerging sector in CI</li>
+          <li>Ransomware attack on ICS (Colonial Pipeline style) — highly relevant</li>
+        </ul>
+
+        <h4>Predicted Structured Questions:</h4>
+        <ul>
+          <li>Explain how Manipulation of Control (MoC) can cause physical damage without exploiting a technical vulnerability [4–6 marks]</li>
+          <li>A vendor has remote access to your ICS. What security controls would you implement? [6–10 marks]</li>
+          <li>Explain why the air gap is no longer sufficient as a security measure for ICS [4 marks]</li>
+          <li>Analyse the Stuxnet attack and explain which Defense in Depth layer, if properly implemented, would have stopped it earliest [6 marks]</li>
+          <li>Explain the BYOD challenge in securing ICS networks, and propose a policy with 3 components [6 marks]</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- CHEAT SHEET -->
+    <div class="section" id="cheatsheet" data-importance="imp">
+      <div class="section-header">
+        <span class="section-num">🗒️</span>
+        <h2>Printable Cheat Sheet</h2>
+        <span class="importance-tag tag-imp">IMPORTANT</span>
+      </div>
+
+      <div class="cheat-grid">
+        <div class="cheat-card">
+          <h4>CI Definition</h4>
+          <p>Assets vital to the nation whose incapacity would devastate: (1) Public health & safety (2) Economic strength (3) National defense (4) National image (5) Government function</p>
+        </div>
+        <div class="cheat-card">
+          <h4>ICS 3 Tasks</h4>
+          <ul>
+            <li>Collect data from endpoint devices</li>
+            <li>Send to HMI to be displayed</li>
+            <li>Apply auto/semi-auto/manual changes to endpoints</li>
+          </ul>
+        </div>
+        <div class="cheat-card">
+          <h4>ICS Components</h4>
+          <ul>
+            <li>PLC — automates industrial functions</li>
+            <li>RTU — collects + transmits field data</li>
+            <li>IED — power system controller (substations)</li>
+            <li>HMI — operator viewing/control interface</li>
+            <li>EWS — programs PLCs, configures access</li>
+            <li>Data Historian — stores historical tags</li>
+          </ul>
+        </div>
+        <div class="cheat-card">
+          <h4>CIA Priority</h4>
+          <p>IT: Confidentiality → Integrity → Availability</p>
+          <p>ICS/OT: <strong>Availability → Integrity → Confidentiality</strong></p>
+        </div>
+        <div class="cheat-card">
+          <h4>Data States</h4>
+          <ul>
+            <li>At Rest: stored, non-volatile, low priority</li>
+            <li>In Use: volatile memory, displayed on screen</li>
+            <li>In Motion: packets traveling network — <strong>HIGHEST ICS priority</strong></li>
+          </ul>
+        </div>
+        <div class="cheat-card">
+          <h4>6 Functional Vulnerabilities</h4>
+          <ul>
+            <li>DoV — temp IP failure, can't see</li>
+            <li>LoV — sustained IP failure, can't see</li>
+            <li>MoV — forged data, sees wrong info</li>
+            <li>DoC — temp can't control</li>
+            <li>LoC — sustained can't control</li>
+            <li>MoC — attacker overrides commands</li>
+          </ul>
+        </div>
+        <div class="cheat-card">
+          <h4>3 Vulnerability Categories</h4>
+          <ul>
+            <li>Business: ERM, policies, investment, management</li>
+            <li>Operational: segregation, admin sharing, remote access, wireless, hardening, incident response</li>
+            <li>Technical: legacy protocols, green stacks, limited HW, DoS, MITM, fuzzing</li>
+          </ul>
+        </div>
+        <div class="cheat-card">
+          <h4>6 Risk Assessment Steps</h4>
+          <ol>
+            <li>System Characterization</li>
+            <li>Threat Identification</li>
+            <li>Vulnerability Identification (CVSS)</li>
+            <li>Risk Classification (Impact × Likelihood)</li>
+            <li>Risk Ranking</li>
+            <li>Control Recommendation</li>
+          </ol>
+        </div>
+        <div class="cheat-card">
+          <h4>Security Test Types</h4>
+          <ul>
+            <li>Audit — against policies, doesn't find new vulns</li>
+            <li>Vulnerability Assessment — comprehensive, theoretical or physical</li>
+            <li>Pen Test — real attack, IMPACTS system, best proof for management</li>
+            <li>Physical Test — online (risky) or offline (safe)</li>
+          </ul>
+        </div>
+        <div class="cheat-card">
+          <h4>Defense in Depth — 7 Layers</h4>
+          <ol>
+            <li>Policies, Procedures, Awareness</li>
+            <li>Physical Security</li>
+            <li>Perimeter Security</li>
+            <li>Internal Network Security</li>
+            <li>Host Security</li>
+            <li>Application Security</li>
+            <li>Data Security (Core)</li>
+          </ol>
+        </div>
+        <div class="cheat-card">
+          <h4>APT vs Weaponized Malware</h4>
+          <p>APT: simple initial infection, communicates to C&C, doesn't disrupt network</p>
+          <p>Weaponized: sophisticated infection, operates in isolation, may disrupt (e.g. Stuxnet)</p>
+        </div>
+        <div class="cheat-card">
+          <h4>Key MCQ Answers</h4>
+          <ul>
+            <li>MoV = forged data to operators</li>
+            <li>MITM easy in ICS = lack of encryption/auth</li>
+            <li>Security Through Obscurity = proprietary protocol</li>
+            <li>Pen Testing = negatively impacts system</li>
+            <li>Bare metal reload = completely erased + reset</li>
+            <li>Green network stacks = immature protocols</li>
+            <li>Conduit = flow control between zones</li>
+            <li>Nmap = noisy, dangerous for ICS</li>
+          </ul>
+        </div>
+        <div class="cheat-card">
+          <h4>Infection Response — 3 Steps</h4>
+          <ol>
+            <li>ISOLATE (don't clean yet — dormant layers may exist)</li>
+            <li>INVESTIGATE (forensics: logs, traffic, memory, sandboxing)</li>
+            <li>RECOVER (bare metal reload — complete reimaging)</li>
+          </ol>
+        </div>
+        <div class="cheat-card">
+          <h4>BYOD Risks</h4>
+          <ul>
+            <li>Same device at home & work → malware from home</li>
+            <li>Mobile data bypasses corporate firewall</li>
+            <li>Switching to corporate WiFi = infection enters network</li>
+          </ul>
+        </div>
+        <div class="cheat-card">
+          <h4>Stuxnet Key Facts</h4>
+          <ul>
+            <li>2010, targeted Iran nuclear centrifuges</li>
+            <li>Spread via USB (bypassed air gap)</li>
+            <li>4 zero-day Windows exploits</li>
+            <li>Targeted Siemens S7-315/317 PLCs</li>
+            <li>Used MoV (falsified centrifuge speed)</li>
+            <li>Used MoC (physically changed speeds)</li>
+            <li>First known cyber-physical weapon</li>
+          </ul>
+        </div>
+        <div class="cheat-card">
+          <h4>Why IT Security ≠ ICS Security</h4>
+          <ul>
+            <li>Can't easily patch old systems</li>
+            <li>Downtime unacceptable</li>
+            <li>No dev/test environments</li>
+            <li>Can't restrict operator access (safety)</li>
+            <li>Can't block all protocols (production)</li>
+            <li>Component lifetime 15–20 years (vs 3–5 IT)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- KEY DEFINITIONS -->
+    <div class="section" id="keywords" data-importance="imp">
+      <div class="section-header">
+        <span class="section-num">🔑</span>
+        <h2>Key Definitions — Quick Reference</h2>
+        <span class="importance-tag tag-imp">IMPORTANT</span>
+      </div>
+
+      <div class="card">
+        <table>
+          <tr><th>Term</th><th>Definition</th></tr>
+          <tr><td>Critical Infrastructure</td><td>Assets vital to the nation whose incapacity or destruction would devastate public health, economy, national security, national image, or government function.</td></tr>
+          <tr><td>ICS</td><td>Industrial Control System — a broad class of automation systems used for control and monitoring in manufacturing and industrial facilities.</td></tr>
+          <tr><td>SCADA</td><td>Supervisory Control and Data Acquisition — supervises and controls industrial processes remotely.</td></tr>
+          <tr><td>PLC</td><td>Programmable Logic Controller — specialized industrial computer that automates manufacturing functions.</td></tr>
+          <tr><td>RTU</td><td>Remote Terminal Unit — collects field device data and transmits to central station; relays control signals back to field devices.</td></tr>
+          <tr><td>HMI</td><td>Human-Machine Interface — device for operators to view ICS data and issue control commands.</td></tr>
+          <tr><td>Air Gap</td><td>Physical separation between industrial network and external/business networks with no electronic system crossing the gap.</td></tr>
+          <tr><td>Threat</td><td>A possible danger that might exploit a vulnerability to breach security and cause harm.</td></tr>
+          <tr><td>Vulnerability</td><td>A weakness in a system that can be exploited by a threat to cause harm.</td></tr>
+          <tr><td>Risk</td><td>The potential that a given threat will exploit vulnerabilities of an asset and thereby cause harm to the organization.</td></tr>
+          <tr><td>APT</td><td>Advanced Persistent Threat — malware that is difficult to detect and can continue operating even if detected and removed or the system is rebooted.</td></tr>
+          <tr><td>Weaponized Malware</td><td>Malware that exhibits a certain degree of sophistication and shows a clear motive and intent (e.g., targeted sabotage).</td></tr>
+          <tr><td>Security Through Obscurity</td><td>The belief that keeping a protocol/system secret provides security because nobody knows how to exploit it. NOT effective in modern day.</td></tr>
+          <tr><td>Defense in Depth</td><td>The coordinated use of multiple security countermeasures to protect assets; a layered security approach.</td></tr>
+          <tr><td>Zone</td><td>A logical grouping of assets that share similar security requirements in an ICS network.</td></tr>
+          <tr><td>Conduit</td><td>A communication flow arrangement that groups communications into a logical flow between security zones; controls traffic between zones.</td></tr>
+          <tr><td>CVSS</td><td>Common Vulnerability Scoring System — a tool for ranking and prioritizing vulnerabilities by severity.</td></tr>
+          <tr><td>Bare Metal Reload</td><td>Complete erasure and reinstallation of a device to a bare inoperable state; removes all firmware and software including malware.</td></tr>
+          <tr><td>Pivoting</td><td>Malware propagating from one infected system to other systems in the network to reach the intended target.</td></tr>
+          <tr><td>BYOD</td><td>Bring Your Own Device — policy allowing employees to use personal devices for work; introduces security risks.</td></tr>
+          <tr><td>EWS</td><td>Engineering Workstation — has specialized tools to configure and program PLCs, IEDs, SIS; contains sensitive ICS documentation.</td></tr>
+          <tr><td>MoV</td><td>Manipulation of View — attacker sends forged data to operators, who see false system state without impact on the communication interface itself.</td></tr>
+          <tr><td>MoC</td><td>Manipulation of Control — attacker overrides operator commands with inappropriate control sequences, potentially causing catastrophic results.</td></tr>
+          <tr><td>LoC</td><td>Loss of Control — sustained inability for operators to issue commands to ICS assets; requires local intervention to restore.</td></tr>
+          <tr><td>IT</td><td>Information Technology — computing for information processing (software, hardware, communications). CIA priority: Confidentiality first.</td></tr>
+          <tr><td>OT</td><td>Operational Technology — computing for industrial operations, monitoring/control of physical devices. CIA priority: Availability first.</td></tr>
+          <tr><td>Green Network Stacks</td><td>Immature and poorly tested network protocols and IP stacks in ICS devices; created security vulnerabilities when vendors rushed products to IP market.</td></tr>
+          <tr><td>White Box Testing</td><td>Security testing where the tester has complete information about the ICS (topology, assets, configuration). Reflects insider knowledge. Preferred for ICS.</td></tr>
+          <tr><td>Black Box Testing</td><td>Security testing with minimal information (e.g., only IP address range). Reflects outsider knowledge.</td></tr>
+        </table>
+      </div>
+    </div>
+
+  </div> <!-- /content -->
+</div> <!-- /main -->
+
+<script>
+// Collapsible
+function toggleCollapsible(header) {
+  header.classList.toggle('open');
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+// Navigation active state
+function setActive(el) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+  if (window.innerWidth <= 768) {
+    document.getElementById('sidebar').classList.remove('open');
+  }
+}
+
+// Filter sections
+function filterSections(level, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
+  btn.classList.add('active-filter');
+  const sections = document.querySelectorAll('.section');
+  sections.forEach(s => {
+    if (level === 'all') {
+      s.classList.remove('hidden');
+    } else {
+      const imp = s.getAttribute('data-importance') || '';
+      s.classList.toggle('hidden', imp !== level);
+    }
+  });
+}
+
+// Search
+function handleSearch(query) {
+  if (!query.trim()) {
+    clearHighlights();
+    return;
+  }
+  clearHighlights();
+  const q = query.toLowerCase().trim();
+  const sections = document.querySelectorAll('.section');
+  sections.forEach(s => {
+    const text = s.innerText.toLowerCase();
+    s.classList.toggle('hidden', !text.includes(q));
+  });
+}
+
+function clearHighlights() {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('hidden'));
+}
+
+// Smooth scroll for nav
+document.querySelectorAll('a.nav-item').forEach(link => {
+  link.addEventListener('click', function(e) {
+    const href = this.getAttribute('href');
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      const target = document.querySelector(href);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  });
+});
+
+// Auto-open all collapsibles on print
+window.addEventListener('beforeprint', () => {
+  document.querySelectorAll('.collapsible-body').forEach(b => b.classList.add('open'));
+});
+
+// Keyboard shortcut for search
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+    e.preventDefault();
+    document.getElementById('search-bar').focus();
+  }
+});
+</script>
+</body>
+</html>

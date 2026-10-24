@@ -1,0 +1,74 @@
+{
+  "recovered": [
+    {
+      "original": "2024/12/23/Cryptohack/index.html",
+      "source": "source/_posts/Cryptohack.md",
+      "title": "CryptoHack",
+      "permalink": "2024/12/23/Cryptohack/",
+      "codeBlocks": 9
+    },
+    {
+      "original": "2024/12/30/wargamesMY-2024/index.html",
+      "source": "source/_posts/wargamesMY-2024.md",
+      "title": "WargamesMY 2024",
+      "permalink": "2024/12/30/wargamesMY-2024/",
+      "codeBlocks": 15
+    },
+    {
+      "original": "2025/03/05/ApoorvCTF/index.html",
+      "source": "source/_posts/ApoorvCTF.md",
+      "title": "ApoorvCTF",
+      "permalink": "2025/03/05/ApoorvCTF/",
+      "codeBlocks": 2
+    },
+    {
+      "original": "2025/05/01/Nowruz-1404/index.html",
+      "source": "source/_posts/Nowruz-1404.md",
+      "title": "Nowruz-1404",
+      "permalink": "2025/05/01/Nowruz-1404/",
+      "codeBlocks": 3
+    },
+    {
+      "original": "2025/10/26/pwn1-deadface2025/index.html",
+      "source": "source/_posts/pwn1-deadface2025.md",
+      "title": "PWN - ROP (Deadface CTF 2025)",
+      "permalink": "2025/10/26/pwn1-deadface2025/",
+      "codeBlocks": 11
+    },
+    {
+      "original": "about/index.html",
+      "source": "source/about/index.md",
+      "title": "About Me",
+      "permalink": "about/",
+      "codeBlocks": 1
+    }
+  ],
+  "copied": [
+    "cover/apoorvctf.png",
+    "cover/cryptohack.png",
+    "cover/deadface2025.png",
+    "cover/nowruz.png",
+    "cover/wgmy24.png",
+    "css/var.css",
+    "favicon.ico",
+    "finals/index.html",
+    "finals/sem6/cis.html",
+    "finals/sem6/crypto.html",
+    "finals/sem6/crypto2.html",
+    "finals/sem6/ethics-answers.html",
+    "finals/sem6/ethics.html",
+    "img/404.jpg",
+    "img/butterfly-icon.png",
+    "img/error-page.png",
+    "img/favicon.ico",
+    "img/friend_404.gif",
+    "notes/cf/chapt1-3.html",
+    "notes/index.html",
+    "notes/ism/chapt1-2.html",
+    "notes/netsec/chapt1-3.html",
+    "notes/softsec/chapt1-2.html"
+  ],
+  "absent": [
+    "notes/df/chapt1-3.html"
+  ]
+}
