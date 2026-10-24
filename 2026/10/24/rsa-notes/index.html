@@ -1,0 +1,1044 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>rsa-notes | ukyovis' blog</title><meta name="author" content="Syihab Dhiaulhaq"><meta name="copyright" content="Syihab Dhiaulhaq"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="Crypto CTF field notesA practical reference for recognizing a weakness, choosing an attack, and checking the result. Prepared 24 October 2026. All numeric examples are deliberately small or constructe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rsa-notes">
+<meta property="og:url" content="https://syiehab.github.io/2026/10/24/rsa-notes/">
+<meta property="og:site_name" content="ukyovis&#39; blog">
+<meta property="og:description" content="Crypto CTF field notesA practical reference for recognizing a weakness, choosing an attack, and checking the result. Prepared 24 October 2026. All numeric examples are deliberately small or constructe">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.pinimg.com/736x/f4/04/44/f4044494aeacb1a2a428a597e072bdad.jpg">
+<meta property="article:published_time" content="2026-10-24T05:33:26.000Z">
+<meta property="article:modified_time" content="2026-10-24T05:33:26.000Z">
+<meta property="article:author" content="Syihab Dhiaulhaq">
+<meta property="article:tag" content="Crypto">
+<meta property="article:tag" content="RSA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.pinimg.com/736x/f4/04/44/f4044494aeacb1a2a428a597e072bdad.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "rsa-notes",
+  "url": "https://syiehab.github.io/2026/10/24/rsa-notes/",
+  "image": "https://i.pinimg.com/736x/f4/04/44/f4044494aeacb1a2a428a597e072bdad.jpg",
+  "datePublished": "2026-10-24T05:33:26.000Z",
+  "dateModified": "2026-10-24T05:33:26.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Syihab Dhiaulhaq",
+      "url": "https://syiehab.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="https://syiehab.github.io/2026/10/24/rsa-notes/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'rsa-notes',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.pinimg.com/736x/f4/04/44/f4044494aeacb1a2a428a597e072bdad.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/notes/"><i class="fa-fw fas fa-book-open"></i><span> Notes</span></a></div><div class="menus_item"><a class="site-page" href="/finals/"><i class="fa-fw fas fa-graduation-cap"></i><span> Finals</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://wallpapercave.com/wp/wp8908552.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">ukyovis' blog</span></a><a class="nav-page-title" href="/"><span class="site-name">rsa-notes</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/notes/"><i class="fa-fw fas fa-book-open"></i><span> Notes</span></a></div><div class="menus_item"><a class="site-page" href="/finals/"><i class="fa-fw fas fa-graduation-cap"></i><span> Finals</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">rsa-notes</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-10-24T05:33:26.000Z" title="Created 2026-10-24 13:33:26">2026-10-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-10-24T05:33:26.000Z" title="Updated 2026-10-24 13:33:26">2026-10-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Notes/">Notes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Crypto-CTF-field-notes"><a href="#Crypto-CTF-field-notes" class="headerlink" title="Crypto CTF field notes"></a>Crypto CTF field notes</h1><p>A practical reference for recognizing a weakness, choosing an attack, and checking the result. Prepared 24 October 2026. All numeric examples are deliberately small or constructed for practice. Commands assume Bash in Linux&#x2F;WSL and that your current directory is <code>crypto-ctf-handbook</code>, unless a block says otherwise.</p>
+<p>The companion <code>index.html</code> works offline and includes full-text search, section filters, copy buttons, bookmarks, a BigInt RSA calculator, and a brute-force work estimator. The scripts are local helpers: Python code is run in your terminal, not executed by the HTML page.</p>
+<h2 id="0-Start-here-a-five-minute-triage"><a href="#0-Start-here-a-five-minute-triage" class="headerlink" title="0. Start here: a five-minute triage"></a>0. Start here: a five-minute triage</h2><ol>
+<li>Read the encryption code before trying tools. Identify the primitive, mode, padding, RNG, integer&#x2F;byte conversion, and which values you control or observe.</li>
+<li>Save inputs unchanged. Distinguish hex text, Base64 text, decimal integers, and raw bytes. Decode one layer at a time.</li>
+<li>Write down knowns: RSA <code>(n,e,c)</code>, multiple keys, leaked bits, related messages, an oracle; AES <code>(mode,IV/nonce,ciphertext,tag)</code>; signature <code>(r,s,z)</code> pairs.</li>
+<li>Try cheap structural checks first: bit lengths, GCDs, exact roots, repeated blocks, nonce reuse, small candidate spaces.</li>
+<li>Verify every recovery. For RSA check <code>pow(m,e,n)==c</code>; for factors check <code>p*q==n</code>; for keys&#x2F;signatures use an independent validation, not only a flag-looking string.</li>
+</ol>
+<h3 id="Recognition-table"><a href="#Recognition-table" class="headerlink" title="Recognition table"></a>Recognition table</h3><table>
+<thead>
+<tr>
+<th>Clue in the challenge</th>
+<th>First thing to try</th>
+<th>Required extra condition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Many RSA moduli</td>
+<td>Pairwise GCD</td>
+<td>A prime was reused</td>
+</tr>
+<tr>
+<td><code>q = next_prime(p)</code></td>
+<td>Fermat</td>
+<td>The gap is small enough for your iteration budget</td>
+</tr>
+<tr>
+<td><code>e = 3</code>, short message</td>
+<td>Integer cube root, then <code>c+k*n</code></td>
+<td>No randomized padding; <code>k</code> is zero or small</td>
+</tr>
+<tr>
+<td>Same message, several recipients</td>
+<td>Håstad broadcast</td>
+<td>Same exponent, correct ciphertext&#x2F;key pairing, enough total modulus size</td>
+</tr>
+<tr>
+<td>Same <code>n</code>, different <code>e</code></td>
+<td>Common modulus</td>
+<td>Same encoded message; coprime exponents for direct recovery</td>
+</tr>
+<tr>
+<td><code>d</code> generated with few bits</td>
+<td>Wiener, then Boneh–Durfee</td>
+<td>Small private exponent, not merely a large public exponent</td>
+</tr>
+<tr>
+<td>Known prefix &#x2F; part of a prime</td>
+<td>Coppersmith</td>
+<td>A suitable polynomial and a genuinely small unknown</td>
+</tr>
+<tr>
+<td>Decrypt endpoint leaks one bit</td>
+<td>Parity or threshold oracle</td>
+<td>Repeatable adaptive queries on chosen ciphertexts</td>
+</tr>
+<tr>
+<td>Two messages differ by known affine rule</td>
+<td>Franklin–Reiter</td>
+<td>Same modulus&#x2F;exponent and known relation</td>
+</tr>
+<tr>
+<td>Same AES-CTR nonce&#x2F;key</td>
+<td>XOR &#x2F; crib dragging</td>
+<td>Same keystream positions</td>
+</tr>
+<tr>
+<td>Repeated 16-byte ciphertext blocks</td>
+<td>ECB investigation</td>
+<td>Aligned equal plaintext blocks under one key</td>
+</tr>
+<tr>
+<td>CBC “padding error” differs from other errors</td>
+<td>Padding oracle</td>
+<td>Chosen ciphertext access and reliable padding signal</td>
+</tr>
+<tr>
+<td>Same ECDSA <code>r</code></td>
+<td>Nonce reuse check</td>
+<td>Same signing key; handle possible nonce sign ambiguity</td>
+</tr>
+<tr>
+<td>Timestamp or tiny seed</td>
+<td>Bounded seed enumeration</td>
+<td>Exact RNG and generation procedure reproduced</td>
+</tr>
+</tbody></table>
+<h3 id="Encoding-and-arithmetic-essentials"><a href="#Encoding-and-arithmetic-essentials" class="headerlink" title="Encoding and arithmetic essentials"></a>Encoding and arithmetic essentials</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> base64 <span class="keyword">import</span> b64decode</span><br><span class="line"><span class="keyword">from</span> math <span class="keyword">import</span> gcd</span><br><span class="line"></span><br><span class="line">raw = <span class="built_in">bytes</span>.fromhex(<span class="string">&quot;666c61677b64656d6f7d&quot;</span>)</span><br><span class="line"><span class="keyword">assert</span> b64decode(<span class="string">&quot;ZmxhZ3tkZW1vfQ==&quot;</span>, validate=<span class="literal">True</span>) == raw</span><br><span class="line">m = <span class="built_in">int</span>.from_bytes(raw, <span class="string">&quot;big&quot;</span>)</span><br><span class="line"><span class="keyword">assert</span> m.to_bytes((m.bit_length()+<span class="number">7</span>)//<span class="number">8</span>, <span class="string">&quot;big&quot;</span>) == raw</span><br><span class="line">n = <span class="built_in">int</span>(<span class="string">&quot;0xca1&quot;</span>, <span class="number">16</span>)                    <span class="comment"># 3233</span></span><br><span class="line"><span class="keyword">assert</span> <span class="built_in">pow</span>(<span class="number">17</span>, -<span class="number">1</span>, <span class="number">3120</span>) == <span class="number">2753</span>         <span class="comment"># modular inverse, Python &gt;=3.8</span></span><br><span class="line"><span class="keyword">assert</span> <span class="built_in">pow</span>(<span class="number">65</span>, <span class="number">17</span>, n) == <span class="number">2790</span>            <span class="comment"># efficient modular exponentiation</span></span><br><span class="line"><span class="keyword">assert</span> gcd(<span class="number">61</span>, n) == <span class="number">61</span></span><br></pre></td></tr></table></figure>
+
+<p>Leading zero bytes disappear in an integer conversion. When decoding an RSA block, preserve the modulus byte length: <code>k=(n.bit_length()+7)//8; block=m.to_bytes(k,&#39;big&#39;)</code>. Use exact integers for roots and interval endpoints. <code>int(c**(1/3))</code> is unsafe for cryptographic integers.</p>
+<h2 id="1-RSA-foundations-and-attack-map"><a href="#1-RSA-foundations-and-attack-map" class="headerlink" title="1. RSA foundations and attack map"></a>1. RSA foundations and attack map</h2><p>For ordinary two-prime RSA, <code>n=p*q</code> with distinct primes, <code>phi=(p-1)*(q-1)</code>, and <code>lambda=lcm(p-1,q-1)</code>. Choose <code>gcd(e,lambda)=1</code>, then <code>d=inverse(e,lambda)</code>. Raw encryption is <code>c=m**e mod n</code>; raw decryption is <code>m=c**d mod n</code>, with <code>0&lt;=m&lt;n</code>. A private exponent computed modulo <code>phi</code> also works.</p>
+<p>The raw integer is often an <strong>encoded block</strong>, not directly the flag. OAEP and PKCS#1 v1.5 introduce encoding; their presence changes which attacks apply. The examples below explicitly identify raw&#x2F;textbook assumptions. See <a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc8017">RFC 8017</a> for RSA encodings.</p>
+<p>Use the bundled helpers from a challenge solver:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># If solve.py is in this handbook&#x27;s directory:</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.insert(<span class="number">0</span>, <span class="string">&quot;scripts&quot;</span>)</span><br><span class="line"><span class="keyword">from</span> rsa_attacks <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure>
+
+<p>The first RSA survey to read for the broader taxonomy is <a target="_blank" rel="noopener" href="https://crypto.stanford.edu/~dabo/pubs/papers/RSA-survey.pdf">Boneh’s RSA attack survey</a>. The practical derivations and bounded implementations here are accompanied by their own toy examples.</p>
+<h3 id="RSA-01-—-Known-factors-finish-the-decryption"><a href="#RSA-01-—-Known-factors-finish-the-decryption" class="headerlink" title="RSA 01 — Known factors: finish the decryption"></a>RSA 01 — Known factors: finish the decryption</h3><p><strong>Use when:</strong> You have either factor of a semiprime modulus. Derive the other by exact division, calculate <code>d</code>, decrypt, then inspect encoding. This is the final step after most factoring attacks.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rsa_attacks <span class="keyword">import</span> decrypt_factors, i2b</span><br><span class="line">n, e, c, p = <span class="number">3233</span>, <span class="number">17</span>, <span class="number">2790</span>, <span class="number">61</span></span><br><span class="line"><span class="keyword">assert</span> n % p == <span class="number">0</span></span><br><span class="line">q = n // p</span><br><span class="line">m = decrypt_factors(n, e, c, p, q)</span><br><span class="line"><span class="keyword">assert</span> m == <span class="number">65</span></span><br><span class="line"><span class="built_in">print</span>(i2b(m))                            <span class="comment"># b&#x27;A&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Failure clues:</strong> Inverse does not exist → <code>e</code> is not coprime to the group exponent, or your factors&#x2F;assumptions are wrong. Garbled text → inspect block length, padding, byte order, compression, and whether the plaintext is an AES key. The helper assumes two distinct primes and does not certify primality or unpad.</p>
+<h3 id="RSA-02-—-Shared-prime-batch-GCD"><a href="#RSA-02-—-Shared-prime-batch-GCD" class="headerlink" title="RSA 02 — Shared prime &#x2F; batch GCD"></a>RSA 02 — Shared prime &#x2F; batch GCD</h3><p><strong>Use when:</strong> Several keys were generated with bad randomness. If <code>n1=p*q1</code> and <code>n2=p*q2</code>, then <code>gcd(n1,n2)=p</code> without any expensive factorization.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rsa_attacks <span class="keyword">import</span> shared_factors</span><br><span class="line">moduli = [<span class="number">101</span>*<span class="number">113</span>, <span class="number">101</span>*<span class="number">127</span>, <span class="number">137</span>*<span class="number">139</span>]</span><br><span class="line"><span class="built_in">print</span>(shared_factors(moduli))            <span class="comment"># [(0, 1, 101)]</span></span><br></pre></td></tr></table></figure>
+
+<p>Recover each cofactor and use RSA 01. A GCD of 1 gives no factor; a GCD equal to the modulus may mean a duplicate key. Large collections call for product&#x2F;remainder-tree batch GCD, while the supplied O(number_of_keys²) scan suits small CTF sets. Also check <code>gcd(c,n)</code>: a nonunit ciphertext can reveal a factor directly.</p>
+<h3 id="RSA-03-—-Fermat-close-primes"><a href="#RSA-03-—-Fermat-close-primes" class="headerlink" title="RSA 03 — Fermat: close primes"></a>RSA 03 — Fermat: close primes</h3><p><strong>Use when:</strong> <code>p</code> and <code>q</code> are close, especially <code>q=next_prime(p)</code> or both were derived from a common value. Write <code>n=a²-b²=(a-b)(a+b)</code> and search upward from <code>ceil(sqrt(n))</code> until <code>a²-n</code> is a square.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rsa_attacks <span class="keyword">import</span> fermat</span><br><span class="line"><span class="keyword">assert</span> fermat(<span class="number">1022117</span>, max_steps=<span class="number">1000</span>) == (<span class="number">1009</span>, <span class="number">1013</span>)</span><br></pre></td></tr></table></figure>
+
+<p>The number of steps is approximately <code>(p-q)²/(8*sqrt(n))</code> when the gap is small relative to the primes. Merely having primes with the same bit length does not make them close enough. Set a budget; a timeout does not establish that no close-prime weakness exists.</p>
+<h3 id="RSA-04-—-Exact-low-exponent-root"><a href="#RSA-04-—-Exact-low-exponent-root" class="headerlink" title="RSA 04 — Exact low-exponent root"></a>RSA 04 — Exact low-exponent root</h3><p><strong>Use when:</strong> Raw RSA uses small <code>e</code> and the encoded integer satisfies <code>m**e&lt;n</code>. No modular reduction happened, so <code>c=m**e</code> over the integers.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rsa_attacks <span class="keyword">import</span> iroot</span><br><span class="line">m, exact = iroot(<span class="number">74088</span>, <span class="number">3</span>)</span><br><span class="line"><span class="keyword">assert</span> exact <span class="keyword">and</span> m == <span class="number">42</span></span><br></pre></td></tr></table></figure>
+
+<p>Small <code>e</code> alone is insufficient. A long message or randomized padding usually prevents the small-message condition. Never accept a rounded root without checking <code>m**e==c</code>.</p>
+<h3 id="RSA-05-—-Low-exponent-with-a-small-wrap-count"><a href="#RSA-05-—-Low-exponent-with-a-small-wrap-count" class="headerlink" title="RSA 05 — Low exponent with a small wrap count"></a>RSA 05 — Low exponent with a small wrap count</h3><p><strong>Use when:</strong> <code>m**e</code> is only a little larger than <code>n</code>. Search <code>c+k*n</code> for an exact <code>e</code>th power, starting at <code>k=0</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rsa_attacks <span class="keyword">import</span> low_exponent</span><br><span class="line"><span class="keyword">assert</span> low_exponent(<span class="number">10403</span>, <span class="number">3</span>, <span class="number">1267</span>, max_k=<span class="number">20</span>) == (<span class="number">42</span>, <span class="number">7</span>)</span><br><span class="line"><span class="comment"># 42**3 = 1267 + 7*10403</span></span><br></pre></td></tr></table></figure>
+
+<p>If you know <code>m&lt;=M</code>, then <code>k&lt;=floor((M**e-c)/n)</code>. This can tell you immediately whether the search is feasible. For unrestricted messages the range is enormous; switching to brute force does not bypass RSA’s hardness.</p>
+<h3 id="RSA-06-—-Hastad-broadcast"><a href="#RSA-06-—-Hastad-broadcast" class="headerlink" title="RSA 06 — Håstad broadcast"></a>RSA 06 — Håstad broadcast</h3><p><strong>Use when:</strong> The same integer message is encrypted under different, pairwise-coprime moduli with the same small exponent. Combine <code>c_i</code> with CRT into <code>C</code> modulo <code>N=product(n_i)</code>. If <code>m**e&lt;N</code>, then <code>C=m**e</code> as an integer. Taking an exact root recovers <code>m</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rsa_attacks <span class="keyword">import</span> broadcast</span><br><span class="line">ns = [<span class="number">101</span>*<span class="number">107</span>, <span class="number">113</span>*<span class="number">131</span>, <span class="number">137</span>*<span class="number">149</span>]</span><br><span class="line">cs = [<span class="built_in">pow</span>(<span class="number">42</span>, <span class="number">3</span>, n) <span class="keyword">for</span> n <span class="keyword">in</span> ns]</span><br><span class="line"><span class="keyword">assert</span> broadcast(ns, cs, <span class="number">3</span>) == <span class="number">42</span></span><br></pre></td></tr></table></figure>
+
+<p>With <code>e</code> recipients and <code>m&lt;min(n_i)</code>, the size condition holds. Sometimes fewer suffice if <code>m</code> is small. Per-recipient randomized padding destroys the identical-message assumption. Check all pairwise GCDs first; a shared factor is easier to exploit than broadcast. Keep every ciphertext paired with its own modulus.</p>
+<h3 id="RSA-07-—-Common-modulus"><a href="#RSA-07-—-Common-modulus" class="headerlink" title="RSA 07 — Common modulus"></a>RSA 07 — Common modulus</h3><p><strong>Use when:</strong> Two encryptions share <code>n</code> and the exact encoded message but use exponents <code>e1,e2</code>. If <code>gcd(e1,e2)=1</code>, extended GCD gives <code>a*e1+b*e2=1</code>, hence <code>m=c1**a*c2**b mod n</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rsa_attacks <span class="keyword">import</span> common_modulus</span><br><span class="line">n, m = <span class="number">3233</span>, <span class="number">65</span></span><br><span class="line">c1, c2 = <span class="built_in">pow</span>(m,<span class="number">17</span>,n), <span class="built_in">pow</span>(m,<span class="number">13</span>,n)</span><br><span class="line"><span class="keyword">assert</span> common_modulus(n,<span class="number">17</span>,c1,<span class="number">13</span>,c2) == <span class="number">65</span></span><br></pre></td></tr></table></figure>
+
+<p>Negative Bézout coefficients require modular inverses. If an inverse fails, compute <code>gcd(ciphertext,n)</code>; that can be the factor you need. When <code>gcd(e1,e2)=g&gt;1</code>, the combination only yields <code>m**g mod n</code>; an ordinary root is justified only under an additional no-wrap bound. This differs from Franklin–Reiter, where the messages are related rather than identical.</p>
+<h3 id="RSA-08-—-Wiener-very-small-private-exponent"><a href="#RSA-08-—-Wiener-very-small-private-exponent" class="headerlink" title="RSA 08 — Wiener: very small private exponent"></a>RSA 08 — Wiener: very small private exponent</h3><p><strong>Use when:</strong> <code>d</code> is unusually small and <code>p,q</code> have comparable sizes. The relation <code>e*d-k*phi=1</code> makes <code>k/d</code> closely approximate <code>e/n</code>. Enumerate continued-fraction convergents; test candidate <code>phi=(e*d-1)/k</code> by reconstructing <code>p,q</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rsa_attacks <span class="keyword">import</span> wiener</span><br><span class="line">n = <span class="number">1009</span>*<span class="number">1013</span></span><br><span class="line">e = <span class="built_in">pow</span>(<span class="number">5</span>, -<span class="number">1</span>, <span class="number">1008</span>*<span class="number">1012</span>)</span><br><span class="line"><span class="keyword">assert</span> wiener(n,e) == (<span class="number">5</span>,<span class="number">1009</span>,<span class="number">1013</span>)</span><br></pre></td></tr></table></figure>
+
+<p>A classic sufficient setting is <code>q&lt;p&lt;2*q</code> and <code>d&lt;n**0.25/3</code> with the conventional RSA relation modulo <code>phi</code>. Treat this as a sufficient bound, not a perfect yes&#x2F;no cutoff. A large <code>e</code> is a clue only; ordinary large exponents do not guarantee small <code>d</code>.</p>
+<h3 id="RSA-09-—-Boneh–Durfee-somewhat-larger-small-d"><a href="#RSA-09-—-Boneh–Durfee-somewhat-larger-small-d" class="headerlink" title="RSA 09 — Boneh–Durfee: somewhat larger small d"></a>RSA 09 — Boneh–Durfee: somewhat larger small d</h3><p><strong>Use when:</strong> A small-<code>d</code> generation rule is evident and Wiener fails. Lattice methods exploit a bivariate modular equation derived from the RSA key relation. The familiar <code>d&lt;n**0.292</code> regime assumes the usual balanced-prime setting and suitable parameters; practical lattice implementations can fail near the limit.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Template: key.pub is the challenge&#x27;s public key; requires Sage/backend support.</span></span><br><span class="line">RsaCtfTool --publickey key.pub --attack boneh_durfee --private --<span class="built_in">timeout</span> 300</span><br></pre></td></tr></table></figure>
+
+<p>Tune the lattice size and the estimated bound on <code>d</code> in a dedicated implementation if necessary. Increasing lattice size costs time and memory; it is not a guarantee. Read the <a target="_blank" rel="noopener" href="https://crypto.stanford.edu/~dabo/pubs/abstracts/lowRSAexp.html">original Boneh–Durfee paper</a> and the local implementation before adapting it. This workspace’s <code>crypto-attacks/attacks/rsa/boneh_durfee.py</code> contains an unguarded challenge-solving block at import time; copy&#x2F;guard that code in a scratch file before treating it as a library.</p>
+<h3 id="RSA-10-—-Known-phi-p-q-or-full-d"><a href="#RSA-10-—-Known-phi-p-q-or-full-d" class="headerlink" title="RSA 10 — Known phi, p+q, or full d"></a>RSA 10 — Known phi, p+q, or full d</h3><p><strong>Use when:</strong> A leak reveals <code>phi</code> or the prime sum. Since <code>p+q=n-phi+1</code>, the factors solve <code>x²-(p+q)x+n=0</code>. The discriminant must be an exact square.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rsa_attacks <span class="keyword">import</span> factors_from_phi, factor_from_d</span><br><span class="line"><span class="keyword">assert</span> factors_from_phi(<span class="number">3233</span>,<span class="number">3120</span>) == (<span class="number">53</span>,<span class="number">61</span>)</span><br><span class="line">p,q = factor_from_d(<span class="number">3233</span>,<span class="number">17</span>,<span class="number">2753</span>)</span><br><span class="line"><span class="keyword">assert</span> p*q == <span class="number">3233</span></span><br></pre></td></tr></table></figure>
+
+<p>With full <code>d</code>, write <code>e*d-1=2**s*t</code>, with odd <code>t</code>; random bases and repeated squaring can yield a nontrivial square root of 1, then <code>gcd(x-1,n)</code> factors the modulus. The helper caps its attempts. If full <code>d</code> is already known, simply decrypt first; factoring is useful for reconstructing a private-key file.</p>
+<h3 id="RSA-11-—-Leaked-dp-or-dq-tiny-CRT-exponent"><a href="#RSA-11-—-Leaked-dp-or-dq-tiny-CRT-exponent" class="headerlink" title="RSA 11 — Leaked dp or dq &#x2F; tiny CRT exponent"></a>RSA 11 — Leaked dp or dq &#x2F; tiny CRT exponent</h3><p><strong>Use when:</strong> <code>dp=d mod (p-1)</code> is leaked. From <code>e*dp-1=k*(p-1)</code>, try <code>1&lt;=k&lt;e</code>, keep integral <code>p=(e*dp-1)/k+1</code>, and test divisibility of <code>n</code>. Substitute <code>dq</code> for the other prime.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rsa_attacks <span class="keyword">import</span> factor_from_dp</span><br><span class="line">p,q = factor_from_dp(<span class="number">3233</span>,<span class="number">17</span>,<span class="number">53</span>)</span><br><span class="line"><span class="keyword">assert</span> p*q == <span class="number">3233</span></span><br></pre></td></tr></table></figure>
+
+<p>Enumeration is practical for <code>e=65537</code>, but not for a random 2048-bit exponent. If <code>dp</code> itself is tiny but unknown, brute force candidate <code>dp</code> values and test <code>gcd(a**(e*dp)-a,n)</code> using modular powers; repeat bases when GCD is 1 or n. Leaked full CRT exponents and partial bits of them are different problems.</p>
+<h3 id="RSA-12-—-Coppersmith-known-message-prefix-or-suffix"><a href="#RSA-12-—-Coppersmith-known-message-prefix-or-suffix" class="headerlink" title="RSA 12 — Coppersmith: known message prefix or suffix"></a>RSA 12 — Coppersmith: known message prefix or suffix</h3><p><strong>Use when:</strong> A low-degree polynomial has a root small enough to recover. For an unknown <code>t</code>-byte suffix after prefix <code>P</code>, let <code>m=P*256**t+x</code>, <code>0&lt;=x&lt;256**t</code>, and solve <code>(P*256**t+x)**e-c=0 mod n</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Run under sage -python. Import path assumes scripts is on sys.path.</span></span><br><span class="line"><span class="keyword">from</span> sage_examples <span class="keyword">import</span> known_prefix</span><br><span class="line"><span class="comment"># Challenge template; replace n,e,c,P,t with real values:</span></span><br><span class="line"><span class="comment"># candidates = known_prefix(n,e,c,P,t)</span></span><br><span class="line"><span class="comment"># for m in candidates: assert pow(m,e,n)==c</span></span><br></pre></td></tr></table></figure>
+
+<p>Run <code>sage -python scripts/sage_examples.py</code> for a complete working instance. For a known suffix <code>S</code> of <code>s</code> bytes use <code>(x*256**s+S)**e-c</code>; a known prefix and suffix can be combined in one polynomial. The model must match exact byte order and unknown length.</p>
+<p>For a monic degree-<code>delta</code> polynomial modulo all of <code>n</code>, think “root substantially below <code>n**(1/delta)</code>,” with implementation margin controlled by epsilon. <code>beta=1</code> means a root modulo the full modulus. <code>small_roots()</code> is not a general-purpose solver for arbitrary multivariate equations. Check Sage’s <a target="_blank" rel="noopener" href="https://doc.sagemath.org/html/en/reference/polynomial_rings/sage/rings/polynomial/polynomial_modn_dense_ntl.html">small_roots reference</a> for its precise bounds and parameters.</p>
+<h3 id="RSA-13-—-Coppersmith-partial-prime-bits"><a href="#RSA-13-—-Coppersmith-partial-prime-bits" class="headerlink" title="RSA 13 — Coppersmith: partial prime bits"></a>RSA 13 — Coppersmith: partial prime bits</h3><p><strong>Use when:</strong> High bits of a factor are known. Model <code>p=p0+x</code>, where <code>p0</code> is the known prefix shifted back to its original position. Then <code>f(x)=p0+x</code> is zero modulo the unknown factor <code>p</code> of <code>n</code>, not necessarily modulo <code>n</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Sage template, with known prefix P and t unknown low bits:</span></span><br><span class="line"><span class="comment"># p0 = P &lt;&lt; t</span></span><br><span class="line"><span class="comment"># from sage_examples import partial_prime</span></span><br><span class="line"><span class="comment"># factors = partial_prime(n, p0, t, beta=0.49)</span></span><br></pre></td></tr></table></figure>
+
+<p>For a factor at least <code>n**beta</code>, a degree-<code>delta</code> polynomial has the familiar scale <code>X</code> below <code>n**(beta²/delta)</code> with margin. Balanced RSA gives roughly a quarter of the modulus bit length as a theoretical unknown-bit scale for the linear case. Work below that boundary; success depends on the actual factor lower bound and lattice parameters. <code>beta=0.5</code> is not justified for the smaller factor when it is below <code>sqrt(n)</code>; the demo uses a conservative <code>0.49</code>.</p>
+<p>Known low bits need a different polynomial: <code>p=known_low+2**k*x</code>. Make it monic only if the leading coefficient is invertible modulo <code>n</code>. Sparse&#x2F;random leaked bits and partial <code>d</code> require other constructions; do not paste the high-bit formula unchanged.</p>
+<h3 id="RSA-14-—-Franklin–Reiter-related-messages"><a href="#RSA-14-—-Franklin–Reiter-related-messages" class="headerlink" title="RSA 14 — Franklin–Reiter related messages"></a>RSA 14 — Franklin–Reiter related messages</h3><p><strong>Use when:</strong> Same <code>(n,e)</code>, with <code>m2=a*m1+b mod n</code> and known <code>a,b</code>. The polynomials <code>f(x)=x**e-c1</code> and <code>g(x)=(a*x+b)**e-c2</code> share the root <code>m1</code>. Their polynomial GCD usually becomes <code>x-m1</code> for a nondegenerate low-degree instance.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sage -python; full numeric example</span></span><br><span class="line"><span class="keyword">from</span> sage_examples <span class="keyword">import</span> franklin_reiter</span><br><span class="line">n,e,m,a,b = <span class="number">1009</span>*<span class="number">1013</span>,<span class="number">3</span>,<span class="number">123</span>,<span class="number">2</span>,<span class="number">5</span></span><br><span class="line"><span class="keyword">assert</span> franklin_reiter(n,e,<span class="built_in">pow</span>(m,e,n),<span class="built_in">pow</span>(a*m+b,e,n),a,b) == <span class="number">123</span></span><br></pre></td></tr></table></figure>
+
+<p>Composite-modulus polynomial rings have zero divisors. A failed inverse during GCD is not always a dead end: GCD the problematic coefficient with <code>n</code>. If the polynomial GCD is not linear, inspect the relation or degeneracy. The RsaCtfTool CLI help in this checkout reverses the written relation; its implementation uses <strong><code>m2=a*m1+b</code></strong>, as the example above does.</p>
+<h3 id="RSA-15-—-Coppersmith-short-pad-attack"><a href="#RSA-15-—-Coppersmith-short-pad-attack" class="headerlink" title="RSA 15 — Coppersmith short-pad attack"></a>RSA 15 — Coppersmith short-pad attack</h3><p><strong>Use when:</strong> Two raw RSA messages encode the same long value with different short random pads, under the same key and small exponent. Eliminate the shared message using a resultant, recover the small pad difference, then reduce to related-message recovery.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Template: ciphertext files must correspond to the two related encodings.</span></span><br><span class="line">RsaCtfTool --publickey key.pub --decryptfile c1.bin,c2.bin --attack short_pad --<span class="built_in">timeout</span> 300</span><br></pre></td></tr></table></figure>
+
+<p>The often-cited pad-difference scale is around <code>n**(1/e²)</code> for the classic construction. Exact encoding and practical bounds matter. This is not an attack on arbitrary OAEP padding and does not follow from “the plaintexts look similar.”</p>
+<h3 id="RSA-16-—-Pollard-p−1-rho-ECM-and-general-factoring"><a href="#RSA-16-—-Pollard-p−1-rho-ECM-and-general-factoring" class="headerlink" title="RSA 16 — Pollard p−1, rho, ECM, and general factoring"></a>RSA 16 — Pollard p−1, rho, ECM, and general factoring</h3><p><strong>Pollard p−1:</strong> Good when a factor’s predecessor <code>p-1</code> divides an efficiently constructed exponent, commonly because its prime powers are small. Choose <code>M</code>, compute <code>a**M mod n</code>, then <code>gcd(a**M-1,n)</code>. If both factors’ predecessors divide M, the result can be n; change the bound&#x2F;base or method.</p>
+<p><strong>Pollard rho:</strong> Birthday-style collision search modulo an unknown factor. Roughly O(sqrt(p)) modular steps for the smallest prime factor <code>p</code>; useful for modest factors, not generic full-size RSA primes.</p>
+<p><strong>ECM:</strong> Best when one factor is relatively small. It seeks smooth elliptic-curve group orders modulo that factor. Different curves give different orders, unlike the fixed <code>p-1</code> in Pollard’s method.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rsa_attacks <span class="keyword">import</span> pollard_pm1, pollard_rho</span><br><span class="line">p,q = pollard_pm1(<span class="number">257</span>*<span class="number">1019</span>, bound=<span class="number">100</span>)</span><br><span class="line"><span class="keyword">assert</span> p*q == <span class="number">257</span>*<span class="number">1019</span></span><br><span class="line">p,q = pollard_rho(<span class="number">1009</span>*<span class="number">10007</span>, max_steps=<span class="number">10000</span>)</span><br><span class="line"><span class="keyword">assert</span> p*q == <span class="number">1009</span>*<span class="number">10007</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RsaCtfTool --publickey key.pub --attack pollard_p_1 pollard_rho --private</span><br><span class="line">RsaCtfTool --publickey key.pub --attack ecm --ecmdigits 25 --private --<span class="built_in">timeout</span> 300</span><br></pre></td></tr></table></figure>
+
+<p><code>--ecmdigits</code> estimates a factor’s decimal digits, not modulus bits. For a small generic modulus consider QS or NFS tools. A generic, correctly generated 2048-bit RSA semiprime is not a realistic CTF brute-force target. Factoring databases are useful for previously known moduli, not proof of an algebraic weakness.</p>
+<h3 id="RSA-17-—-Prime-modulus-prime-powers-multiprime-RSA"><a href="#RSA-17-—-Prime-modulus-prime-powers-multiprime-RSA" class="headerlink" title="RSA 17 — Prime modulus, prime powers, multiprime RSA"></a>RSA 17 — Prime modulus, prime powers, multiprime RSA</h3><p><strong>Use when:</strong> The challenge’s modulus generation is nonstandard. If <code>n</code> is prime, <code>phi=n-1</code>. If <code>n=p**k</code>, <code>phi=p**(k-1)*(p-1)</code>. If it has several distinct prime factors, multiply their <code>(p_i-1)</code> values; with repetitions, use prime-power totients.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Sage: small demo only; factor() is not magic for large RSA moduli.</span></span><br><span class="line"><span class="keyword">from</span> sage.<span class="built_in">all</span> <span class="keyword">import</span> ZZ, euler_phi</span><br><span class="line">n,e,m = <span class="number">101</span>**<span class="number">2</span>,<span class="number">7</span>,<span class="number">42</span></span><br><span class="line">c = <span class="built_in">pow</span>(m,e,n)</span><br><span class="line">d = <span class="built_in">pow</span>(e,-<span class="number">1</span>,<span class="built_in">int</span>(euler_phi(ZZ(n))))</span><br><span class="line"><span class="keyword">assert</span> <span class="built_in">pow</span>(c,d,n) == m</span><br></pre></td></tr></table></figure>
+
+<p>Prime powers need extra care for messages divisible by p: exponentiation may not be invertible on nonunits, so ordinary RSA uniqueness is lost. RsaCtfTool’s advertised main model is a two-prime semiprime; handle unusual moduli explicitly. <code>is_prime</code>, <code>is_square</code>, and exact nth-root checks are useful early tests.</p>
+<h3 id="RSA-18-—-Non-coprime-exponent-multiple-possible-plaintexts"><a href="#RSA-18-—-Non-coprime-exponent-multiple-possible-plaintexts" class="headerlink" title="RSA 18 — Non-coprime exponent: multiple possible plaintexts"></a>RSA 18 — Non-coprime exponent: multiple possible plaintexts</h3><p><strong>Use when:</strong> <code>gcd(e,phi)!=1</code>. There is no global private exponent inverse. Given the factorization, solve <code>x**e=c</code> modulo each prime, combine all roots with CRT, then filter using length&#x2F;format and verify encryption.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># sage -python; n=77, e=2 has several square roots for this ciphertext.</span></span><br><span class="line"><span class="keyword">from</span> sage.<span class="built_in">all</span> <span class="keyword">import</span> Zmod, CRT</span><br><span class="line">p,q,e,c = <span class="number">7</span>,<span class="number">11</span>,<span class="number">2</span>,<span class="number">4</span></span><br><span class="line">rp = Zmod(p)(c).nth_root(e, <span class="built_in">all</span>=<span class="literal">True</span>)</span><br><span class="line">rq = Zmod(q)(c).nth_root(e, <span class="built_in">all</span>=<span class="literal">True</span>)</span><br><span class="line">candidates = <span class="built_in">sorted</span>(&#123;<span class="built_in">int</span>(CRT(<span class="built_in">int</span>(a),<span class="built_in">int</span>(b),p,q)) <span class="keyword">for</span> a <span class="keyword">in</span> rp <span class="keyword">for</span> b <span class="keyword">in</span> rq&#125;)</span><br><span class="line"><span class="keyword">assert</span> candidates == [<span class="number">2</span>,<span class="number">9</span>,<span class="number">68</span>,<span class="number">75</span>]</span><br></pre></td></tr></table></figure>
+
+<p>For large e, root enumeration can itself be expensive or impossible without more structure. A failed <code>inverse(e,phi)</code> is information, not a Python bug. Repeated prime powers need lifting, not just the distinct-prime recipe above.</p>
+<h3 id="RSA-19-—-Raw-RSA-malleability-decrypt-oracle-bypass"><a href="#RSA-19-—-Raw-RSA-malleability-decrypt-oracle-bypass" class="headerlink" title="RSA 19 — Raw RSA malleability &#x2F; decrypt-oracle bypass"></a>RSA 19 — Raw RSA malleability &#x2F; decrypt-oracle bypass</h3><p><strong>Use when:</strong> An oracle decrypts arbitrary raw RSA ciphertexts except the target. Choose invertible <code>r</code>, submit <code>c&#39;=c*r**e mod n</code>, receive <code>m&#39;=m*r mod n</code>, and recover <code>m=m&#39;*inverse(r,n) mod n</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">n,e,d,m,r = <span class="number">3233</span>,<span class="number">17</span>,<span class="number">2753</span>,<span class="number">65</span>,<span class="number">2</span></span><br><span class="line">c = <span class="built_in">pow</span>(m,e,n)</span><br><span class="line">modified = c*<span class="built_in">pow</span>(r,e,n) % n</span><br><span class="line">oracle_reply = <span class="built_in">pow</span>(modified,d,n)          <span class="comment"># replace only this with a real CTF oracle</span></span><br><span class="line">recovered = oracle_reply*<span class="built_in">pow</span>(r,-<span class="number">1</span>,n) % n</span><br><span class="line"><span class="keyword">assert</span> recovered == m</span><br></pre></td></tr></table></figure>
+
+<p>Requires an oracle returning the raw multiplicatively related plaintext. A properly validated OAEP decrypt endpoint does not provide this capability just by decrypting valid ciphertexts. Avoid <code>r</code> that maps back to the blocked target.</p>
+<h3 id="RSA-20-—-Parity-LSB-oracle"><a href="#RSA-20-—-Parity-LSB-oracle" class="headerlink" title="RSA 20 — Parity &#x2F; LSB oracle"></a>RSA 20 — Parity &#x2F; LSB oracle</h3><p><strong>Use when:</strong> An oracle gives the least significant bit of the <strong>raw decrypted integer</strong> for chosen ciphertexts. Multiplying ciphertext by <code>2**e</code> repeatedly gives parity information about successive modular doublings. For odd n, this bisects an interval containing m.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rsa_attacks <span class="keyword">import</span> parity_oracle</span><br><span class="line">n,e,d,c = <span class="number">3233</span>,<span class="number">17</span>,<span class="number">2753</span>,<span class="number">2790</span></span><br><span class="line">m = parity_oracle(n,e,c,<span class="keyword">lambda</span> chosen: <span class="built_in">pow</span>(chosen,d,n)&amp;<span class="number">1</span>)</span><br><span class="line"><span class="keyword">assert</span> m == <span class="number">65</span></span><br></pre></td></tr></table></figure>
+
+<p>About <code>n.bit_length()</code> adaptive queries suffice for the basic noiseless setting. The helper uses rational intervals to avoid accumulated float errors and verifies the final ciphertext. A bit of an unpadded application string, noisy errors, or a different bit position requires a different model.</p>
+<h3 id="RSA-21-—-Bleichenbacher-PKCS-1-v1-5-padding-oracle"><a href="#RSA-21-—-Bleichenbacher-PKCS-1-v1-5-padding-oracle" class="headerlink" title="RSA 21 — Bleichenbacher PKCS#1 v1.5 padding oracle"></a>RSA 21 — Bleichenbacher PKCS#1 v1.5 padding oracle</h3><p><strong>Use when:</strong> A service distinguishes whether chosen RSA decryptions have valid PKCS#1 v1.5 encryption padding. For a k-byte block, <code>B=2**(8*(k-2))</code>; valid encoded messages lie in <code>[2*B,3*B)</code>, with additional padding-format constraints.</p>
+<p>Search multipliers s for which <code>c*s**e mod n</code> is accepted. Each positive result restricts the possible original plaintext intervals through <code>2*B &lt;= m*s-r*n &lt; 3*B</code>. Adaptive interval refinement eventually isolates m. A complete attack includes blinding, multiplier search and interval merging; it is not a one-line root attack.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Integration template using the existing crypto-attacks checkout:</span></span><br><span class="line"><span class="comment"># Run with sage -python from this handbook directory.</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.insert(<span class="number">0</span>, <span class="string">&quot;../crypto-attacks&quot;</span>)</span><br><span class="line"><span class="keyword">from</span> attacks.rsa.bleichenbacher <span class="keyword">import</span> attack</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">valid_v15</span>(<span class="params">chosen_ciphertext</span>):</span><br><span class="line">    <span class="comment"># Encode chosen_ciphertext to exactly k bytes; send to the challenge.</span></span><br><span class="line">    <span class="comment"># Return True ONLY for the observed valid-padding response.</span></span><br><span class="line">    <span class="keyword">raise</span> NotImplementedError(<span class="string">&quot;Implement the challenge-specific transport&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># recovered_encoded_integer = attack(valid_v15, n, e, c)</span></span><br></pre></td></tr></table></figure>
+
+<p>The transport is intentionally a template: framing, rate limits and the exact response predicate depend on the challenge. Plan for many queries, potentially far more than a parity oracle. A uniformly indistinguishable error response removes this particular signal. See <a target="_blank" rel="noopener" href="https://www.iacr.org/cryptodb/data/paper.php?pubkey=1037">Bleichenbacher’s original paper</a>.</p>
+<h3 id="RSA-22-—-Manger-leading-byte-threshold-oracle"><a href="#RSA-22-—-Manger-leading-byte-threshold-oracle" class="headerlink" title="RSA 22 — Manger &#x2F; leading-byte threshold oracle"></a>RSA 22 — Manger &#x2F; leading-byte threshold oracle</h3><p><strong>Use when:</strong> An implementation leaks whether the raw decrypted value is below <code>B=2**(8*(k-1))</code>, often through a distinguishable leading-zero processing step. Manger’s attack uses this threshold to grow and then narrow a plaintext interval.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Integration template; inspect this implementation&#x27;s predicate before wiring.</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">sys.path.insert(<span class="number">0</span>, <span class="string">&quot;../crypto-attacks&quot;</span>)</span><br><span class="line"><span class="keyword">from</span> attacks.rsa.manger <span class="keyword">import</span> attack</span><br><span class="line"><span class="comment"># attack(threshold_oracle, n, e, c)</span></span><br></pre></td></tr></table></figure>
+
+<p>The local implementation expects True for a value below B, and assumes <code>2*B&lt;n</code> and a target with the required leading zero. Verify the predicate before wiring another implementation. An OAEP label alone does not imply an exploitable Manger oracle. You need this specific observable implementation leak. See <a target="_blank" rel="noopener" href="https://www.iacr.org/archive/crypto2001/21390229.pdf">Manger’s original paper</a>.</p>
+<h3 id="RSA-23-—-CRT-fault-attack"><a href="#RSA-23-—-CRT-fault-attack" class="headerlink" title="RSA 23 — CRT fault attack"></a>RSA 23 — CRT fault attack</h3><p><strong>Use when:</strong> A signature was computed correctly modulo one prime but incorrectly modulo the other. If the intended encoded message representative is M and faulty signature is s, then <code>gcd(s**e-M,n)</code> can reveal a factor. With a correct and faulty signature of the same representative, use <code>gcd(s_good-s_bad,n)</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rsa_attacks <span class="keyword">import</span> crt, fault_factor</span><br><span class="line">n,e,d,M = <span class="number">3233</span>,<span class="number">17</span>,<span class="number">2753</span>,<span class="number">65</span></span><br><span class="line">good = <span class="built_in">pow</span>(M,d,n)</span><br><span class="line">bad,_ = crt([good%<span class="number">61</span>,(good+<span class="number">1</span>)%<span class="number">53</span>],[<span class="number">61</span>,<span class="number">53</span>])</span><br><span class="line"><span class="keyword">assert</span> fault_factor(n,e,M,bad) == (<span class="number">61</span>,<span class="number">53</span>)</span><br></pre></td></tr></table></figure>
+
+<p>M is the complete encoded signature representative, not necessarily the message integer or raw hash. Randomized signature padding changes what “same message” means for this comparison. An arbitrary bad signature usually yields GCD 1, not a factor.</p>
+<h3 id="RSA-24-—-Textbook-signature-forgery-and-weak-verification"><a href="#RSA-24-—-Textbook-signature-forgery-and-weak-verification" class="headerlink" title="RSA 24 — Textbook signature forgery and weak verification"></a>RSA 24 — Textbook signature forgery and weak verification</h3><p><strong>Use when:</strong> A signer&#x2F;verifier implements raw RSA or checks an encoded block incompletely. With textbook signatures <code>s1**e=m1</code> and <code>s2**e=m2</code>, the product <code>s1*s2 mod n</code> verifies for <code>m1*m2 mod n</code>. Choosing an arbitrary s also defines a valid raw message <code>m=s**e mod n</code>, although it may not be a useful target message.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">n,e,d = <span class="number">3233</span>,<span class="number">17</span>,<span class="number">2753</span></span><br><span class="line">s1,s2 = <span class="built_in">pow</span>(<span class="number">2</span>,d,n),<span class="built_in">pow</span>(<span class="number">3</span>,d,n)</span><br><span class="line"><span class="keyword">assert</span> <span class="built_in">pow</span>(s1*s2%n,e,n) == <span class="number">6</span></span><br></pre></td></tr></table></figure>
+
+<p>For small-e PKCS#1 signature forgeries, an overly permissive parser that accepts a prefix while ignoring trailing data can permit carefully constructed roots. This requires a vulnerable verifier; strict PKCS#1 encoding validation or PSS prevents that shortcut. Inspect exactly what bytes the verifier checks before selecting an exploit.</p>
+<h3 id="RSA-25-—-Message-dictionary-weak-seeds-and-special-form-primes"><a href="#RSA-25-—-Message-dictionary-weak-seeds-and-special-form-primes" class="headerlink" title="RSA 25 — Message dictionary, weak seeds and special-form primes"></a>RSA 25 — Message dictionary, weak seeds and special-form primes</h3><p><strong>Use when:</strong> Raw deterministic RSA protects a tiny plaintext domain, such as a four-digit PIN. Encrypt each candidate under the public key and compare with c. Factoring is unnecessary.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> crypto_recipes <span class="keyword">import</span> rsa_dictionary</span><br><span class="line"><span class="keyword">assert</span> <span class="built_in">list</span>(rsa_dictionary(<span class="number">3233</span>,<span class="number">17</span>,<span class="number">2790</span>,[<span class="string">b&quot;B&quot;</span>,<span class="string">b&quot;A&quot;</span>])) == [<span class="string">b&quot;A&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>For timestamp-derived primes, reproduce the actual RNG seed, byte generation, primality search, and rejected draws. Guessing a seed without reproducing the consumption order fails. Special-form primes may expose algebraic factors or searchable parameters; model the exact formula. ROCA has a specific key-generation fingerprint and dedicated attacks; “unusual prime” is not enough to identify it.</p>
+<h2 id="2-SageMath-quick-syntax-sheet"><a href="#2-SageMath-quick-syntax-sheet" class="headerlink" title="2. SageMath quick syntax sheet"></a>2. SageMath quick syntax sheet</h2><p>SageMath supplies exact arithmetic, finite fields, polynomials, matrices, lattices, and elliptic curves. Use Python for bytes, parsing and network I&#x2F;O; use Sage for algebra. Examples below use ordinary Python syntax unless labeled <code>.sage</code>.</p>
+<h3 id="Running-code-and-choosing-syntax"><a href="#Running-code-and-choosing-syntax" class="headerlink" title="Running code and choosing syntax"></a>Running code and choosing syntax</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sage                                  <span class="comment"># interactive Sage shell</span></span><br><span class="line">sage solve.sage                        <span class="comment"># Sage preparser enabled</span></span><br><span class="line">sage -python solve.py                  <span class="comment"># Python syntax, Sage libraries available</span></span><br><span class="line">sage -python scripts/sage_examples.py  <span class="comment"># bundled worked demos</span></span><br><span class="line">sage -c <span class="string">&#x27;print(factor(3233))&#x27;</span>           <span class="comment"># quick calculation</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># .py: no preparser. This style also works in Sage.</span></span><br><span class="line"><span class="keyword">from</span> sage.<span class="built_in">all</span> <span class="keyword">import</span> *</span><br><span class="line">R = PolynomialRing(Zmod(<span class="number">3233</span>), <span class="string">&quot;x&quot;</span>)</span><br><span class="line">x = R.gen()</span><br><span class="line">f = x**<span class="number">3</span> + <span class="number">2</span>*x + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># .sage / interactive Sage only:</span><br><span class="line">R.&lt;x&gt; = PolynomialRing(Zmod(3233))</span><br><span class="line">f = x^3 + 2*x + 1</span><br></pre></td></tr></table></figure>
+
+<p><strong>Critical trap:</strong> <code>^</code> is XOR in Python but exponentiation in preparsed Sage. Prefer <code>**</code> for powers in portable code. To XOR Sage integers portably, use <code>operator.xor(int(a),int(b))</code>. Sage also turns integer literals into exact Sage integers; in ordinary Python use <code>QQ(1)/3</code> for an exact rational rather than <code>1/3</code>.</p>
+<h3 id="Number-types-and-conversion"><a href="#Number-types-and-conversion" class="headerlink" title="Number types and conversion"></a>Number types and conversion</h3><table>
+<thead>
+<tr>
+<th>Object</th>
+<th>Meaning</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ZZ</code></td>
+<td>Arbitrary-precision integers</td>
+<td><code>ZZ(&quot;deadbeef&quot;,16)</code></td>
+</tr>
+<tr>
+<td><code>QQ</code></td>
+<td>Exact rational numbers</td>
+<td><code>QQ(2)/3</code></td>
+</tr>
+<tr>
+<td><code>RR</code> &#x2F; <code>RealField(200)</code></td>
+<td>Approximate reals</td>
+<td><code>RealField(200)(2).sqrt()</code></td>
+</tr>
+<tr>
+<td><code>Zmod(n)</code> &#x2F; <code>Integers(n)</code></td>
+<td>Integers modulo n</td>
+<td><code>Zmod(15)(17)</code> gives 2</td>
+</tr>
+<tr>
+<td><code>GF(p)</code></td>
+<td>Prime finite field</td>
+<td><code>GF(101)(7)</code></td>
+</tr>
+<tr>
+<td><code>GF(2**8,name=&#39;a&#39;)</code></td>
+<td>Extension field, 256 elements</td>
+<td>Arithmetic differs from <code>Zmod(256)</code></td>
+</tr>
+<tr>
+<td><code>int(x)</code></td>
+<td>Python integer</td>
+<td>For <code>to_bytes</code>, JSON and sockets</td>
+</tr>
+<tr>
+<td><code>parent(x)</code></td>
+<td>Algebraic domain of x</td>
+<td>Useful for coercion errors</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sage.<span class="built_in">all</span> <span class="keyword">import</span> *</span><br><span class="line">raw = <span class="string">b&quot;flag&#123;demo&#125;&quot;</span></span><br><span class="line">m = ZZ(<span class="built_in">int</span>.from_bytes(raw,<span class="string">&quot;big&quot;</span>))</span><br><span class="line"><span class="keyword">assert</span> <span class="built_in">int</span>(m).to_bytes((<span class="built_in">int</span>(m).bit_length()+<span class="number">7</span>)//<span class="number">8</span>,<span class="string">&quot;big&quot;</span>) == raw</span><br><span class="line"><span class="built_in">print</span>(m.nbits(), m.digits(<span class="number">16</span>))           <span class="comment"># digits() is least-significant first</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(<span class="built_in">int</span>(m)), m.<span class="built_in">str</span>(<span class="number">2</span>))            <span class="comment"># conventional display order</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Modular-arithmetic-and-CRT"><a href="#Modular-arithmetic-and-CRT" class="headerlink" title="Modular arithmetic and CRT"></a>Modular arithmetic and CRT</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sage.<span class="built_in">all</span> <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">assert</span> gcd(<span class="number">12</span>,<span class="number">18</span>) == <span class="number">6</span></span><br><span class="line">g,a,b = xgcd(<span class="number">17</span>,<span class="number">13</span>)</span><br><span class="line"><span class="keyword">assert</span> a*<span class="number">17</span>+b*<span class="number">13</span> == g == <span class="number">1</span></span><br><span class="line"><span class="keyword">assert</span> inverse_mod(<span class="number">17</span>,<span class="number">3120</span>) == <span class="number">2753</span></span><br><span class="line"><span class="keyword">assert</span> power_mod(<span class="number">65</span>,<span class="number">17</span>,<span class="number">3233</span>) == <span class="number">2790</span></span><br><span class="line"><span class="keyword">assert</span> CRT([<span class="number">2</span>,<span class="number">3</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>]) == <span class="number">23</span></span><br><span class="line"><span class="keyword">assert</span> Mod(<span class="number">5</span>,<span class="number">101</span>).multiplicative_order() == <span class="number">25</span></span><br><span class="line"><span class="keyword">assert</span> Mod(<span class="number">5</span>,<span class="number">101</span>)**<span class="number">25</span> == <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>An inverse exists iff the GCD is 1. Over <code>Zmod(composite)</code>, not every nonzero element is invertible. CRT can also support compatible non-coprime congruences in Sage, but the bundled Python helper deliberately requires pairwise-coprime moduli.</p>
+<h3 id="Primes-factors-and-exact-roots"><a href="#Primes-factors-and-exact-roots" class="headerlink" title="Primes, factors and exact roots"></a>Primes, factors and exact roots</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sage.<span class="built_in">all</span> <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">assert</span> is_prime(<span class="number">101</span>)</span><br><span class="line"><span class="keyword">assert</span> next_prime(<span class="number">100</span>) == <span class="number">101</span></span><br><span class="line"><span class="keyword">assert</span> factor(<span class="number">3233</span>) == factor(<span class="number">53</span>*<span class="number">61</span>)</span><br><span class="line"><span class="keyword">assert</span> euler_phi(<span class="number">3233</span>) == <span class="number">3120</span></span><br><span class="line"><span class="keyword">assert</span> ZZ(<span class="number">81</span>).is_square()</span><br><span class="line"><span class="keyword">assert</span> ZZ(<span class="number">81</span>).isqrt() == <span class="number">9</span></span><br><span class="line">r,exact = ZZ(<span class="number">74088</span>).nth_root(<span class="number">3</span>,truncate_mode=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">assert</span> (r,exact) == (<span class="number">42</span>,<span class="literal">True</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">list</span>(continued_fraction(QQ(<span class="number">17</span>)/<span class="number">3233</span>).convergents()))</span><br></pre></td></tr></table></figure>
+
+<p><code>factor(n)</code> may be slow on large semiprimes. <code>nth_root(k)</code> without truncation may raise an exception if the number is not a perfect power. Approximate real roots are not substitutes for integer checks.</p>
+<h3 id="Polynomial-rings-coefficients-and-roots"><a href="#Polynomial-rings-coefficients-and-roots" class="headerlink" title="Polynomial rings, coefficients and roots"></a>Polynomial rings, coefficients and roots</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sage.<span class="built_in">all</span> <span class="keyword">import</span> *</span><br><span class="line">R = PolynomialRing(QQ,<span class="string">&quot;x&quot;</span>)</span><br><span class="line">x = R.gen()</span><br><span class="line">f = x**<span class="number">3</span>-<span class="number">6</span>*x**<span class="number">2</span>+<span class="number">11</span>*x-<span class="number">6</span></span><br><span class="line"><span class="keyword">assert</span> f(<span class="number">2</span>) == <span class="number">0</span></span><br><span class="line"><span class="built_in">print</span>(f.factor())                       <span class="comment"># (x-3)*(x-2)*(x-1)</span></span><br><span class="line"><span class="built_in">print</span>(f.roots())                        <span class="comment"># [(root,multiplicity), ...]</span></span><br><span class="line"><span class="built_in">print</span>(f.<span class="built_in">list</span>())                         <span class="comment"># [-6,11,-6,1], low degree first</span></span><br><span class="line"><span class="keyword">assert</span> f[<span class="number">0</span>] == -<span class="number">6</span> <span class="keyword">and</span> f.degree() == <span class="number">3</span></span><br><span class="line"><span class="built_in">print</span>(f.derivative(), f.monic())</span><br><span class="line">q,r = f.quo_rem(x-<span class="number">1</span>)</span><br><span class="line"><span class="keyword">assert</span> r == <span class="number">0</span></span><br><span class="line"></span><br><span class="line">S = PolynomialRing(GF(<span class="number">101</span>),<span class="string">&quot;y&quot;</span>)</span><br><span class="line">y = S.gen()</span><br><span class="line"><span class="keyword">assert</span> <span class="built_in">set</span>((y**<span class="number">2</span>-<span class="number">4</span>).roots(multiplicities=<span class="literal">False</span>)) == &#123;S.base_ring()(<span class="number">2</span>), S.base_ring()(<span class="number">99</span>)&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Symbolic <code>var(&#39;x&#39;)</code> expressions and polynomial-ring generators are different objects. For <code>.small_roots()</code>, <code>.resultant()</code> and algebraic attacks, construct the correct polynomial ring. <code>.roots()</code> is ordinary root-finding in a specified domain; <code>.small_roots()</code> is a bounded modular lattice method.</p>
+<h3 id="Small-roots-the-essential-pattern"><a href="#Small-roots-the-essential-pattern" class="headerlink" title="Small roots: the essential pattern"></a>Small roots: the essential pattern</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Template, not a complete challenge instance:</span></span><br><span class="line"><span class="keyword">from</span> sage.<span class="built_in">all</span> <span class="keyword">import</span> *</span><br><span class="line"><span class="comment"># R = PolynomialRing(Zmod(n),&quot;x&quot;,implementation=&quot;NTL&quot;)</span></span><br><span class="line"><span class="comment"># x = R.gen()</span></span><br><span class="line"><span class="comment"># f = (known_prefix*256**unknown_bytes+x)**e-c</span></span><br><span class="line"><span class="comment"># roots = f.monic().small_roots(X=256**unknown_bytes,beta=1,epsilon=0.03)</span></span><br><span class="line"><span class="comment"># for r in roots:</span></span><br><span class="line"><span class="comment">#     candidate = known_prefix*256**unknown_bytes+int(r)</span></span><br><span class="line"><span class="comment">#     assert pow(candidate,e,n) == c</span></span><br></pre></td></tr></table></figure>
+
+<p><code>X</code> bounds the unknown integer; it is not the number of bytes. <code>beta</code> describes the size of the factor on which the root holds; it is not a “success probability.” Smaller epsilon can build larger lattices and cost more. If no roots appear, check the equation, variable bounds, monicity and factor assumptions before tuning blindly.</p>
+<h3 id="Multivariate-polynomials-and-resultants"><a href="#Multivariate-polynomials-and-resultants" class="headerlink" title="Multivariate polynomials and resultants"></a>Multivariate polynomials and resultants</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sage.<span class="built_in">all</span> <span class="keyword">import</span> *</span><br><span class="line">R = PolynomialRing(QQ,names=(<span class="string">&quot;x&quot;</span>,<span class="string">&quot;y&quot;</span>))</span><br><span class="line">x,y = R.gens()</span><br><span class="line">f,g = x+y-<span class="number">3</span>, x-y-<span class="number">1</span></span><br><span class="line"><span class="built_in">print</span>(f.resultant(g,y))                 <span class="comment"># eliminates y</span></span><br><span class="line"><span class="built_in">print</span>(R.ideal([f,g]).groebner_basis())</span><br><span class="line"><span class="keyword">assert</span> f(x=<span class="number">2</span>,y=<span class="number">1</span>) == g(x=<span class="number">2</span>,y=<span class="number">1</span>) == <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>A resultant can create extraneous roots or lose information in special cases; substitute candidate solutions into the original equations. Gröbner basis computation can grow rapidly. Changing from a field to a composite ring changes what operations are supported.</p>
+<h3 id="Matrices-linear-systems-and-kernels"><a href="#Matrices-linear-systems-and-kernels" class="headerlink" title="Matrices, linear systems and kernels"></a>Matrices, linear systems and kernels</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sage.<span class="built_in">all</span> <span class="keyword">import</span> *</span><br><span class="line">A = matrix(GF(<span class="number">101</span>),[[<span class="number">2</span>,<span class="number">3</span>],[<span class="number">5</span>,<span class="number">7</span>]])</span><br><span class="line">b = vector(GF(<span class="number">101</span>),[<span class="number">11</span>,<span class="number">13</span>])</span><br><span class="line">x = A.solve_right(b)                    <span class="comment"># A*x = b</span></span><br><span class="line"><span class="keyword">assert</span> A*x == b</span><br><span class="line"><span class="built_in">print</span>(A.rank(), A.det(), A.inverse())</span><br><span class="line">B = matrix(GF(<span class="number">2</span>),[[<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>],[<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>]])</span><br><span class="line">K = B.right_kernel().basis_matrix()</span><br><span class="line"><span class="keyword">assert</span> B*K.transpose() == zero_matrix(GF(<span class="number">2</span>),<span class="number">2</span>,K.nrows())</span><br></pre></td></tr></table></figure>
+
+<p>Use <code>GF(2)</code> for linear equations over bits, <code>GF(p)</code> for prime-modulus systems and <code>QQ</code> for exact rational algebra. Linear algebra over <code>Zmod(n)</code> with composite n is not automatically field linear algebra. Keep the distinction between row vectors, column multiplication, and left&#x2F;right kernels explicit.</p>
+<h3 id="Lattices-and-LLL"><a href="#Lattices-and-LLL" class="headerlink" title="Lattices and LLL"></a>Lattices and LLL</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sage.<span class="built_in">all</span> <span class="keyword">import</span> *</span><br><span class="line">B = matrix(ZZ,[[<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>],[-<span class="number">1</span>,<span class="number">0</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">5</span>,<span class="number">6</span>]])</span><br><span class="line">L = B.LLL()                            <span class="comment"># reduced ROW basis</span></span><br><span class="line"><span class="keyword">assert</span> <span class="built_in">abs</span>(B.det()) == <span class="built_in">abs</span>(L.det())</span><br></pre></td></tr></table></figure>
+
+<p>LLL returns short lattice vectors; it does not know what your secret is. Define the embedding, scale columns according to unknown bounds, decode candidate vectors and verify against the challenge equations. Do not apply LLL to a finite-field matrix when the attack requires an integer lattice.</p>
+<h3 id="Discrete-logarithms-and-elliptic-curves"><a href="#Discrete-logarithms-and-elliptic-curves" class="headerlink" title="Discrete logarithms and elliptic curves"></a>Discrete logarithms and elliptic curves</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sage.<span class="built_in">all</span> <span class="keyword">import</span> *</span><br><span class="line">g = GF(<span class="number">101</span>)(<span class="number">2</span>)</span><br><span class="line">h = g**<span class="number">37</span></span><br><span class="line">x = discrete_log(h,g,<span class="built_in">ord</span>=g.multiplicative_order())</span><br><span class="line"><span class="keyword">assert</span> g**x == h</span><br><span class="line">E = EllipticCurve(GF(<span class="number">97</span>),[<span class="number">2</span>,<span class="number">3</span>])          <span class="comment"># y² = x³+2x+3</span></span><br><span class="line">P = E(<span class="number">3</span>,<span class="number">6</span>)</span><br><span class="line">Q = <span class="number">3</span>*P</span><br><span class="line">k = discrete_log(Q,P,<span class="built_in">ord</span>=P.order(),operation=<span class="string">&#x27;+&#x27;</span>)</span><br><span class="line"><span class="keyword">assert</span> k*P == Q</span><br><span class="line"><span class="built_in">print</span>(E.order(), P.order(), E(<span class="number">0</span>))        <span class="comment"># E(0) is the point at infinity</span></span><br></pre></td></tr></table></figure>
+
+<p>Smooth group order suggests Pohlig–Hellman; small subgroups suggest subgroup attacks if membership is not checked. Generic discrete logs in large prime-order groups remain hard. For anomalous curves, singular curves, or low embedding degree, identify the exact structural property before selecting Smart, singular-curve, or MOV attacks.</p>
+<h3 id="Help-and-common-error-translations"><a href="#Help-and-common-error-translations" class="headerlink" title="Help and common error translations"></a>Help and common error translations</h3><table>
+<thead>
+<tr>
+<th>Error &#x2F; symptom</th>
+<th>Likely cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>SyntaxError</code> at <code>R.&lt;x&gt;</code></td>
+<td>Running Sage syntax with Python</td>
+<td>Use <code>sage file.sage</code> or explicit ring construction</td>
+</tr>
+<tr>
+<td><code>ModuleNotFoundError: sage</code></td>
+<td>Wrong interpreter</td>
+<td>Use <code>sage -python file.py</code></td>
+</tr>
+<tr>
+<td><code>Integer has no to_bytes</code> in some versions</td>
+<td>Sage&#x2F;Python type mismatch</td>
+<td><code>int(x).to_bytes(...)</code></td>
+</tr>
+<tr>
+<td>Inverse does not exist</td>
+<td>Nonunit element</td>
+<td>Compute GCD; it may leak a factor</td>
+</tr>
+<tr>
+<td>No <code>.small_roots()</code></td>
+<td>Wrong parent&#x2F;backend</td>
+<td>Univariate NTL ring over <code>Zmod(n)</code></td>
+</tr>
+<tr>
+<td>Floats &#x2F; precision loss</td>
+<td>Python <code>/</code> or real roots</td>
+<td>Use <code>//</code>, <code>QQ</code>, exact roots</td>
+</tr>
+<tr>
+<td>Empty root list</td>
+<td>Model&#x2F;bound&#x2F;domain mismatch</td>
+<td>Verify polynomial and actual unknown size</td>
+</tr>
+<tr>
+<td>Incorrect XOR</td>
+<td>Sage preparser changed <code>^</code></td>
+<td><code>operator.xor(int(a),int(b))</code></td>
+</tr>
+</tbody></table>
+<p>Use <code>help(object)</code> in either interpreter; in the Sage shell, <code>object?</code> shows documentation and <code>object??</code> can show source. Sage’s <a target="_blank" rel="noopener" href="https://doc.sagemath.org/html/en/tutorial/index.html">tutorial index</a> links arithmetic, polynomials and linear algebra chapters.</p>
+<h2 id="3-Reusable-crypto-attack-recipes"><a href="#3-Reusable-crypto-attack-recipes" class="headerlink" title="3. Reusable crypto attack recipes"></a>3. Reusable crypto attack recipes</h2><p><code>scripts/rsa_attacks.py</code> and <code>scripts/crypto_recipes.py</code> use the Python standard library. <code>scripts/sage_examples.py</code> requires Sage. Import them into <code>solve.py</code> or use the small command-line interfaces. These are transparent building blocks, not an automatic universal solver.</p>
+<h3 id="Recipe-01-—-Single-byte-XOR-brute-force"><a href="#Recipe-01-—-Single-byte-XOR-brute-force" class="headerlink" title="Recipe 01 — Single-byte XOR brute force"></a>Recipe 01 — Single-byte XOR brute force</h3><p><strong>When:</strong> One unknown byte was XORed with every plaintext byte. There are only 256 keys. Rank candidates by readable text and inspect the top results.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 scripts/crypto_recipes.py xor 232e272724 --top 8</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> crypto_recipes <span class="keyword">import</span> single_byte_xor, repeating_xor</span><br><span class="line">c = repeating_xor(<span class="string">b&quot;the secret message is here&quot;</span>, <span class="string">b&quot;K&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> score,key,plain <span class="keyword">in</span> single_byte_xor(c):</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">hex</span>(key),score,plain)</span><br></pre></td></tr></table></figure>
+
+<p>The CLI example contains <code>hello</code> encrypted with key <code>0x4b</code>. Very short messages can rank poorly. For a flag prefix, use an exact crib check instead of relying exclusively on English scoring. All 256 keys can be shown with <code>--top 256</code>.</p>
+<h3 id="Recipe-02-—-Repeating-key-XOR"><a href="#Recipe-02-—-Repeating-key-XOR" class="headerlink" title="Recipe 02 — Repeating-key XOR"></a>Recipe 02 — Repeating-key XOR</h3><p><strong>When:</strong> <code>c[i]=p[i] XOR key[i % key_length]</code>. For each hypothesized length, split into columns and apply single-byte XOR scoring to each column.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> crypto_recipes <span class="keyword">import</span> repeating_xor_known_length</span><br><span class="line"><span class="comment"># Template: c is bytes, key_length is a candidate length.</span></span><br><span class="line"><span class="comment"># key,plain = repeating_xor_known_length(c,key_length)</span></span><br></pre></td></tr></table></figure>
+
+<p>Estimate length using normalized Hamming distances across several block pairs, then compare several candidate lengths (multiples are common false positives). A short ciphertext or binary plaintext needs stronger constraints. With a known plaintext span, directly recover the corresponding key bytes and check whether the period is consistent.</p>
+<h3 id="Recipe-03-—-Bounded-hash-brute-force"><a href="#Recipe-03-—-Bounded-hash-brute-force" class="headerlink" title="Recipe 03 — Bounded hash brute force"></a>Recipe 03 — Bounded hash brute force</h3><p><strong>When:</strong> You know the hash construction and the unknown input has a small search space. This helper tries all exact-length strings over an alphabet, preserves leading zeros, and supports <code>hash(prefix+candidate+suffix)</code>.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># SHA-256(&quot;1234&quot;); should print b&#x27;1234&#x27;.</span></span><br><span class="line">python3 scripts/crypto_recipes.py <span class="built_in">hash</span> 03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4 --length 4</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">from</span> crypto_recipes <span class="keyword">import</span> hash_search</span><br><span class="line">target = hashlib.sha256(<span class="string">b&quot;salt:0042!&quot;</span>).hexdigest()</span><br><span class="line"><span class="keyword">assert</span> hash_search(target,length=<span class="number">4</span>,prefix=<span class="string">b&quot;salt:&quot;</span>,suffix=<span class="string">b&quot;!&quot;</span>) == <span class="string">b&quot;0042&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>The default budget is 1,000,000 candidates; raise it explicitly with <code>--max-candidates</code> after estimating work. Search size for exact length L and alphabet size A is <code>A**L</code>; lengths 1 through L cost <code>sum(A**i for i in range(1,L+1))</code>. At measured rate R, worst-case time is candidates&#x2F;R; half that is an average only if exactly one uniformly positioned solution exists.</p>
+<p>Hashing text <code>&quot;1234&quot;</code> differs from hashing integer 1234 encoded in two bytes, and hex text differs from decoded bytes. For PBKDF2, scrypt or Argon2, reproduce the actual KDF, salt and parameters; this fast-hash script is not a substitute. A 128-bit random AES key is not a viable brute-force exercise.</p>
+<h3 id="Recipe-04-—-Dictionary-attack-on-raw-RSA"><a href="#Recipe-04-—-Dictionary-attack-on-raw-RSA" class="headerlink" title="Recipe 04 — Dictionary attack on raw RSA"></a>Recipe 04 — Dictionary attack on raw RSA</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> crypto_recipes <span class="keyword">import</span> rsa_dictionary</span><br><span class="line"><span class="comment"># Template; wordlist opened as bytes preserves the candidate encoding.</span></span><br><span class="line"><span class="comment"># with open(&quot;words.txt&quot;,&quot;rb&quot;) as words:</span></span><br><span class="line"><span class="comment">#     for match in rsa_dictionary(n,e,c,words): print(match)</span></span><br></pre></td></tr></table></figure>
+
+<p>The helper removes only CR&#x2F;LF line endings. It does not automatically add <code>flag{}</code>, whitespace or a terminator. Recreate those explicitly if the challenge does. This works against deterministic encryption of a small domain; randomized encoding changes the comparison.</p>
+<h3 id="Recipe-05-—-Reused-OTP-CTR-keystream-and-crib-dragging"><a href="#Recipe-05-—-Reused-OTP-CTR-keystream-and-crib-dragging" class="headerlink" title="Recipe 05 — Reused OTP &#x2F; CTR keystream and crib dragging"></a>Recipe 05 — Reused OTP &#x2F; CTR keystream and crib dragging</h3><p><strong>When:</strong> Two ciphertexts share keystream bytes K: <code>C1=P1 XOR K</code>, <code>C2=P2 XOR K</code>. Then <code>C1 XOR C2=P1 XOR P2</code>. A known P1 span directly reveals the corresponding P2 span.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> crypto_recipes <span class="keyword">import</span> xor_bytes, crib_drag</span><br><span class="line">P1,P2,K = <span class="string">b&quot;flag&#123;one&#125;&quot;</span>,<span class="string">b&quot;text&#123;two&#125;&quot;</span>,<span class="string">b&quot;123456789&quot;</span></span><br><span class="line">C1,C2 = xor_bytes(P1,K),xor_bytes(P2,K)</span><br><span class="line"><span class="keyword">for</span> offset,guess <span class="keyword">in</span> crib_drag(C1,C2,<span class="string">b&quot;flag&#123;&quot;</span>):</span><br><span class="line">    <span class="built_in">print</span>(offset,guess)                  <span class="comment"># offset 0 gives b&#x27;text&#123;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>Check nonce, key, initial counter, and byte offset alignment. Same nonce with different keys does not imply the same keystream. Recovering one span does not automatically reveal all bytes. With many English plaintexts under one stream, combine cross-message consistency and language scoring.</p>
+<h3 id="Recipe-06-—-CTR-and-CBC-bit-flipping"><a href="#Recipe-06-—-CTR-and-CBC-bit-flipping" class="headerlink" title="Recipe 06 — CTR and CBC bit flipping"></a>Recipe 06 — CTR and CBC bit flipping</h3><p><strong>CTR:</strong> A known plaintext span can be changed without knowing the key: <code>C&#39;=C XOR old XOR new</code> at the matching offset.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> crypto_recipes <span class="keyword">import</span> ctr_patch, xor_bytes</span><br><span class="line">plain,key = <span class="string">b&quot;admin=0&quot;</span>,<span class="string">b&quot;1234567&quot;</span></span><br><span class="line">c = xor_bytes(plain,key)</span><br><span class="line">modified = ctr_patch(c,<span class="number">6</span>,<span class="string">b&quot;0&quot;</span>,<span class="string">b&quot;1&quot;</span>)</span><br><span class="line"><span class="keyword">assert</span> xor_bytes(modified,key) == <span class="string">b&quot;admin=1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>CBC:</strong> <code>P_i=D(C_i) XOR C_(i-1)</code>. Change the previous ciphertext block by <code>old XOR new</code> to make the desired same-position change in P_i. This also corrupts P_(i-1). For the first block, change the IV and avoid that preceding-plaintext corruption. Locate exact block&#x2F;byte offsets first. A verified authentication tag normally rejects either modification.</p>
+<h3 id="Recipe-07-—-ECB-detection-and-byte-at-a-time-recovery"><a href="#Recipe-07-—-ECB-detection-and-byte-at-a-time-recovery" class="headerlink" title="Recipe 07 — ECB detection and byte-at-a-time recovery"></a>Recipe 07 — ECB detection and byte-at-a-time recovery</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Input must be decoded binary ciphertext.</span></span><br><span class="line">python3 scripts/crypto_recipes.py ecb ciphertext.bin --block-size 16</span><br></pre></td></tr></table></figure>
+
+<p>Repeated aligned ciphertext blocks suggest ECB, but do not prove it in isolation; short messages can also hide ECB repetition. For an oracle <code>AES-ECB(key,controlled_input || secret)</code>, pad your input so the next unknown byte is at a block end, build a 256-entry encrypted candidate dictionary, match the target block, and repeat. Confirm block size and determinism first. A fixed unknown prefix requires alignment; a fresh random prefix needs a more careful synchronization strategy.</p>
+<h3 id="Recipe-08-—-CBC-padding-oracle-workflow"><a href="#Recipe-08-—-CBC-padding-oracle-workflow" class="headerlink" title="Recipe 08 — CBC padding-oracle workflow"></a>Recipe 08 — CBC padding-oracle workflow</h3><p><strong>When:</strong> A decrypting service exposes whether a modified CBC plaintext has valid PKCS#7 padding. Recover intermediate bytes <code>I=D_K(C_i)</code> from right to left by altering the previous block to force <code>01</code>, then <code>02 02</code>, and so on. Finally <code>P_i=I XOR C_(i-1)</code>.</p>
+<p>The basic worst-case search is about 256 guesses per byte, plus verification queries. Last-byte successes can be false positives from an existing longer padding suffix; perturb another byte to distinguish them. Keep the IV and ciphertext framing intact, and distinguish padding validity from later parse errors.</p>
+<p>The existing <code>crypto-attacks/attacks/cbc/padding_oracle.py</code> is an implementation reference. Inspect its function signature and test fixture before connecting a transport; API layouts differ. A useful adapter contract is <code>oracle(iv: bytes,ciphertext: bytes)-&gt;bool</code>. A timeout is not evidence of invalid padding unless the challenge establishes that behavior.</p>
+<h3 id="Recipe-09-—-LCG-recovery"><a href="#Recipe-09-—-LCG-recovery" class="headerlink" title="Recipe 09 — LCG recovery"></a>Recipe 09 — LCG recovery</h3><p><strong>When:</strong> You see consecutive full states of <code>x_(i+1)=(a*x_i+b) mod M</code>. With known M and an invertible state difference, solve a and b directly, then predict the next output.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> crypto_recipes <span class="keyword">import</span> lcg_known_modulus, lcg_modulus_multiple</span><br><span class="line">states = [<span class="number">7</span>]</span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>): states.append((<span class="number">17</span>*states[-<span class="number">1</span>]+<span class="number">43</span>)%<span class="number">101</span>)</span><br><span class="line">a,b,next_value = lcg_known_modulus(states,<span class="number">101</span>)</span><br><span class="line"><span class="keyword">assert</span> (a,b) == (<span class="number">17</span>,<span class="number">43</span>)</span><br><span class="line">multiple = lcg_modulus_multiple(states)</span><br><span class="line"><span class="keyword">assert</span> multiple &gt; <span class="number">0</span> <span class="keyword">and</span> multiple % <span class="number">101</span> == <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>For unknown M, let differences be <code>t_i=x_(i+1)-x_i</code>. Each <code>t_(i+2)*t_i-t_(i+1)**2</code> is a multiple of M. Their GCD may be a <strong>multiple</strong> of the true modulus, not the modulus itself; factor candidates and verify all observed transitions. Truncated outputs, skipped states or noninvertible differences require other methods.</p>
+<h3 id="Recipe-10-—-Timestamp-weak-RNG-seed-search"><a href="#Recipe-10-—-Timestamp-weak-RNG-seed-search" class="headerlink" title="Recipe 10 — Timestamp &#x2F; weak RNG seed search"></a>Recipe 10 — Timestamp &#x2F; weak RNG seed search</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Toy construction. Reproduce the challenge&#x27;s exact generator calls in practice.</span></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line">observed = random.Random(<span class="number">1700000000</span>).getrandbits(<span class="number">32</span>)</span><br><span class="line">hits = []</span><br><span class="line"><span class="keyword">for</span> seed <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1699999940</span>,<span class="number">1700000061</span>):</span><br><span class="line">    rng = random.Random(seed)</span><br><span class="line">    <span class="keyword">if</span> rng.getrandbits(<span class="number">32</span>) == observed:</span><br><span class="line">        hits.append((seed,rng.getrandbits(<span class="number">32</span>)))</span><br><span class="line"><span class="built_in">print</span>(hits)                             <span class="comment"># seed and predicted next output</span></span><br></pre></td></tr></table></figure>
+
+<p>Use a justified time window and verify another output. Python <code>random</code> is not interchangeable with C <code>rand</code>, NumPy generators, or <code>secrets</code>. Recovering a Mersenne Twister state from full outputs is another route, but byte&#x2F;bit packing and hidden draws matter. Never claim that one short output uniquely identifies a seed without checking collisions.</p>
+<h3 id="Recipe-11-—-ECDSA-nonce-reuse"><a href="#Recipe-11-—-ECDSA-nonce-reuse" class="headerlink" title="Recipe 11 — ECDSA nonce reuse"></a>Recipe 11 — ECDSA nonce reuse</h3><p><strong>When:</strong> Two signatures use the same private key d and the same nonce k. With group order q, <code>s=k^-1*(z+r*d) mod q</code>, so <code>k=(z1-z2)/(s1-s2) mod q</code>, then <code>d=(s1*k-z1)/r mod q</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> crypto_recipes <span class="keyword">import</span> ecdsa_reused_nonce</span><br><span class="line">q,r,d,k,z1,z2 = <span class="number">101</span>,<span class="number">9</span>,<span class="number">42</span>,<span class="number">17</span>,<span class="number">20</span>,<span class="number">30</span></span><br><span class="line">s1 = (z1+r*d)*<span class="built_in">pow</span>(k,-<span class="number">1</span>,q)%q</span><br><span class="line">s2 = (z2+r*d)*<span class="built_in">pow</span>(k,-<span class="number">1</span>,q)%q</span><br><span class="line"><span class="keyword">assert</span> ecdsa_reused_nonce(q,r,s1,z1,s2,z2) == (k,d)</span><br></pre></td></tr></table></figure>
+
+<p>This toy tests the scalar algebra; a real recovery must verify <code>d*G</code> equals the public key and both signatures verify. The modulus is the subgroup order q, not the curve coordinate-field prime. Form z using the signature scheme’s specified hash truncation. Equal r can also arise from k and −k; low-s normalization can flip signs, so try the relevant <code>s</code> &#x2F; <code>q-s</code> combinations and verify.</p>
+<h3 id="Recipe-12-—-Other-patterns-worth-recognizing"><a href="#Recipe-12-—-Other-patterns-worth-recognizing" class="headerlink" title="Recipe 12 — Other patterns worth recognizing"></a>Recipe 12 — Other patterns worth recognizing</h3><table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Why it matters</th>
+<th>Practical starting point</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Secret-prefix &#96;hash(key</td>
+<td></td>
+<td>msg)&#96; MAC</td>
+</tr>
+<tr>
+<td>GCM nonce reuse</td>
+<td>Repeats CTR stream and creates equations in GHASH key</td>
+<td>Keep AAD, lengths and tags; tag forgery requires more than XOR alone</td>
+</tr>
+<tr>
+<td>Smooth discrete-log group order</td>
+<td>Break log into small prime-power subproblems</td>
+<td>Factor group order, use Pohlig–Hellman, recombine with CRT</td>
+</tr>
+<tr>
+<td>Unvalidated small-order public point</td>
+<td>Leaks secret scalar residues</td>
+<td>Need an observable key-dependent response; combine residues</td>
+</tr>
+<tr>
+<td>Biased&#x2F;partial ECDSA nonces</td>
+<td>Hidden-number lattice problem</td>
+<td>Collect sufficient independent signatures and correct bit bounds</td>
+</tr>
+<tr>
+<td>Double encryption with small key domains</td>
+<td>Meet in the middle</td>
+<td>Store <code>E_k1(P)</code>, match against <code>D_k2(C)</code>; verify another pair</td>
+</tr>
+<tr>
+<td>Low-density subset sum</td>
+<td>Integer lattice embedding</td>
+<td>Scale carefully, LLL, then check binary subset coefficients</td>
+</tr>
+<tr>
+<td>Linear LFSR output</td>
+<td>Linear recurrence can be reconstructed</td>
+<td>Consecutive bits, Berlekamp–Massey or GF(2) equations</td>
+</tr>
+</tbody></table>
+<p>These are recognition notes, not claims that every instance is solvable. The local <a target="_blank" rel="noopener" href="https://github.com/jvdsn/crypto-attacks">crypto-attacks implementation collection</a> includes many corresponding modules and tests. Read each attack’s prerequisites; advanced scripts are not interchangeable CLI commands.</p>
+<h2 id="4-RsaCtfTool-practical-command-guide"><a href="#4-RsaCtfTool-practical-command-guide" class="headerlink" title="4. RsaCtfTool practical command guide"></a>4. RsaCtfTool practical command guide</h2><p>This guide targets the local checkout at <code>../RsaCtfTool</code>, commit <strong>e1d8644e80aa48d08aa8e06d24c37cf81f3fb437</strong>. The CLI option names, relation direction and bit layout were checked against its source, not inferred from old writeups. The <a target="_blank" rel="noopener" href="https://github.com/RsaCtfTool/RsaCtfTool">upstream project</a> provides general installation and usage information. Your own <code>--help</code> is authoritative after an upgrade.</p>
+<p><strong>Version traps:</strong> This version uses <code>--decrypt</code> and <code>--decryptfile</code>. Older writeups may say <code>--uncipher</code> &#x2F; <code>--uncipherfile</code> or invoke <code>RsaCtfTool.py</code>. This checkout installs <code>RsaCtfTool</code> and <code>rsacrack</code>, and supports <code>python -m RsaCtfTool</code>.</p>
+<h3 id="Install-launch-in-this-workspace"><a href="#Install-launch-in-this-workspace" class="headerlink" title="Install &#x2F; launch in this workspace"></a>Install &#x2F; launch in this workspace</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># From the handbook directory; use your existing environment if already set up.</span></span><br><span class="line"><span class="built_in">cd</span> ../RsaCtfTool</span><br><span class="line">python3 -m venv .venv</span><br><span class="line"><span class="built_in">source</span> .venv/bin/activate</span><br><span class="line">python -m pip install -e .</span><br><span class="line">RsaCtfTool --<span class="built_in">help</span></span><br><span class="line"><span class="built_in">cd</span> ../crypto-ctf-handbook</span><br></pre></td></tr></table></figure>
+
+<p>Sage is separate from a normal Python pip environment. Install it using the <a target="_blank" rel="noopener" href="https://doc.sagemath.org/html/en/installation/index.html">SageMath installation guide</a> appropriate to your OS. On Windows, WSL is a useful place to run the Linux commands shown here. Being able to invoke <code>sage</code> and being able to <code>import sage.all</code> from an arbitrary Python virtualenv are different capabilities.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sage --version</span><br><span class="line">sage -python -c <span class="string">&#x27;from sage.all import ZZ; print(ZZ(81).isqrt())&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Alternative if your Sage Python already has RsaCtfTool&#x27;s dependencies:</span></span><br><span class="line">PYTHONPATH=../RsaCtfTool/src sage -python -m RsaCtfTool --<span class="built_in">help</span></span><br></pre></td></tr></table></figure>
+
+<p>The second command form was available in this workspace during preparation. Replace <code>RsaCtfTool</code> in later examples with that form if you do not have the console executable on PATH. Do not blindly mix pip packages between Python and Sage environments.</p>
+<h3 id="Self-contained-toy-example"><a href="#Self-contained-toy-example" class="headerlink" title="Self-contained toy example"></a>Self-contained toy example</h3><p>The toy values below exercise direct decryption without external files. The supplied RsaCtfTool checkout also includes many attack-specific fixtures under <code>../RsaCtfTool/examples/</code>; inspect a fixture before assuming which attack it demonstrates.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># n=3233, p=61, q=53, e=17; raw ciphertext 2790 decrypts to integer 65 (&#x27;A&#x27;).</span></span><br><span class="line">RsaCtfTool -n 3233 -p 61 -q 53 -e 17 --decrypt 2790 --private</span><br></pre></td></tr></table></figure>
+
+<p>This is textbook RSA with tiny values, not a secure padding example. Use Python’s standard-library helpers in <code>scripts/rsa_attacks.py --demo</code> to reproduce the arithmetic without installing RsaCtfTool dependencies.</p>
+<p>Generate additional local fixtures for close-prime, Wiener, broadcast and related-message attacks with <code>sage -python scripts/make_rsa_lab.py</code>. The script requires PyCryptodome in the interpreter that runs it and writes only to <code>crypto-ctf-handbook/lab/</code>.</p>
+<h3 id="Typical-workflow-for-a-new-challenge"><a href="#Typical-workflow-for-a-new-challenge" class="headerlink" title="Typical workflow for a new challenge"></a>Typical workflow for a new challenge</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># A. Inspect the provided key.</span></span><br><span class="line">RsaCtfTool --dumpkey --key key.pub</span><br><span class="line"></span><br><span class="line"><span class="comment"># B. Choose attacks that match your clues.</span></span><br><span class="line">RsaCtfTool --publickey key.pub --attack fermat wiener --private --<span class="built_in">timeout</span> 60</span><br><span class="line"></span><br><span class="line"><span class="comment"># C. Include ciphertext so successful recovery also decrypts it.</span></span><br><span class="line">RsaCtfTool --publickey key.pub --decryptfile cipher.bin --attack fermat --private</span><br><span class="line"></span><br><span class="line"><span class="comment"># D. Broader attempt if no clue dominates; some attacks may contact external services.</span></span><br><span class="line">RsaCtfTool --publickey key.pub --attack all --private --decryptfile cipher.bin --<span class="built_in">timeout</span> 120</span><br><span class="line"></span><br><span class="line"><span class="comment"># E. Inspect a recovered key or decrypt with an existing complete private key.</span></span><br><span class="line">RsaCtfTool --dumpkey --ext --key recovered.pem</span><br><span class="line">RsaCtfTool --key recovered.pem --decryptfile cipher.bin</span><br></pre></td></tr></table></figure>
+
+<p><code>--timeout</code> is an attack-level setting; it is not a guaranteed overall deadline for the full queue or all external subprocesses. Missing backend messages describe unavailable attacks, not evidence that the mathematical attack failed. <code>--private</code> asks to display a recovered key; message-only attacks such as broadcast can succeed without one.</p>
+<h3 id="Integer-input-byte-files-and-public-key-creation"><a href="#Integer-input-byte-files-and-public-key-creation" class="headerlink" title="Integer input, byte files and public-key creation"></a>Integer input, byte files and public-key creation</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RsaCtfTool -n 3233 -e 17 --decrypt 2790 --attack fermat</span><br><span class="line">RsaCtfTool -n 0xca1 -e 0x11 --decrypt 0xae6 --attack fermat</span><br><span class="line">RsaCtfTool --createpub -n 3233 -e 17 &gt; toy.pub</span><br><span class="line">RsaCtfTool --dumpkey --key toy.pub</span><br></pre></td></tr></table></figure>
+
+<p>Use decimal or lowercase <code>0x</code>-prefixed hexadecimal for the least ambiguous numeric parsing. <code>--decrypt 2790</code> means an integer. <code>--decryptfile cipher.txt</code> does <strong>not</strong> mean “parse the decimal number in this text file.” It reads bytes and may auto-decode canonical Base64. Arbitrary raw bytes that also look like Base64 can therefore be ambiguous; numeric <code>--decrypt</code> avoids that issue.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line">n,c = <span class="number">3233</span>,<span class="number">2790</span></span><br><span class="line">Path(<span class="string">&quot;cipher.bin&quot;</span>).write_bytes(c.to_bytes((n.bit_length()+<span class="number">7</span>)//<span class="number">8</span>,<span class="string">&quot;big&quot;</span>))</span><br><span class="line"><span class="comment"># Hex text -&gt; raw bytes:</span></span><br><span class="line"><span class="comment"># Path(&quot;cipher.bin&quot;).write_bytes(bytes.fromhex(Path(&quot;cipher.hex&quot;).read_text().strip()))</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Multiple-key-commands-and-ordered-pairing"><a href="#Multiple-key-commands-and-ordered-pairing" class="headerlink" title="Multiple-key commands and ordered pairing"></a>Multiple-key commands and ordered pairing</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># GCD scanning does not require ciphertext pairing.</span></span><br><span class="line">RsaCtfTool --publickey <span class="string">&#x27;keys/*.pub&#x27;</span> --attack common_factors --private</span><br><span class="line"></span><br><span class="line"><span class="comment"># Same modulus, different exponents, same message.</span></span><br><span class="line">RsaCtfTool --publickey key_e1.pub,key_e2.pub --decryptfile c1.bin,c2.bin --attack common_modulus_related_message</span><br><span class="line"></span><br><span class="line"><span class="comment"># Same-n mode can also take comma-separated exponents and ciphers.</span></span><br><span class="line">RsaCtfTool -n 3233 -e 17,13 --decrypt 2790,1666 --attack common_modulus_related_message</span><br></pre></td></tr></table></figure>
+
+<p>Quote wildcards so the tool receives a single pattern argument. For broadcast or paired ciphertext attacks, prefer explicit comma-separated paths: filesystem glob order is not a reliable pairing contract. The <code>common_modulus_related_message</code> attack name in this version refers to the shared-message&#x2F;common-modulus case; it is separate from <code>franklin_reiter</code>.</p>
+<h3 id="Leaks-and-Coppersmith-command-templates"><a href="#Leaks-and-Coppersmith-command-templates" class="headerlink" title="Leaks and Coppersmith command templates"></a>Leaks and Coppersmith command templates</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Full dp or dq leak (choose the appropriate parameter).</span></span><br><span class="line">RsaCtfTool -n 3233 -e 17 --dp 53 --attack dp_leak --private --decrypt 2790</span><br><span class="line">RsaCtfTool -n 3233 -e 17 --dq 49 --attack dp_leak --private --decrypt 2790</span><br><span class="line"></span><br><span class="line"><span class="comment"># Known prefix, four unknown BYTES; key and cipher supplied by the challenge.</span></span><br><span class="line">RsaCtfTool --publickey key.pub --decryptfile cipher.bin --attack stereotyped_message --sm-prefix <span class="string">&#x27;flag&#123;&#x27;</span> --sm-len 4</span><br><span class="line"></span><br><span class="line"><span class="comment"># Known prefix and suffix, four unknown bytes between them.</span></span><br><span class="line">RsaCtfTool --publickey key.pub --decryptfile cipher.bin --attack stereotyped_message --sm-prefix <span class="string">&#x27;flag&#123;&#x27;</span> --sm-suffix <span class="string">&#x27;&#125;&#x27;</span> --sm-len 4</span><br><span class="line"></span><br><span class="line"><span class="comment"># Hex-encoded prefix bytes; 0x666c61677b means ASCII flag&#123;.</span></span><br><span class="line">RsaCtfTool --publickey key.pub --decryptfile cipher.bin --attack stereotyped_message --sm-prefix 0x666c61677b --sm-len 4</span><br><span class="line"></span><br><span class="line"><span class="comment"># Partial p: high value is ALREADY shifted; this example means p=0x12340000+x.</span></span><br><span class="line"><span class="comment"># Template only: replace n&#x27;s key and the prefix with the challenge data.</span></span><br><span class="line">RsaCtfTool --publickey key.pub --attack partial_p --p-high 0x12340000 --p-unknown-bits 16 --private</span><br><span class="line"></span><br><span class="line"><span class="comment"># Partial private-key structures: require correctly encoded partial key material.</span></span><br><span class="line">RsaCtfTool --key partial.pem --partial --attack partial_d --d-known-bits 20 --private</span><br><span class="line">RsaCtfTool --key partial.pem --partial --attack lattice --private</span><br></pre></td></tr></table></figure>
+
+<p><code>--sm-len</code> counts <strong>bytes</strong>; <code>--p-unknown-bits</code> and <code>--d-known-bits</code> count <strong>bits</strong>. Supplying 16 for the first asks for 128 unknown bits. The partial-private-key modes do not turn arbitrary fragments of PEM text into recoverable keys; inspect the implementation’s expected fields. An attack name being accepted does not mean your inputs satisfy its prerequisites.</p>
+<h3 id="Database-diagnostics-and-output"><a href="#Database-diagnostics-and-output" class="headerlink" title="Database, diagnostics and output"></a>Database, diagnostics and output</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Online lookup of a public modulus; requires network access.</span></span><br><span class="line">RsaCtfTool --publickey key.pub --attack factordb --private</span><br><span class="line"></span><br><span class="line"><span class="comment"># Explicit opt-in to submitting recovered factors to the external database.</span></span><br><span class="line">RsaCtfTool --publickey key.pub --attack fermat --private --sendtofdb</span><br><span class="line"></span><br><span class="line"><span class="comment"># Fingerprint checks and format conversion.</span></span><br><span class="line">RsaCtfTool --isroca --publickey key.pub</span><br><span class="line">RsaCtfTool --isconspicuous --key recovered.pem</span><br><span class="line">RsaCtfTool --convert_idrsa_pub --publickey id_rsa.pub</span><br><span class="line"></span><br><span class="line"><span class="comment"># Diagnostics and file output.</span></span><br><span class="line">RsaCtfTool --publickey key.pub --attack fermat --verbosity DEBUG --withtraceback --private</span><br><span class="line">RsaCtfTool --publickey key.pub --attack fermat --private --output recovered.pem</span><br></pre></td></tr></table></figure>
+
+<p>This version appends to <code>--output</code>. Use a fresh path and one intended output type per run: multiple keys and decrypted bytes may otherwise be mixed in the same file. Do not assume logs constitute a clean PEM; verify with a key parser. <code>--sendtofdb</code> is a submission action, while <code>--attack factordb</code> is a lookup. No external submissions are needed for this handbook’s lab.</p>
+<h3 id="Complete-CLI-flag-reference-for-the-checked-checkout"><a href="#Complete-CLI-flag-reference-for-the-checked-checkout" class="headerlink" title="Complete CLI flag reference for the checked checkout"></a>Complete CLI flag reference for the checked checkout</h3><p>The examples in this table are argument fragments to append to <code>RsaCtfTool</code>; combine input flags with an appropriate action as shown in the complete commands above. <code>key.pub</code>, <code>cipher.bin</code>, <code>partial.pem</code> and <code>recovered.pem</code> are challenge placeholders, not bundled files unless explicitly under <code>lab/</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Purpose &#x2F; units</th>
+<th>Example fragment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-h</code>, <code>--help</code></td>
+<td>Show parser options and available attacks</td>
+<td><code>--help</code></td>
+</tr>
+<tr>
+<td><code>--publickey</code></td>
+<td>Public PEM path, quoted glob, or comma-separated paths</td>
+<td><code>--publickey &#39;keys/*.pub&#39;</code></td>
+</tr>
+<tr>
+<td><code>--key</code></td>
+<td>Load key for dump&#x2F;private&#x2F;partial operations</td>
+<td><code>--key recovered.pem --dumpkey</code></td>
+</tr>
+<tr>
+<td><code>--password</code></td>
+<td>Passphrase for an encrypted private key</td>
+<td><code>--key protected.pem --password &#39;ctf-demo&#39; --dumpkey</code></td>
+</tr>
+<tr>
+<td><code>-n</code></td>
+<td>Modulus integer</td>
+<td><code>-n 3233</code></td>
+</tr>
+<tr>
+<td><code>-e</code></td>
+<td>Public exponent or comma-separated exponents</td>
+<td><code>-e 17,13</code></td>
+</tr>
+<tr>
+<td><code>-p</code></td>
+<td>Known prime factor</td>
+<td><code>-p 61</code></td>
+</tr>
+<tr>
+<td><code>-q</code></td>
+<td>Other known factor</td>
+<td><code>-q 53</code></td>
+</tr>
+<tr>
+<td><code>-d</code></td>
+<td>Known full private exponent</td>
+<td><code>-n 3233 -e 17 -d 2753 --private</code></td>
+</tr>
+<tr>
+<td><code>--decrypt</code></td>
+<td>Numeric ciphertext(s), comma-separated</td>
+<td><code>--decrypt 2790</code></td>
+</tr>
+<tr>
+<td><code>--decryptfile</code></td>
+<td>Ciphertext file(s), comma-separated</td>
+<td><code>--decryptfile c1.bin,c2.bin</code></td>
+</tr>
+<tr>
+<td><code>--private</code></td>
+<td>Display recovered private key</td>
+<td><code>--private</code></td>
+</tr>
+<tr>
+<td><code>--output</code></td>
+<td>Append selected result data to path</td>
+<td><code>--output recovered.pem</code></td>
+</tr>
+<tr>
+<td><code>--attack</code></td>
+<td>One or more names, or <code>all</code></td>
+<td><code>--attack fermat wiener</code></td>
+</tr>
+<tr>
+<td><code>--timeout</code></td>
+<td>Per-attack seconds, default 60</td>
+<td><code>--timeout 300</code></td>
+</tr>
+<tr>
+<td><code>--verbosity</code></td>
+<td>DEBUG, INFO, WARNING, ERROR, CRITICAL</td>
+<td><code>--verbosity DEBUG</code></td>
+</tr>
+<tr>
+<td><code>--withtraceback</code></td>
+<td>Include traceback diagnostics</td>
+<td><code>--withtraceback</code></td>
+</tr>
+<tr>
+<td><code>--createpub</code></td>
+<td>Print public PEM from n and e</td>
+<td><code>--createpub -n 3233 -e 17</code></td>
+</tr>
+<tr>
+<td><code>--dumpkey</code></td>
+<td>Display key parameters</td>
+<td><code>--dumpkey --key key.pub</code></td>
+</tr>
+<tr>
+<td><code>--ext</code></td>
+<td>Additional CRT values in private-key dump</td>
+<td><code>--dumpkey --ext --key recovered.pem</code></td>
+</tr>
+<tr>
+<td><code>--show_modulus</code></td>
+<td>Display n supplied numerically</td>
+<td><code>-n 3233 -e 17 --show_modulus --attack fermat</code></td>
+</tr>
+<tr>
+<td><code>--check_publickey</code></td>
+<td>Run modulus well-formedness check before attacks</td>
+<td><code>--publickey key.pub --check_publickey --attack fermat</code></td>
+</tr>
+<tr>
+<td><code>--isroca</code></td>
+<td>ROCA fingerprint</td>
+<td><code>--isroca --publickey key.pub</code></td>
+</tr>
+<tr>
+<td><code>--isconspicuous</code></td>
+<td>Inspect a complete private key for suspicious structure</td>
+<td><code>--isconspicuous --key recovered.pem</code></td>
+</tr>
+<tr>
+<td><code>--convert_idrsa_pub</code></td>
+<td>Print PEM from OpenSSH public format</td>
+<td><code>--convert_idrsa_pub --publickey id_rsa.pub</code></td>
+</tr>
+<tr>
+<td><code>--ecmdigits</code></td>
+<td>Estimated decimal digits of a factor for ECM</td>
+<td><code>--attack ecm --ecmdigits 25</code></td>
+</tr>
+<tr>
+<td><code>--fr-a</code></td>
+<td>Affine multiplier in implementation’s <code>m2=a*m1+b</code></td>
+<td><code>--attack franklin_reiter --fr-a 2 --fr-b 5</code></td>
+</tr>
+<tr>
+<td><code>--fr-b</code></td>
+<td>Affine offset; this implementation rejects zero</td>
+<td><code>--fr-a 2 --fr-b 5</code></td>
+</tr>
+<tr>
+<td><code>--sm-prefix</code></td>
+<td>Known bytes: text or <code>0x</code> hex</td>
+<td><code>--sm-prefix &#39;flag{&#39;</code></td>
+</tr>
+<tr>
+<td><code>--sm-suffix</code></td>
+<td>Known suffix bytes</td>
+<td><code>--sm-suffix &#39;}&#39;</code></td>
+</tr>
+<tr>
+<td><code>--sm-len</code></td>
+<td>Number of unknown bytes</td>
+<td><code>--sm-len 4</code></td>
+</tr>
+<tr>
+<td><code>--p-high</code></td>
+<td>Known high factor bits with low unknown bits zeroed</td>
+<td><code>--p-high 0x12340000</code></td>
+</tr>
+<tr>
+<td><code>--p-unknown-bits</code></td>
+<td>Number of missing low factor bits</td>
+<td><code>--p-unknown-bits 16</code></td>
+</tr>
+<tr>
+<td><code>--d-known-bits</code></td>
+<td>Number of known low d bits in partial-key mode</td>
+<td><code>--d-known-bits 20</code></td>
+</tr>
+<tr>
+<td><code>--dp</code></td>
+<td>Leaked <code>d mod (p-1)</code></td>
+<td><code>--dp 53 --attack dp_leak</code></td>
+</tr>
+<tr>
+<td><code>--dq</code></td>
+<td>Leaked <code>d mod (q-1)</code></td>
+<td><code>--dq 49 --attack dp_leak</code></td>
+</tr>
+<tr>
+<td><code>--partial</code></td>
+<td>Interpret partial private-key material</td>
+<td><code>--key partial.pem --partial --attack partial_d</code></td>
+</tr>
+<tr>
+<td><code>--sendtofdb</code></td>
+<td>Submit recovered factors externally</td>
+<td><code>--publickey key.pub --private --sendtofdb</code></td>
+</tr>
+<tr>
+<td><code>--tests</code></td>
+<td>Tool’s attack self-test mode, distinct from pytest</td>
+<td><code>--tests --attack fermat</code></td>
+</tr>
+<tr>
+<td><code>--cleanup</code></td>
+<td>Request cleanup of <code>.pub</code> inputs after operation</td>
+<td><code>--publickey &#39;disposable/*.pub&#39; --attack fermat --cleanup</code></td>
+</tr>
+</tbody></table>
+<p>Use <code>--cleanup</code> only on disposable copies. This reference does not run it against your challenge files. Passing a password as a CLI argument may expose it in process listings and shell history; the example is a throwaway CTF value.</p>
+<h3 id="Which-named-attack-should-I-select"><a href="#Which-named-attack-should-I-select" class="headerlink" title="Which named attack should I select?"></a>Which named attack should I select?</h3><table>
+<thead>
+<tr>
+<th>Attack selector</th>
+<th>Suitable clue &#x2F; required data</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>fermat</code></td>
+<td>Close p and q</td>
+</tr>
+<tr>
+<td><code>wiener</code></td>
+<td>Very small d</td>
+</tr>
+<tr>
+<td><code>boneh_durfee</code></td>
+<td>Small d beyond simple continued fractions</td>
+</tr>
+<tr>
+<td><code>cube_root</code></td>
+<td>Small e&#x3D;3 message &#x2F; root case</td>
+</tr>
+<tr>
+<td><code>common_factors</code></td>
+<td>Several moduli with shared primes</td>
+</tr>
+<tr>
+<td><code>hastads</code></td>
+<td>Same message, several moduli, matching ciphertexts</td>
+</tr>
+<tr>
+<td><code>common_modulus_related_message</code></td>
+<td>Same n, same message, different exponents</td>
+</tr>
+<tr>
+<td><code>franklin_reiter</code></td>
+<td>Two affine-related messages plus a,b</td>
+</tr>
+<tr>
+<td><code>stereotyped_message</code></td>
+<td>Known prefix&#x2F;suffix, short unknown part</td>
+</tr>
+<tr>
+<td><code>short_pad</code></td>
+<td>Two encodings with short random-pad difference</td>
+</tr>
+<tr>
+<td><code>partial_p</code></td>
+<td>Aligned high bits of a factor and unknown-bit count</td>
+</tr>
+<tr>
+<td><code>partial_d</code>, <code>lattice</code>, <code>partial_q</code></td>
+<td>Supported partial key material; inspect exact adapter</td>
+</tr>
+<tr>
+<td><code>dp_leak</code></td>
+<td>Full leaked dp or dq</td>
+</tr>
+<tr>
+<td><code>small_crt_exp</code></td>
+<td>Small CRT private exponent</td>
+</tr>
+<tr>
+<td><code>pollard_p_1</code></td>
+<td>Smooth p−1</td>
+</tr>
+<tr>
+<td><code>pollard_rho</code>, <code>brent</code>, <code>smallq</code></td>
+<td>Small factor &#x2F; bounded general factoring</td>
+</tr>
+<tr>
+<td><code>ecm</code>, <code>ecm2</code></td>
+<td>Factor small enough for ECM backend</td>
+</tr>
+<tr>
+<td><code>factordb</code></td>
+<td>Previously factored modulus; network lookup</td>
+</tr>
+<tr>
+<td><code>roca</code></td>
+<td>Positive ROCA fingerprint and feasible parameters</td>
+</tr>
+<tr>
+<td><code>smallfraction</code></td>
+<td>p&#x2F;q near a small rational</td>
+</tr>
+<tr>
+<td><code>siqs</code>, <code>qs</code>, <code>quadratic_sieve</code></td>
+<td>Small enough general composite; backend requirements vary</td>
+</tr>
+<tr>
+<td><code>all</code></td>
+<td>Broad queue; slower and may invoke network&#x2F;external backends</td>
+</tr>
+</tbody></table>
+<p>Other dynamically discovered modules cover specialized prime forms and experimental algorithms. Run <code>--help</code> for the exact names in your checkout and read <code>src/RsaCtfTool/attacks/{single_key,multi_keys}/NAME.py</code> before selecting an unfamiliar one. Selecting a module only invokes its implementation; it does not make a missing prerequisite true.</p>
+<h3 id="Troubleshooting-RsaCtfTool"><a href="#Troubleshooting-RsaCtfTool" class="headerlink" title="Troubleshooting RsaCtfTool"></a>Troubleshooting RsaCtfTool</h3><table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>What to check next</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Unrecognized <code>--uncipher</code></td>
+<td>Use this version’s <code>--decrypt</code>; compare <code>--help</code></td>
+</tr>
+<tr>
+<td>No <code>RsaCtfTool.py</code></td>
+<td>Use installed console command or <code>python -m RsaCtfTool</code></td>
+</tr>
+<tr>
+<td>Sage&#x2F;backend not found</td>
+<td>Verify executable PATH and interpreter environment</td>
+</tr>
+<tr>
+<td>Attack “failed” instantly</td>
+<td>Required leak flags, ciphertext count, imports or binaries</td>
+</tr>
+<tr>
+<td>Broadcast gives no root</td>
+<td>Ordered pairing, identical encoded message, GCDs and total modulus bound</td>
+</tr>
+<tr>
+<td>Franklin–Reiter no result</td>
+<td>Verify implementation relation <code>m2=a*m1+b</code> and input order</td>
+</tr>
+<tr>
+<td>Coppersmith no result</td>
+<td>Check units, aligned prefix, polynomial degree and realistic bound</td>
+</tr>
+<tr>
+<td>GCD&#x2F;inverse errors</td>
+<td>May reveal shared factors; compute GCD before discarding</td>
+</tr>
+<tr>
+<td>Private key recovered, no flag</td>
+<td>Decode correct ciphertext and padding; plaintext may be another key</td>
+</tr>
+<tr>
+<td><code>--output</code> no longer parses as PEM</td>
+<td>File may have appended multiple keys or mixed outputs</td>
+</tr>
+<tr>
+<td>Long run without a result</td>
+<td>Select attacks by evidence; set budgets and inspect logs</td>
+</tr>
+</tbody></table>
+<h2 id="5-Practice-path-and-verification-checklist"><a href="#5-Practice-path-and-verification-checklist" class="headerlink" title="5. Practice path and verification checklist"></a>5. Practice path and verification checklist</h2><p>Work through the examples in this order: known factors → shared factors → Fermat → low roots → broadcast → common modulus → Wiener → Sage polynomials → related messages → Coppersmith → oracles. For each one, deliberately break one prerequisite and observe the failure. This builds recognition faster than running all attacks against every challenge.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python3 scripts/rsa_attacks.py --demo</span><br><span class="line">sage -python scripts/sage_examples.py</span><br><span class="line">sage -python scripts/make_rsa_lab.py</span><br></pre></td></tr></table></figure>
+
+<p>For a final answer in a CTF, check the actual challenge relation and encoding, re-encrypt recovered RSA candidates, confirm factors multiply back, and preserve enough bytes to distinguish a padded block from a short integer. For oracle scripts, save the query count and exact predicate. For brute force, record the searched range so “no match” has a precise meaning.</p>
+<h3 id="Source-and-version-notes"><a href="#Source-and-version-notes" class="headerlink" title="Source and version notes"></a>Source and version notes</h3><ul>
+<li>RsaCtfTool: local <code>main.py</code>, <code>lib/utils.py</code>, <code>lib/algos.py</code>, attack adapters and <code>pyproject.toml</code> at commit <code>e1d8644e80aa48d08aa8e06d24c37cf81f3fb437</code>; <a target="_blank" rel="noopener" href="https://github.com/RsaCtfTool/RsaCtfTool">upstream repository</a>.</li>
+<li>SageMath: local runtime <strong>10.7</strong>, with syntax and API references in the <a target="_blank" rel="noopener" href="https://doc.sagemath.org/html/en/index.html">official documentation</a>. Online documentation may describe a newer release.</li>
+<li><a target="_blank" rel="noopener" href="https://crypto.stanford.edu/~dabo/pubs/papers/RSA-survey.pdf">RSA attack survey</a>, <a target="_blank" rel="noopener" href="https://crypto.stanford.edu/~dabo/pubs/abstracts/lowRSAexp.html">Boneh–Durfee</a>, <a target="_blank" rel="noopener" href="https://www.iacr.org/cryptodb/data/paper.php?pubkey=1037">Bleichenbacher</a>, and <a target="_blank" rel="noopener" href="https://www.iacr.org/archive/crypto2001/21390229.pdf">Manger</a> provide the original research context.</li>
+<li><a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/rfc8017">RFC 8017</a> specifies RSA encodings; <a target="_blank" rel="noopener" href="https://doc.sagemath.org/html/en/reference/polynomial_rings/sage/rings/polynomial/polynomial_modn_dense_ntl.html">Sage small_roots</a> documents the modular root interface.</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/jvdsn/crypto-attacks">jvdsn&#x2F;crypto-attacks</a> is an implementation reference already present in this workspace. Local files may contain challenge-specific modifications; inspect before importing.</li>
+</ul>
+<p>The bundled Python helpers and Sage toy demos are executable. Commands involving placeholder challenge files, partial keys or network oracles are integration templates; adapt their input and query handling to the challenge.</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://syiehab.github.io">Syihab Dhiaulhaq</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://syiehab.github.io/2026/10/24/rsa-notes/">https://syiehab.github.io/2026/10/24/rsa-notes/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/RSA/">RSA</a><a class="post-meta__tags" href="/tags/Crypto/">Crypto</a></div><div class="post-share"><div class="social-share" data-image="https://i.pinimg.com/736x/f4/04/44/f4044494aeacb1a2a428a597e072bdad.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/10/26/pwn1-deadface2025/" title="PWN - ROP (Deadface CTF 2025)"><img class="cover" src="/cover/deadface2025.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">PWN - ROP (Deadface CTF 2025)</div></div><div class="info-2"><div class="info-item-1">I will make a slight change on how the article will be. Instead of one CTF per article, I will make one challenge per article. This will ensure to ease my future writeup reference Locked OutPoints: 100 Created By: @SpiffyLich Desc:We found this program on one of the old drives DEADFACE threw out. We think they’re using it on a server somewhere as a way for members to ‘log in…’ and to keep other people out. No password seems to work. Looking it over, it seems vulnerable enough— but how on eart...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/05/01/Nowruz-1404/" title="Nowruz-1404"><img class="cover" src="/cover/nowruz.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-01</div><div class="info-item-2">Nowruz-1404</div></div><div class="info-2"><div class="info-item-1">Nowruz 1404Nowruz 1404 is an online jeopardy-style Capture The Flag competition organized by the FlagMotori team.I played this ctf under RE:UN10N team and got 10th place. This writeup will cover the crypto challenges only.  CryptoBrutal RSAQuestion: Sometimes you need to be cruel to be able to solve a crypto challenge, don’t you? Wrap the decrypted message in: FMCTF{} output.txt: 123c =  4137144162867874985534106931891394013918336619009285045779140194463748488172238713043252878940386712098331...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.pinimg.com/736x/f4/04/44/f4044494aeacb1a2a428a597e072bdad.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Syihab Dhiaulhaq</div><div class="author-info-description">2nd Year Cyber Security Student</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/syiehab" target="_blank" title="Github"><i class="fab fa-github" style="color: #ffffff;"></i></a><a class="social-icon" href="https://x.com/ukyovis" target="_blank" title="X"><i class="fab fa-x-twitter" style="color: #ffffff;"></i></a><a class="social-icon" href="https://open.spotify.com/user/22oy7kjj3lzgeabmq3ribiw2y?si=72473b17ab7a4c06" target="_blank" title="Spotify"><i class="fab fa-spotify" style="color: #ffffff;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Noob CTF Player</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Crypto-CTF-field-notes"><span class="toc-number">1.</span> <span class="toc-text">Crypto CTF field notes</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-Start-here-a-five-minute-triage"><span class="toc-number">1.1.</span> <span class="toc-text">0. Start here: a five-minute triage</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Recognition-table"><span class="toc-number">1.1.1.</span> <span class="toc-text">Recognition table</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Encoding-and-arithmetic-essentials"><span class="toc-number">1.1.2.</span> <span class="toc-text">Encoding and arithmetic essentials</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-RSA-foundations-and-attack-map"><span class="toc-number">1.2.</span> <span class="toc-text">1. RSA foundations and attack map</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-01-%E2%80%94-Known-factors-finish-the-decryption"><span class="toc-number">1.2.1.</span> <span class="toc-text">RSA 01 — Known factors: finish the decryption</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-02-%E2%80%94-Shared-prime-batch-GCD"><span class="toc-number">1.2.2.</span> <span class="toc-text">RSA 02 — Shared prime &#x2F; batch GCD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-03-%E2%80%94-Fermat-close-primes"><span class="toc-number">1.2.3.</span> <span class="toc-text">RSA 03 — Fermat: close primes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-04-%E2%80%94-Exact-low-exponent-root"><span class="toc-number">1.2.4.</span> <span class="toc-text">RSA 04 — Exact low-exponent root</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-05-%E2%80%94-Low-exponent-with-a-small-wrap-count"><span class="toc-number">1.2.5.</span> <span class="toc-text">RSA 05 — Low exponent with a small wrap count</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-06-%E2%80%94-Hastad-broadcast"><span class="toc-number">1.2.6.</span> <span class="toc-text">RSA 06 — Håstad broadcast</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-07-%E2%80%94-Common-modulus"><span class="toc-number">1.2.7.</span> <span class="toc-text">RSA 07 — Common modulus</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-08-%E2%80%94-Wiener-very-small-private-exponent"><span class="toc-number">1.2.8.</span> <span class="toc-text">RSA 08 — Wiener: very small private exponent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-09-%E2%80%94-Boneh%E2%80%93Durfee-somewhat-larger-small-d"><span class="toc-number">1.2.9.</span> <span class="toc-text">RSA 09 — Boneh–Durfee: somewhat larger small d</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-10-%E2%80%94-Known-phi-p-q-or-full-d"><span class="toc-number">1.2.10.</span> <span class="toc-text">RSA 10 — Known phi, p+q, or full d</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-11-%E2%80%94-Leaked-dp-or-dq-tiny-CRT-exponent"><span class="toc-number">1.2.11.</span> <span class="toc-text">RSA 11 — Leaked dp or dq &#x2F; tiny CRT exponent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-12-%E2%80%94-Coppersmith-known-message-prefix-or-suffix"><span class="toc-number">1.2.12.</span> <span class="toc-text">RSA 12 — Coppersmith: known message prefix or suffix</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-13-%E2%80%94-Coppersmith-partial-prime-bits"><span class="toc-number">1.2.13.</span> <span class="toc-text">RSA 13 — Coppersmith: partial prime bits</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-14-%E2%80%94-Franklin%E2%80%93Reiter-related-messages"><span class="toc-number">1.2.14.</span> <span class="toc-text">RSA 14 — Franklin–Reiter related messages</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-15-%E2%80%94-Coppersmith-short-pad-attack"><span class="toc-number">1.2.15.</span> <span class="toc-text">RSA 15 — Coppersmith short-pad attack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-16-%E2%80%94-Pollard-p%E2%88%921-rho-ECM-and-general-factoring"><span class="toc-number">1.2.16.</span> <span class="toc-text">RSA 16 — Pollard p−1, rho, ECM, and general factoring</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-17-%E2%80%94-Prime-modulus-prime-powers-multiprime-RSA"><span class="toc-number">1.2.17.</span> <span class="toc-text">RSA 17 — Prime modulus, prime powers, multiprime RSA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-18-%E2%80%94-Non-coprime-exponent-multiple-possible-plaintexts"><span class="toc-number">1.2.18.</span> <span class="toc-text">RSA 18 — Non-coprime exponent: multiple possible plaintexts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-19-%E2%80%94-Raw-RSA-malleability-decrypt-oracle-bypass"><span class="toc-number">1.2.19.</span> <span class="toc-text">RSA 19 — Raw RSA malleability &#x2F; decrypt-oracle bypass</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-20-%E2%80%94-Parity-LSB-oracle"><span class="toc-number">1.2.20.</span> <span class="toc-text">RSA 20 — Parity &#x2F; LSB oracle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-21-%E2%80%94-Bleichenbacher-PKCS-1-v1-5-padding-oracle"><span class="toc-number">1.2.21.</span> <span class="toc-text">RSA 21 — Bleichenbacher PKCS#1 v1.5 padding oracle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-22-%E2%80%94-Manger-leading-byte-threshold-oracle"><span class="toc-number">1.2.22.</span> <span class="toc-text">RSA 22 — Manger &#x2F; leading-byte threshold oracle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-23-%E2%80%94-CRT-fault-attack"><span class="toc-number">1.2.23.</span> <span class="toc-text">RSA 23 — CRT fault attack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-24-%E2%80%94-Textbook-signature-forgery-and-weak-verification"><span class="toc-number">1.2.24.</span> <span class="toc-text">RSA 24 — Textbook signature forgery and weak verification</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA-25-%E2%80%94-Message-dictionary-weak-seeds-and-special-form-primes"><span class="toc-number">1.2.25.</span> <span class="toc-text">RSA 25 — Message dictionary, weak seeds and special-form primes</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-SageMath-quick-syntax-sheet"><span class="toc-number">1.3.</span> <span class="toc-text">2. SageMath quick syntax sheet</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Running-code-and-choosing-syntax"><span class="toc-number">1.3.1.</span> <span class="toc-text">Running code and choosing syntax</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Number-types-and-conversion"><span class="toc-number">1.3.2.</span> <span class="toc-text">Number types and conversion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Modular-arithmetic-and-CRT"><span class="toc-number">1.3.3.</span> <span class="toc-text">Modular arithmetic and CRT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Primes-factors-and-exact-roots"><span class="toc-number">1.3.4.</span> <span class="toc-text">Primes, factors and exact roots</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Polynomial-rings-coefficients-and-roots"><span class="toc-number">1.3.5.</span> <span class="toc-text">Polynomial rings, coefficients and roots</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Small-roots-the-essential-pattern"><span class="toc-number">1.3.6.</span> <span class="toc-text">Small roots: the essential pattern</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Multivariate-polynomials-and-resultants"><span class="toc-number">1.3.7.</span> <span class="toc-text">Multivariate polynomials and resultants</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Matrices-linear-systems-and-kernels"><span class="toc-number">1.3.8.</span> <span class="toc-text">Matrices, linear systems and kernels</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Lattices-and-LLL"><span class="toc-number">1.3.9.</span> <span class="toc-text">Lattices and LLL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Discrete-logarithms-and-elliptic-curves"><span class="toc-number">1.3.10.</span> <span class="toc-text">Discrete logarithms and elliptic curves</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Help-and-common-error-translations"><span class="toc-number">1.3.11.</span> <span class="toc-text">Help and common error translations</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Reusable-crypto-attack-recipes"><span class="toc-number">1.4.</span> <span class="toc-text">3. Reusable crypto attack recipes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Recipe-01-%E2%80%94-Single-byte-XOR-brute-force"><span class="toc-number">1.4.1.</span> <span class="toc-text">Recipe 01 — Single-byte XOR brute force</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Recipe-02-%E2%80%94-Repeating-key-XOR"><span class="toc-number">1.4.2.</span> <span class="toc-text">Recipe 02 — Repeating-key XOR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Recipe-03-%E2%80%94-Bounded-hash-brute-force"><span class="toc-number">1.4.3.</span> <span class="toc-text">Recipe 03 — Bounded hash brute force</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Recipe-04-%E2%80%94-Dictionary-attack-on-raw-RSA"><span class="toc-number">1.4.4.</span> <span class="toc-text">Recipe 04 — Dictionary attack on raw RSA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Recipe-05-%E2%80%94-Reused-OTP-CTR-keystream-and-crib-dragging"><span class="toc-number">1.4.5.</span> <span class="toc-text">Recipe 05 — Reused OTP &#x2F; CTR keystream and crib dragging</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Recipe-06-%E2%80%94-CTR-and-CBC-bit-flipping"><span class="toc-number">1.4.6.</span> <span class="toc-text">Recipe 06 — CTR and CBC bit flipping</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Recipe-07-%E2%80%94-ECB-detection-and-byte-at-a-time-recovery"><span class="toc-number">1.4.7.</span> <span class="toc-text">Recipe 07 — ECB detection and byte-at-a-time recovery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Recipe-08-%E2%80%94-CBC-padding-oracle-workflow"><span class="toc-number">1.4.8.</span> <span class="toc-text">Recipe 08 — CBC padding-oracle workflow</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Recipe-09-%E2%80%94-LCG-recovery"><span class="toc-number">1.4.9.</span> <span class="toc-text">Recipe 09 — LCG recovery</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Recipe-10-%E2%80%94-Timestamp-weak-RNG-seed-search"><span class="toc-number">1.4.10.</span> <span class="toc-text">Recipe 10 — Timestamp &#x2F; weak RNG seed search</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Recipe-11-%E2%80%94-ECDSA-nonce-reuse"><span class="toc-number">1.4.11.</span> <span class="toc-text">Recipe 11 — ECDSA nonce reuse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Recipe-12-%E2%80%94-Other-patterns-worth-recognizing"><span class="toc-number">1.4.12.</span> <span class="toc-text">Recipe 12 — Other patterns worth recognizing</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-RsaCtfTool-practical-command-guide"><span class="toc-number">1.5.</span> <span class="toc-text">4. RsaCtfTool practical command guide</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Install-launch-in-this-workspace"><span class="toc-number">1.5.1.</span> <span class="toc-text">Install &#x2F; launch in this workspace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Self-contained-toy-example"><span class="toc-number">1.5.2.</span> <span class="toc-text">Self-contained toy example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Typical-workflow-for-a-new-challenge"><span class="toc-number">1.5.3.</span> <span class="toc-text">Typical workflow for a new challenge</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Integer-input-byte-files-and-public-key-creation"><span class="toc-number">1.5.4.</span> <span class="toc-text">Integer input, byte files and public-key creation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Multiple-key-commands-and-ordered-pairing"><span class="toc-number">1.5.5.</span> <span class="toc-text">Multiple-key commands and ordered pairing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Leaks-and-Coppersmith-command-templates"><span class="toc-number">1.5.6.</span> <span class="toc-text">Leaks and Coppersmith command templates</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Database-diagnostics-and-output"><span class="toc-number">1.5.7.</span> <span class="toc-text">Database, diagnostics and output</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Complete-CLI-flag-reference-for-the-checked-checkout"><span class="toc-number">1.5.8.</span> <span class="toc-text">Complete CLI flag reference for the checked checkout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Which-named-attack-should-I-select"><span class="toc-number">1.5.9.</span> <span class="toc-text">Which named attack should I select?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Troubleshooting-RsaCtfTool"><span class="toc-number">1.5.10.</span> <span class="toc-text">Troubleshooting RsaCtfTool</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Practice-path-and-verification-checklist"><span class="toc-number">1.6.</span> <span class="toc-text">5. Practice path and verification checklist</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Source-and-version-notes"><span class="toc-number">1.6.1.</span> <span class="toc-text">Source and version notes</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/10/24/rsa-notes/" title="rsa-notes">rsa-notes</a><time datetime="2026-10-24T05:33:26.000Z" title="Created 2026-10-24 13:33:26">2026-10-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/10/26/pwn1-deadface2025/" title="PWN - ROP (Deadface CTF 2025)"><img src="/cover/deadface2025.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="PWN - ROP (Deadface CTF 2025)"/></a><div class="content"><a class="title" href="/2025/10/26/pwn1-deadface2025/" title="PWN - ROP (Deadface CTF 2025)">PWN - ROP (Deadface CTF 2025)</a><time datetime="2025-10-26T07:46:40.000Z" title="Created 2025-10-26 15:46:40">2025-10-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/01/Nowruz-1404/" title="Nowruz-1404"><img src="/cover/nowruz.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Nowruz-1404"/></a><div class="content"><a class="title" href="/2025/05/01/Nowruz-1404/" title="Nowruz-1404">Nowruz-1404</a><time datetime="2025-05-01T01:16:08.000Z" title="Created 2025-05-01 09:16:08">2025-05-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/05/ApoorvCTF/" title="ApoorvCTF"><img src="/cover/apoorvctf.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ApoorvCTF"/></a><div class="content"><a class="title" href="/2025/03/05/ApoorvCTF/" title="ApoorvCTF">ApoorvCTF</a><time datetime="2025-03-05T13:06:37.000Z" title="Created 2025-03-05 21:06:37">2025-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/30/wargamesMY-2024/" title="WargamesMY 2024"><img src="/cover/wgmy24.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WargamesMY 2024"/></a><div class="content"><a class="title" href="/2024/12/30/wargamesMY-2024/" title="WargamesMY 2024">WargamesMY 2024</a><time datetime="2024-12-29T17:25:12.000Z" title="Created 2024-12-30 01:25:12">2024-12-30</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://wallpapercave.com/wp/wp8908552.jpg);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Syihab Dhiaulhaq</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.7.0"></script><script src="/js/main.js?v=5.7.0"></script><div class="js-pjax"></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

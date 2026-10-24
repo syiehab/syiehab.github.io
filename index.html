@@ -1,58 +1,107 @@
 <!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>ukyovis' blog</title><meta name="author" content="Syihab Dhiaulhaq"><meta name="copyright" content="Syihab Dhiaulhaq"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="2nd Year Cyber Security Student">
 <meta property="og:type" content="website">
 <meta property="og:title" content="ukyovis&#39; blog">
-<meta property="og:url" content="https://blog.ukyovis.xyz/index.html">
+<meta property="og:url" content="https://syiehab.github.io/">
 <meta property="og:site_name" content="ukyovis&#39; blog">
 <meta property="og:description" content="2nd Year Cyber Security Student">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.pinimg.com/736x/f4/04/44/f4044494aeacb1a2a428a597e072bdad.jpg">
 <meta property="article:author" content="Syihab Dhiaulhaq">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.pinimg.com/736x/f4/04/44/f4044494aeacb1a2a428a597e072bdad.jpg"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="https://blog.ukyovis.xyz/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="manifest" href="/img/pwa/manifest.json"/><link rel="apple-touch-icon" sizes="180x180" href="/img/pwa/apple-touch-icon.png"/><link rel="icon" type="image/png" sizes="32x32" href="/img/pwa/32.png"/><link rel="icon" type="image/png" sizes="16x16" href="/img/pwa/16.png"/><link rel="mask-icon" href="/img/pwa/safari-pinned-tab.svg" color="#5bbad5"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+<meta name="twitter:image" content="https://i.pinimg.com/736x/f4/04/44/f4044494aeacb1a2a428a597e072bdad.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "ukyovis' blog",
+  "alternateName": [
+    "syiehab.github.io"
+  ],
+  "url": "https://syiehab.github.io/"
+}</script><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="https://syiehab.github.io/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/all.min.css"><script>
     (() => {
       
     const saveToLocal = {
       set: (key, value, ttl) => {
-        if (!ttl) return
-        const expiry = Date.now() + ttl * 86400000
-        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
       },
       get: key => {
         const itemStr = localStorage.getItem(key)
-        if (!itemStr) return undefined
-        const { value, expiry } = JSON.parse(itemStr)
-        if (Date.now() > expiry) {
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
           localStorage.removeItem(key)
-          return undefined
         }
-        return value
       }
     }
 
+    const scriptCache = new Map()
+    const cssCache = new Map()
     window.btf = {
       saveToLocal,
-      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
-        const script = document.createElement('script')
-        script.src = url
-        script.async = true
-        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
-        script.onload = script.onreadystatechange = () => {
-          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
         }
-        script.onerror = reject
-        document.head.appendChild(script)
-      }),
-      getCSS: (url, id) => new Promise((resolve, reject) => {
-        const link = document.createElement('link')
-        link.rel = 'stylesheet'
-        link.href = url
-        if (id) link.id = id
-        link.onload = link.onreadystatechange = () => {
-          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
         }
-        link.onerror = reject
-        document.head.appendChild(link)
-      }),
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
       addGlobalFn: (key, fn, name = false, parent = window) => {
         if (!false && key.startsWith('pjax')) return
         const globalFn = parent.globalFn || {}
@@ -63,16 +112,17 @@
     }
   
       
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
       const activateDarkMode = () => {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
         }
       }
       const activateLightMode = () => {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
         }
       }
 
@@ -122,14 +172,14 @@
     month: 'months ago'
   },
   copyright: undefined,
-  lightbox: 'fancybox',
-  Snackbar: {"chs_to_cht":"You have switched to Traditional Chinese","cht_to_chs":"You have switched to Simplified Chinese","day_to_night":"You have switched to Dark Mode","night_to_day":"You have switched to Light Mode","bgLight":"#f54949","bgDark":"#1f1f1f","position":"bottom-left"},
+  lightbox: 'null',
+  Snackbar: undefined,
   infinitegrid: {
-    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
     buttonText: 'Load More'
   },
   isPhotoFigcaption: false,
-  islazyload: false,
+  islazyloadPlugin: false,
   isAnchor: false,
   percent: {
     toc: true,
@@ -138,54 +188,64 @@
   autoDarkmode: false
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: 'ukyovis\' blog',
-  isPost: false,
-  isHome: true,
   isHighlightShrink: false,
   isToc: false,
-  isShuoshuo: false
-}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.pinimg.com/736x/f4/04/44/f4044494aeacb1a2a428a597e072bdad.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/notes/"><i class="fa-fw fas fa-book-open"></i><span> Notes</span></a></div><div class="menus_item"><a class="site-page" href="/finals/"><i class="fa-fw fas fa-graduation-cap"></i><span> Finals</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(https://wallpapercave.com/wp/wp8908552.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">ukyovis' blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/notes/"><i class="fa-fw fas fa-book-open"></i><span> Notes</span></a></div><div class="menus_item"><a class="site-page" href="/finals/"><i class="fa-fw fas fa-graduation-cap"></i><span> Finals</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">ukyovis' blog</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/syiehab" target="_blank" title="Github"><i class="fab fa-github" style="color: #ffffff;"></i></a><a class="social-icon" href="https://x.com/ukyovis" target="_blank" title="X"><i class="fab fa-x-twitter" style="color: #ffffff;"></i></a><a class="social-icon" href="https://open.spotify.com/user/22oy7kjj3lzgeabmq3ribiw2y?si=72473b17ab7a4c06" target="_blank" title="Spotify"><i class="fab fa-spotify" style="color: #ffffff;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="post_cover left"><a href="/2025/10/26/pwn1-deadface2025/" title="PWN - ROP (Deadface CTF 2025)"><img class="post-bg" src="/cover/deadface2025.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="PWN - ROP (Deadface CTF 2025)"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/10/26/pwn1-deadface2025/" title="PWN - ROP (Deadface CTF 2025)">PWN - ROP (Deadface CTF 2025)</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-10-26T07:46:40.000Z" title="Created 2025-10-26 15:46:40">2025-10-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Writeup/">Writeup</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CTF/">CTF</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/ROP/">ROP</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Ret2Libc/">Ret2Libc</a></span></div><div class="content">I will make a slight change on how the article will be. Instead of one CTF per article, I will make one challenge per article. This will ensure to ease my future writeup reference Locked OutPoints: 100 Created By: @SpiffyLich Desc:We found this program on one of the old drives DEADFACE threw out. We think they’re using it on a server somewhere as a way for members to ‘log in…’ and to keep other people out. No password seems to work. Looking it over, it seems vulnerable enough— but how on...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2025/05/01/Nowruz-1404/" title="Nowruz-1404"><img class="post-bg" src="/cover/nowruz.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Nowruz-1404"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/05/01/Nowruz-1404/" title="Nowruz-1404">Nowruz-1404</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-05-01T01:16:08.000Z" title="Created 2025-05-01 09:16:08">2025-05-01</time></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CTF/">CTF</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Predicting-Python-urandom/">Predicting Python urandom</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/RSA/">RSA</a></span></div><div class="content">Nowruz 1404Nowruz 1404 is an online jeopardy-style Capture The Flag competition organized by the FlagMotori team.I played this ctf under RE:UN10N team and got 10th place. This writeup will cover the crypto challenges only.  CryptoBrutal RSAQuestion: Sometimes you need to be cruel to be able to solve a crypto challenge, don’t you? Wrap the decrypted message in: FMCTF{} output.txt: 123c = ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2025/03/05/ApoorvCTF/" title="ApoorvCTF"><img class="post-bg" src="/cover/apoorvctf.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ApoorvCTF"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/03/05/ApoorvCTF/" title="ApoorvCTF">ApoorvCTF</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-03-05T13:06:37.000Z" title="Created 2025-03-05 21:06:37">2025-03-05</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Writeup/">Writeup</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CTF/">CTF</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/AES-ECB/">AES-ECB</a></span></div><div class="content">We played ApoorvCTF   Cryptokowareta cipherTHe question is about AES-ECB Plaintext Recovery. It is a cryptographic attack that exploits the weaknesses of the ECB mode. In ECB mode, identical plaintext blocks are encrypted into identical ciphertext blocks, making it vulnerable to pattern recognition and chosen-plaintext attacks. Chall.py12345678910111213141516171819202122232425262728293031323334353637import sysfrom Crypto.Cipher import AESfrom Crypto.Util.Padding import padfrom random import...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2024/12/30/wargamesMY-2024/" title="WargamesMY 2024"><img class="post-bg" src="/cover/wgmy24.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WargamesMY 2024"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/12/30/wargamesMY-2024/" title="WargamesMY 2024">WargamesMY 2024</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-12-29T17:25:12.000Z" title="Created 2024-12-30 01:25:12">2024-12-30</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Writeup/">Writeup</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CTF/">CTF</a></span></div><div class="content">WargamesMY 2024Writeup for the challenges that I solved in Wargames.MY 2024This is my first time participating in WMGY and we solved some solvable challenges.   MiscChristmas GIFtHere is your christmas GIFt from santa! Just open and wait for it.. SolutionThe solution is really like the description, Just open and wait for it..Opened it in stegsolve and the flag is on frame 1402 DCM Meta“[25, 10, 0, 3, 17, 19, 23, 27, 4, 13, 20, 8, 24, 21, 31, 15, 7, 29, 6, 1, 9, 30, 22, 5, 28, 18, 26, 11, 2,...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2024/12/23/Cryptohack/" title="CryptoHack"><img class="post-bg" src="/cover/cryptohack.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CryptoHack"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/12/23/Cryptohack/" title="CryptoHack">CryptoHack</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-12-23T01:56:19.000Z" title="Created 2024-12-23 09:56:19">2024-12-23</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Notes/">Notes</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CryptoHack/">CryptoHack</a></span></div><div class="content">RSARSA Signature The private keys are 12N =...</div></div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.pinimg.com/736x/f4/04/44/f4044494aeacb1a2a428a597e072bdad.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Syihab Dhiaulhaq</div><div class="author-info-description">2nd Year Cyber Security Student</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/syiehab" target="_blank" title="Github"><i class="fab fa-github" style="color: #ffffff;"></i></a><a class="social-icon" href="https://x.com/ukyovis" target="_blank" title="X"><i class="fab fa-x-twitter" style="color: #ffffff;"></i></a><a class="social-icon" href="https://open.spotify.com/user/22oy7kjj3lzgeabmq3ribiw2y?si=72473b17ab7a4c06" target="_blank" title="Spotify"><i class="fab fa-spotify" style="color: #ffffff;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Noob CTF Player</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/10/26/pwn1-deadface2025/" title="PWN - ROP (Deadface CTF 2025)"><img src="/cover/deadface2025.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="PWN - ROP (Deadface CTF 2025)"/></a><div class="content"><a class="title" href="/2025/10/26/pwn1-deadface2025/" title="PWN - ROP (Deadface CTF 2025)">PWN - ROP (Deadface CTF 2025)</a><time datetime="2025-10-26T07:46:40.000Z" title="Created 2025-10-26 15:46:40">2025-10-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/01/Nowruz-1404/" title="Nowruz-1404"><img src="/cover/nowruz.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Nowruz-1404"/></a><div class="content"><a class="title" href="/2025/05/01/Nowruz-1404/" title="Nowruz-1404">Nowruz-1404</a><time datetime="2025-05-01T01:16:08.000Z" title="Created 2025-05-01 09:16:08">2025-05-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/05/ApoorvCTF/" title="ApoorvCTF"><img src="/cover/apoorvctf.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ApoorvCTF"/></a><div class="content"><a class="title" href="/2025/03/05/ApoorvCTF/" title="ApoorvCTF">ApoorvCTF</a><time datetime="2025-03-05T13:06:37.000Z" title="Created 2025-03-05 21:06:37">2025-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/30/wargamesMY-2024/" title="WargamesMY 2024"><img src="/cover/wgmy24.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WargamesMY 2024"/></a><div class="content"><a class="title" href="/2024/12/30/wargamesMY-2024/" title="WargamesMY 2024">WargamesMY 2024</a><time datetime="2024-12-29T17:25:12.000Z" title="Created 2024-12-30 01:25:12">2024-12-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/23/Cryptohack/" title="CryptoHack"><img src="/cover/cryptohack.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CryptoHack"/></a><div class="content"><a class="title" href="/2024/12/23/Cryptohack/" title="CryptoHack">CryptoHack</a><time datetime="2024-12-23T01:56:19.000Z" title="Created 2024-12-23 09:56:19">2024-12-23</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
-            <i class="fas fa-folder-open"></i>
-            <span>Categories</span>
-            
-          </div>
+  pageType: 'home'
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://i.pinimg.com/736x/f4/04/44/f4044494aeacb1a2a428a597e072bdad.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/notes/"><i class="fa-fw fas fa-book-open"></i><span> Notes</span></a></div><div class="menus_item"><a class="site-page" href="/finals/"><i class="fa-fw fas fa-graduation-cap"></i><span> Finals</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(https://wallpapercave.com/wp/wp8908552.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">ukyovis' blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/notes/"><i class="fa-fw fas fa-book-open"></i><span> Notes</span></a></div><div class="menus_item"><a class="site-page" href="/finals/"><i class="fa-fw fas fa-graduation-cap"></i><span> Finals</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">ukyovis' blog</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/syiehab" target="_blank" title="Github"><i class="fab fa-github" style="color: #ffffff;"></i></a><a class="social-icon" href="https://x.com/ukyovis" target="_blank" title="X"><i class="fab fa-x-twitter" style="color: #ffffff;"></i></a><a class="social-icon" href="https://open.spotify.com/user/22oy7kjj3lzgeabmq3ribiw2y?si=72473b17ab7a4c06" target="_blank" title="Spotify"><i class="fab fa-spotify" style="color: #ffffff;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/10/24/rsa-notes/" title="rsa-notes">rsa-notes</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-10-24T05:33:26.000Z" title="Created 2026-10-24 13:33:26">2026-10-24</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Notes/">Notes</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/RSA/">RSA</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Crypto/">Crypto</a></span></div><div class="content">Crypto CTF field notesA practical reference for recognizing a weakness, choosing an attack, and checking the result. Prepared 24 October 2026. All numeric examples are deliberately small or constructed for practice. Commands assume Bash in Linux&#x2F;WSL and that your current directory is crypto-ctf-handbook, unless a block says otherwise. The companion index.html works offline and includes full-text search, section filters, copy buttons, bookmarks, a BigInt RSA calculator, and a brute-force ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2025/10/26/pwn1-deadface2025/" title="PWN - ROP (Deadface CTF 2025)"><img class="post-bg" src="/cover/deadface2025.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="PWN - ROP (Deadface CTF 2025)"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/10/26/pwn1-deadface2025/" title="PWN - ROP (Deadface CTF 2025)">PWN - ROP (Deadface CTF 2025)</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-10-26T07:46:40.000Z" title="Created 2025-10-26 15:46:40">2025-10-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/writeup/">Writeup</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CTF/">CTF</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/ROP/">ROP</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Ret2Libc/">Ret2Libc</a></span></div><div class="content">I will make a slight change on how the article will be. Instead of one CTF per article, I will make one challenge per article. This will ensure to ease my future writeup reference Locked OutPoints: 100 Created By: @SpiffyLich Desc:We found this program on one of the old drives DEADFACE threw out. We think they’re using it on a server somewhere as a way for members to ‘log in…’ and to keep other people out. No password seems to work. Looking it over, it seems vulnerable enough— but how on eart...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2025/05/01/Nowruz-1404/" title="Nowruz-1404"><img class="post-bg" src="/cover/nowruz.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Nowruz-1404"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/05/01/Nowruz-1404/" title="Nowruz-1404">Nowruz-1404</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-05-01T01:16:08.000Z" title="Created 2025-05-01 09:16:08">2025-05-01</time></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CTF/">CTF</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Predicting-Python-urandom/">Predicting Python urandom</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/RSA/">RSA</a></span></div><div class="content">Nowruz 1404Nowruz 1404 is an online jeopardy-style Capture The Flag competition organized by the FlagMotori team.I played this ctf under RE:UN10N team and got 10th place. This writeup will cover the crypto challenges only.  CryptoBrutal RSAQuestion: Sometimes you need to be cruel to be able to solve a crypto challenge, don’t you? Wrap the decrypted message in: FMCTF{} output.txt: 123c =  4137144162867874985534106931891394013918336619009285045779140194463748488172238713043252878940386712098331...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2025/03/05/ApoorvCTF/" title="ApoorvCTF"><img class="post-bg" src="/cover/apoorvctf.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ApoorvCTF"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/03/05/ApoorvCTF/" title="ApoorvCTF">ApoorvCTF</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-03-05T13:06:37.000Z" title="Created 2025-03-05 21:06:37">2025-03-05</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/writeup/">Writeup</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CTF/">CTF</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/AES-ECB/">AES-ECB</a></span></div><div class="content">We played ApoorvCTF  Cryptokowareta cipherTHe question is about AES-ECB Plaintext Recovery. It is a cryptographic attack that exploits the weaknesses of the ECB mode. In ECB mode, identical plaintext blocks are encrypted into identical ciphertext blocks, making it vulnerable to pattern recognition and chosen-plaintext attacks. Chall.py   12345678910111213141516171819202122232425262728293031323334353637import sysfrom Crypto.Cipher import AESfrom Crypto.Util.Padding import padfrom random import...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2024/12/30/wargamesMY-2024/" title="WargamesMY 2024"><img class="post-bg" src="/cover/wgmy24.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WargamesMY 2024"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/12/30/wargamesMY-2024/" title="WargamesMY 2024">WargamesMY 2024</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-12-29T17:25:12.000Z" title="Created 2024-12-30 01:25:12">2024-12-30</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/writeup/">Writeup</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CTF/">CTF</a></span></div><div class="content">WargamesMY 2024Writeup for the challenges that I solved in Wargames.MY 2024This is my first time participating in WMGY and we solved some solvable challenges.   MiscChristmas GIFtHere is your christmas GIFt from santa! Just open and wait for it.. SolutionThe solution is really like the description, Just open and wait for it..Opened it in stegsolve and the flag is on frame 1402 DCM Meta“[25, 10, 0, 3, 17, 19, 23, 27, 4, 13, 20, 8, 24, 21, 31, 15, 7, 29, 6, 1, 9, 30, 22, 5, 28, 18, 26, 11, 2, 1...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2024/12/23/Cryptohack/" title="CryptoHack"><img class="post-bg" src="/cover/cryptohack.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CryptoHack"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/12/23/Cryptohack/" title="CryptoHack">CryptoHack</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-12-23T01:56:19.000Z" title="Created 2024-12-23 09:56:19">2024-12-23</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Notes/">Notes</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CryptoHack/">CryptoHack</a></span></div><div class="content">RSARSA Signature The private keys are 12N = 152165836548367313276399812241339188558959483740723840508484799089822868907317694866090859188576640460753752531689550587431856643902730580744503902367743249033056634790465662329672977657316253280298140556353160025912275702712714452260949198644754078844599804896380010927885748115541497740289503106951126887238537637432387533497825081219853387467552378193731786993431350917839922995618273897451328800222598733875242732988503406487798979093819797140268371...</div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://i.pinimg.com/736x/f4/04/44/f4044494aeacb1a2a428a597e072bdad.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Syihab Dhiaulhaq</div><div class="author-info-description">2nd Year Cyber Security Student</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/syiehab" target="_blank" title="Github"><i class="fab fa-github" style="color: #ffffff;"></i></a><a class="social-icon" href="https://x.com/ukyovis" target="_blank" title="X"><i class="fab fa-x-twitter" style="color: #ffffff;"></i></a><a class="social-icon" href="https://open.spotify.com/user/22oy7kjj3lzgeabmq3ribiw2y?si=72473b17ab7a4c06" target="_blank" title="Spotify"><i class="fab fa-spotify" style="color: #ffffff;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">Noob CTF Player</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/10/24/rsa-notes/" title="rsa-notes">rsa-notes</a><time datetime="2026-10-24T05:33:26.000Z" title="Created 2026-10-24 13:33:26">2026-10-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/10/26/pwn1-deadface2025/" title="PWN - ROP (Deadface CTF 2025)"><img src="/cover/deadface2025.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="PWN - ROP (Deadface CTF 2025)"/></a><div class="content"><a class="title" href="/2025/10/26/pwn1-deadface2025/" title="PWN - ROP (Deadface CTF 2025)">PWN - ROP (Deadface CTF 2025)</a><time datetime="2025-10-26T07:46:40.000Z" title="Created 2025-10-26 15:46:40">2025-10-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/01/Nowruz-1404/" title="Nowruz-1404"><img src="/cover/nowruz.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Nowruz-1404"/></a><div class="content"><a class="title" href="/2025/05/01/Nowruz-1404/" title="Nowruz-1404">Nowruz-1404</a><time datetime="2025-05-01T01:16:08.000Z" title="Created 2025-05-01 09:16:08">2025-05-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/05/ApoorvCTF/" title="ApoorvCTF"><img src="/cover/apoorvctf.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ApoorvCTF"/></a><div class="content"><a class="title" href="/2025/03/05/ApoorvCTF/" title="ApoorvCTF">ApoorvCTF</a><time datetime="2025-03-05T13:06:37.000Z" title="Created 2025-03-05 21:06:37">2025-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/30/wargamesMY-2024/" title="WargamesMY 2024"><img src="/cover/wgmy24.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WargamesMY 2024"/></a><div class="content"><a class="title" href="/2024/12/30/wargamesMY-2024/" title="WargamesMY 2024">WargamesMY 2024</a><time datetime="2024-12-29T17:25:12.000Z" title="Created 2024-12-30 01:25:12">2024-12-30</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline"><i class="fas fa-folder-open"></i><span>Categories</span></div>
           <ul class="card-category-list" id="aside-cat-list">
-            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Notes/"><span class="card-category-list-name">Notes</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Writeup/"><span class="card-category-list-name">Writeup</span><span class="card-category-list-count">3</span></a></li>
-          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/Predicting-Python-urandom/" style="font-size: 1.1em; color: #999">Predicting Python urandom</a> <a href="/tags/CTF/" style="font-size: 1.5em; color: #99a9bf">CTF</a> <a href="/tags/ROP/" style="font-size: 1.1em; color: #999">ROP</a> <a href="/tags/Ret2Libc/" style="font-size: 1.1em; color: #999">Ret2Libc</a> <a href="/tags/AES-ECB/" style="font-size: 1.1em; color: #999">AES-ECB</a> <a href="/tags/CryptoHack/" style="font-size: 1.1em; color: #999">CryptoHack</a> <a href="/tags/RSA/" style="font-size: 1.1em; color: #999">RSA</a></div></div><div class="card-widget card-archives">
-    <div class="item-headline">
-      <i class="fas fa-archive"></i>
-      <span>Archives</span>
-      
-    </div>
-    <ul class="card-archive-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Notes/"><span class="card-category-list-name">Notes</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/writeup/"><span class="card-category-list-name">Writeup</span><span class="card-category-list-count">3</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/RSA/" style="font-size: 1.3em; color: #99a1ac">RSA</a> <a href="/tags/Ret2Libc/" style="font-size: 1.1em; color: #999">Ret2Libc</a> <a href="/tags/Predicting-Python-urandom/" style="font-size: 1.1em; color: #999">Predicting Python urandom</a> <a href="/tags/CryptoHack/" style="font-size: 1.1em; color: #999">CryptoHack</a> <a href="/tags/ROP/" style="font-size: 1.1em; color: #999">ROP</a> <a href="/tags/AES-ECB/" style="font-size: 1.1em; color: #999">AES-ECB</a> <a href="/tags/Crypto/" style="font-size: 1.1em; color: #999">Crypto</a> <a href="/tags/CTF/" style="font-size: 1.5em; color: #99a9bf">CTF</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline"><i class="fas fa-archive"></i><span>Archives</span></div>
   
-      <li class="card-archive-list-item">
-        <a class="card-archive-list-link" href="/archives/2025/10/">
-          <span class="card-archive-list-date">October 2025</span>
-          <span class="card-archive-list-count">1</span>
-        </a>
-      </li>
-    
-      <li class="card-archive-list-item">
-        <a class="card-archive-list-link" href="/archives/2025/05/">
-          <span class="card-archive-list-date">May 2025</span>
-          <span class="card-archive-list-count">1</span>
-        </a>
-      </li>
-    
-      <li class="card-archive-list-item">
-        <a class="card-archive-list-link" href="/archives/2025/03/">
-          <span class="card-archive-list-date">March 2025</span>
-          <span class="card-archive-list-count">1</span>
-        </a>
-      </li>
-    
-      <li class="card-archive-list-item">
-        <a class="card-archive-list-link" href="/archives/2024/12/">
-          <span class="card-archive-list-date">December 2024</span>
-          <span class="card-archive-list-count">2</span>
-        </a>
-      </li>
-    </ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Website Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article Count :</div><div class="item-count">5</div></div><div class="webinfo-item"><div class="item-name">Unique Visitors :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Page Views :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Last Update :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-10-26T07:57:36.748Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://wallpapercave.com/wp/wp8908552.jpg);"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Syihab Dhiaulhaq</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/10/">
+            <span class="card-archive-list-date">
+              October 2026
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/10/">
+            <span class="card-archive-list-date">
+              October 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/05/">
+            <span class="card-archive-list-date">
+              May 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/03/">
+            <span class="card-archive-list-date">
+              March 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/12/">
+            <span class="card-archive-list-date">
+              December 2024
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Website Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article Count :</div><div class="item-count">6</div></div><div class="webinfo-item"><div class="item-name">Unique Visitors :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Page Views :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Last Update :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-10-24T05:35:53.935Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(https://wallpapercave.com/wp/wp8908552.jpg);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By Syihab Dhiaulhaq</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.7.0"></script><script src="/js/main.js?v=5.7.0"></script><div class="js-pjax"><script>window.typedJSFn = {
   init: str => {
     window.typed = new Typed('#subtitle', Object.assign({
       strings: str,
@@ -200,22 +260,38 @@
       if (typeof Typed === 'function') {
         subtitleType()
       } else {
-        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js/dist/typed.umd.min.js').then(subtitleType)
+        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js@3.0.0/dist/typed.umd.min.js').then(subtitleType)
       }
     } else {
       subtitleType()
     }
+  },
+  processSubtitle: (content, extraContents = []) => {
+    if (true) {
+      const sub = ["Welcome to my blog :D","48bb6e862e54f2a795ffc4e541caed4d","cool text effect hehe"].slice()
+
+      if (extraContents.length > 0) {
+        sub.unshift(...extraContents)
+      }
+
+      if (typeof content === 'string') {
+        sub.unshift(content)
+      } else if (Array.isArray(content)) {
+        sub.unshift(...content)
+      }
+
+      sub.length > 0 && typedJSFn.init(sub)
+    } else {
+      document.getElementById('subtitle').textContent = typeof content === 'string' ? content :
+        (Array.isArray(content) && content.length > 0 ? content[0] : '')
+    }
   }
 }
-btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
+btf.addGlobalFn('pjaxSendOnce', () => { typed && typed.destroy() }, 'typedDestroy')
 </script><script>function subtitleType () {
-  if (true) {
-    typedJSFn.init(["Welcome to my blog :D","48bb6e862e54f2a795ffc4e541caed4d","cool text effect hehe"])
-  } else {
-    document.getElementById("subtitle").textContent = "Welcome to my blog :D"
-  }
+  typedJSFn.processSubtitle(["Welcome to my blog :D","48bb6e862e54f2a795ffc4e541caed4d","cool text effect hehe"])
 }
-typedJSFn.run(subtitleType)</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+typedJSFn.run(subtitleType)</script></div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
 POWERMODE.shake = true;
 POWERMODE.mobile = false;
 document.body.addEventListener('input', POWERMODE);
